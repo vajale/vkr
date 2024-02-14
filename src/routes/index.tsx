@@ -1,7 +1,8 @@
 import React from "react";
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import { URL } from "../constants/navigation";
+import Constants from "../constants/index";
+
 import { HomePage } from "../pages/HomePage";
 
 export const DesktopRouter = () => {
@@ -10,10 +11,10 @@ export const DesktopRouter = () => {
       <Routes>
         <Route
           path={"/"}
-          element={<Navigate to={`${URL.HOME}`} replace={true} />}
+          element={<Navigate to={`${Constants.URL.HOME}`} replace={true} />}
         />
 
-        <Route path={`${URL.HOME}/*`} element={<HomePage />} />
+        <Route path={`${Constants.URL.HOME}/*`} element={<HomePage />} />
       </Routes>
     </HashRouter>
   );

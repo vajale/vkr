@@ -1,5 +1,6 @@
 import React from "react";
+import PidorButton from "../../components/PidorButton";
 
 export const HomePage = () => {
-  return <h1>TI PIDOR</h1>;
+  return <PidorButton />;
 };
