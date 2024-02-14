@@ -1,3 +1,3 @@
-import * as Navigation from "./navigation";
+import * as Navigation from "./navigation"
 
-export default Navigation;
+export default Navigation
