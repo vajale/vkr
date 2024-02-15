@@ -1,6 +1,6 @@
 import React from "react"
-import PidorButton from "../../components/PidorButton"
+import { MainLayout } from "../../components/layouts/main/MainLayout"
 
 export const HomePage = () => {
-  return <PidorButton />
+  return <MainLayout></MainLayout>
 }

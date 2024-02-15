@@ -6,6 +6,8 @@ import store from "./store/store"
 import { DesktopRouter } from "./routes"
 import ThemeWrapper from "./components/common/ThemeWrapper"
 
+import "normalize.css"
+
 const App = () => {
   return (
     <div className="app">

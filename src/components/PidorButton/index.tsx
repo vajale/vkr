@@ -13,7 +13,9 @@ const PidorButton = () => {
   const handleClick = () => {
     if (currentColorMode === themePalette.Light) {
       dispatch(setColorMode(themePalette.Dark))
+      return
     }
+
     dispatch(setColorMode(themePalette.Light))
   }
 

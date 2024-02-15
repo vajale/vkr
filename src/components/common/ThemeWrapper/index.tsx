@@ -1,9 +1,9 @@
-import React from "react"
+import React, { ReactNode } from "react"
 import { ThemeProvider } from "@mui/system"
 import themes from "../../../themes"
 import { useAppSelector } from "../../../store/hooks"
 
-const ThemeWrapper: React.FC = ({ children }) => {
+const ThemeWrapper: React.FC<{ children: ReactNode }> = ({ children }) => {
   const currentTheme = useAppSelector((state) => state.app.colorMode)
   const theme = currentTheme === "light" ? themes.light : themes.dark
 
