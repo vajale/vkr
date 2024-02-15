@@ -1,6 +1,6 @@
-import { createTheme } from "@mui/material/styles";
-import themeOptions from "./themeOptions";
+import { createTheme } from "@mui/material/styles"
+import themeOptions from "./themeOptions"
 
-const lightTheme = createTheme(themeOptions);
+const lightTheme = createTheme(themeOptions)
 
-export { lightTheme };
+export { lightTheme }

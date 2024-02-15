@@ -7,6 +7,6 @@ const themeOptions = {
       main: "#F50057",
     },
   },
-};
+}
 
-export default themeOptions;
+export default themeOptions
