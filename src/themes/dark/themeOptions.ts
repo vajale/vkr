@@ -1,7 +1,15 @@
-const themeOptions = {
+import { IExtendedTheme } from "../types"
+import { COMMON_OPTIONS } from "../common"
+
+const themeOptions: IExtendedTheme = {
+  menuBackground: "#404040",
+  ...COMMON_OPTIONS,
   palette: {
+    text: {
+      primary: "#FFF",
+    },
     primary: {
-      main: "#F4621F",
+      main: "#FFFFFF",
     },
     secondary: {
       main: "#F50057",
