@@ -1,11 +1,11 @@
 import React, {useMemo, useState} from "react";
 
 import {blockTypes} from "../../../model/hooks/documentParser";
-
+import {Button} from "@mui/material";
 
 interface BlockAddButtonProps {
     onClick?: () => void;
-    buttonContent: string
+    buttonContent: string;
 }
 
 const BlockAddButton = (props: BlockAddButtonProps) => {
@@ -27,9 +27,10 @@ const BlockAddButton = (props: BlockAddButtonProps) => {
     );
 
     return (
-        <button onClick={handleClick}>
+        <button style={{width: 20, border: 'none', background: "white", borderRadius: 4}}
+                onClick={handleClick}>
             {buttonContent}
-            {isMenuOpen && <ul>{typeList}</ul>}
+            {/*{isMenuOpen && <ul>{typeList}</ul>}*/}
         </button>
     );
 };
