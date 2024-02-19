@@ -1,4 +1,7 @@
+import React from "react"
+
 export interface IAccountButton {
-  image: string
+  image?: string
   accountName: string
+  svgIcon?: React.ReactNode
 }

@@ -35,6 +35,11 @@ module.exports = {
         },
       },
       {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        use: [{ loader: "@svgr/webpack", options: { icon: true } }],
+      },
+      {
         test: /\.(sa|sc|c)ss$/,
         use: ["style-loader", "css-loader"],
       },
@@ -42,6 +47,17 @@ module.exports = {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
         loader: "url-loader",
         options: { limit: false },
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              outputPath: "images", // specify the output directory for images
+            },
+          },
+        ],
       },
     ],
   },
