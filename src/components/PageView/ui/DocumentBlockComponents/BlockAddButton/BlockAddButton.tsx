@@ -1,38 +1,33 @@
-import React, {useMemo, useState} from "react";
+import React, { useMemo, useState } from "react";
 
-import {blockTypes} from "../../../model/hooks/documentParser";
-import {Button} from "@mui/material";
+import { blockTypes } from "../../../model/hooks/useDocumentParser";
 
 interface BlockAddButtonProps {
-    onClick?: () => void;
-    buttonContent: string;
+  onClick?: () => void;
+  buttonContent: string;
 }
 
 const BlockAddButton = (props: BlockAddButtonProps) => {
-    const {onClick, buttonContent} = props;
-    const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
+  const { onClick, buttonContent } = props;
 
-    const handleClick = () => {
-        if (!onClick) return;
+  const handleClick = () => {
+    if (!onClick) return;
+    onClick();
+  };
 
-        onClick();
-    };
-
-    const typeList = useMemo(
-        () =>
-            Object.entries(blockTypes).map((item, index) => (
-                <li key={index}>item</li>
-            )),
-        [blockTypes],
-    );
-
-    return (
-        <button style={{width: 20, border: 'none', background: "white", borderRadius: 4}}
-                onClick={handleClick}>
-            {buttonContent}
-            {/*{isMenuOpen && <ul>{typeList}</ul>}*/}
-        </button>
-    );
+  return (
+    <button
+      style={{
+        width: 20,
+        border: "none",
+        background: "white",
+        borderRadius: 4,
+      }}
+      onClick={handleClick}
+    >
+      {buttonContent}
+    </button>
+  );
 };
 
 export default BlockAddButton;
