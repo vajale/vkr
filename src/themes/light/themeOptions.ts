@@ -1,5 +1,5 @@
-import { IExtendedTheme } from "../types"
-import { COMMON_OPTIONS } from "../common"
+import { IExtendedTheme } from "../types";
+import { COMMON_OPTIONS } from "../common";
 
 const themeOptions: IExtendedTheme = {
   menuBackground: "#EDEDED",
@@ -15,6 +15,6 @@ const themeOptions: IExtendedTheme = {
       main: "#F50057",
     },
   },
-}
+};
 
-export default themeOptions
+export default themeOptions;

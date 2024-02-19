@@ -1,4 +1,4 @@
-import { Button, styled } from "@mui/material"
+import { Button, styled } from "@mui/material";
 
 export const StyledAccountButton = styled(Button)(() => ({
   display: "flex",
@@ -10,4 +10,4 @@ export const StyledAccountButton = styled(Button)(() => ({
     width: "40px",
     height: "40px",
   },
-}))
+}));

@@ -15,13 +15,13 @@ const TEXT_SIZES = {
   sizeText56: "56px",
   sizeText72: "72px",
   sizeText96: "96px",
-}
+};
 
 const RADIUS_SIZES = {
   sizeRadiusXS: "4px",
   sizeRadiusS: "8px",
   sizeRadius: "16px",
-}
+};
 
 const SPACE_SIZES = {
   space3XS: "2px",
@@ -37,6 +37,6 @@ const SPACE_SIZES = {
   space4XL: "48px",
   space5XL: "72px",
   space6XL: "96px",
-}
+};
 
-export { TEXT_SIZES, RADIUS_SIZES, SPACE_SIZES }
+export { TEXT_SIZES, RADIUS_SIZES, SPACE_SIZES };

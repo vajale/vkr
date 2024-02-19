@@ -1,8 +1,8 @@
-import React from "react"
-import { NotLoggedUser } from "./NotLoggedUser"
+import React from "react";
+import { NotLoggedUser } from "./NotLoggedUser";
 
 const Login: React.FC = () => {
-  return <NotLoggedUser />
-}
+  return <NotLoggedUser />;
+};
 
-export default Login
+export default Login;
