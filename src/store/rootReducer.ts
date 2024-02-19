@@ -2,7 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import appReducer from "./slices/app/index";
 
 const rootReducer = combineReducers({
-   app: appReducer,
+    app: appReducer,
 });
 
 export default rootReducer;

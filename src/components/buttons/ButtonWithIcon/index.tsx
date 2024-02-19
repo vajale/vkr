@@ -6,12 +6,12 @@ import { StyledButtonWithIcon } from "./styled";
 import { Typography } from "../../common/CustomTypography";
 
 const ButtonWithIcon: React.FunctionComponent<IButtonWithIcon> = ({ svg, title }) => {
-   return (
-      <StyledButtonWithIcon>
-         {svg}
-         <Typography>{title}</Typography>
-      </StyledButtonWithIcon>
-   );
+    return (
+        <StyledButtonWithIcon>
+            {svg}
+            <Typography>{title}</Typography>
+        </StyledButtonWithIcon>
+    );
 };
 
 export default ButtonWithIcon;
