@@ -1,67 +1,65 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-import PageHeader from '../PageHeader/PageHeader'
-import { Paper } from '@mui/material'
-import { useDocumentParser } from '../../model/hooks/useDocumentParser'
-import { type DocumentBlock, DocumentBlockType } from '../../model/types'
-import { closestCenter, DndContext, type DragEndEvent, useDroppable } from '@dnd-kit/core'
-import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { mockDocs } from '../../../../utils/mock/mockdata'
+import PageHeader from "../PageHeader/PageHeader";
+import { Paper } from "@mui/material";
+import { useDocumentParser } from "../../model/hooks/useDocumentParser";
+import { type DocumentBlock } from "../../model/types";
+import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
+import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { mockDocs } from "../../../../utils/mock/mockdata";
+import Dropable from "../../../DnDComponents/Dropable/Dropable";
 
 const PageView = () => {
-  const [documents, setDocuments] = useState<DocumentBlock[]>(() => mockDocs)
+    const [documents, setDocuments] = useState<DocumentBlock[]>(() => mockDocs);
 
-  const { blocks, getBlockByType } = useDocumentParser({
-    blocks: documents
-  })
+    const { blocks, getBlockByType } = useDocumentParser({
+        blocks: documents
+    });
 
-  const { isOver, setNodeRef } = useDroppable({
-    id: 'droppableAShit'
-  })
+    const handleDragEnd = (e: DragEndEvent) => {
+        const { active, over } = e;
 
-  const style = {
-    opacity: isOver ? 1 : 0.5
-  }
+        if (over === null || active.id === over.id) {
+            return;
+        }
 
-  const handleDragEnd = (e: DragEndEvent) => {
-    const { active, over } = e
+        setDocuments((blocks) => {
+            const oldIndex = blocks.findIndex((block) => block.id === active.id);
+            const newIndex = blocks.findIndex((block) => block.id === over.id);
+            return arrayMove(blocks, oldIndex, newIndex);
+        });
+    };
 
-    if (over !== null) {
+    const handleDragMove = (e: DragEndEvent) => {
+        const { over } = e;
 
-    }
+        if (over === null) return;
+    };
 
-    if (active.id !== over.id) {
-      setDocuments((blocks) => {
-        const oldIndex = blocks.findIndex((block) => block.id === active.id)
-        const newIndex = blocks.findIndex((block) => block.id === over.id)
-        return arrayMove(blocks, oldIndex, newIndex)
-      })
-    }
-  }
-
-  return (
+    return (
         <>
-            <PageHeader text={'Page'}/>
+            <PageHeader text={"Page"}/>
             <Paper
                 sx={{
-                  width: 600,
-                  height: 900,
-                  p: 2,
-                  bgcolor: 'whitesmoke'
-                }}
-            >
-                <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                    width: 600,
+                    height: 900,
+                    p: 2,
+                    bgcolor: "whitesmoke"
+                }}>
+                <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragMove={handleDragMove}>
                     <SortableContext items={blocks} strategy={verticalListSortingStrategy}>
-                        <div ref={setNodeRef} style={style}>
-                            {blocks.map((item) => {
-                              return getBlockByType(item)
-                            })}
-                        </div>
+                        {blocks.map((item) => {
+                            return (
+                                <Dropable id={item.id}>
+                                    {getBlockByType(item)}
+                                </Dropable>
+                            );
+                        })}
                     </SortableContext>
                 </DndContext>
             </Paper>
         </>
-  )
-}
+    );
+};
 
-export default PageView
+export default PageView;
