@@ -4,7 +4,6 @@ import ButtonWithIcon from "../../buttons/ButtonWithIcon"
 
 import { StyledMainButtons } from "./styled"
 
-//TODO вынести в константы
 const MenuMainButtons: React.FC = () => {
   return (
     <StyledMainButtons>
