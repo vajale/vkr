@@ -7,11 +7,11 @@ import MenuMainButtons from "../../StatickBlocks/MenuMainButtons";
 import { StyledCommonMenu } from "./styled";
 
 export const CommonMenu: React.FC = () => {
-  return (
-    <StyledCommonMenu>
-      <Login />
-      <MenuMainButtons />
-      <PidorButton></PidorButton>
-    </StyledCommonMenu>
-  );
+   return (
+      <StyledCommonMenu>
+         <Login />
+         <MenuMainButtons />
+         <PidorButton></PidorButton>
+      </StyledCommonMenu>
+   );
 };

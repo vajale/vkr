@@ -1,4 +1,4 @@
 export enum themePalette {
-  Light = "light",
-  Dark = "dark",
+   Light = "light",
+   Dark = "dark",
 }

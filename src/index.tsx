@@ -6,11 +6,11 @@ import App from "./App";
 const element = document.getElementById("root");
 
 if (element) {
-  const root = createRoot(element);
+   const root = createRoot(element);
 
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-  );
+   root.render(
+      <React.StrictMode>
+         <App />
+      </React.StrictMode>,
+   );
 }
