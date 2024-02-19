@@ -1,8 +1,8 @@
 export interface User {
-  isAuth: boolean;
-  user: UserData;
+   isAuth: boolean;
+   user: UserData;
 }
 
 export interface UserData {
-  name: string;
+   name: string;
 }

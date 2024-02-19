@@ -6,16 +6,18 @@ import store from "./store/store";
 import { DesktopRouter } from "./routes";
 import ThemeWrapper from "./components/common/ThemeWrapper";
 
+import "normalize.css";
+
 const App = () => {
-  return (
-    <div className="app">
-      <Provider store={store}>
-        <ThemeWrapper>
-          <DesktopRouter />
-        </ThemeWrapper>
-      </Provider>
-    </div>
-  );
+   return (
+      <div className="app">
+         <Provider store={store}>
+            <ThemeWrapper>
+               <DesktopRouter />
+            </ThemeWrapper>
+         </Provider>
+      </div>
+   );
 };
 
 export default App;

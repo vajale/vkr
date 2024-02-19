@@ -7,17 +7,19 @@ import { setColorMode } from "../../store/slices/app";
 import { useDispatch } from "react-redux";
 
 const PidorButton = () => {
-  const currentColorMode = useAppSelector((state) => state.app.colorMode);
-  const dispatch = useDispatch();
+   const currentColorMode = useAppSelector((state) => state.app.colorMode);
+   const dispatch = useDispatch();
 
-  const handleClick = () => {
-    if (currentColorMode === themePalette.Light) {
-      dispatch(setColorMode(themePalette.Dark));
-    }
-    dispatch(setColorMode(themePalette.Light));
-  };
+   const handleClick = () => {
+      if (currentColorMode === themePalette.Light) {
+         dispatch(setColorMode(themePalette.Dark));
+         return;
+      }
 
-  return <Button onClick={handleClick}>TI PIDOR</Button>;
+      dispatch(setColorMode(themePalette.Light));
+   };
+
+   return <Button onClick={handleClick}>TI PIDOR</Button>;
 };
 
 export default PidorButton;
