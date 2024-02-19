@@ -1,12 +1,12 @@
-import React from "react"
-import { Provider } from "react-redux"
+import React from "react";
+import { Provider } from "react-redux";
 
-import store from "./store/store"
+import store from "./store/store";
 
-import { DesktopRouter } from "./routes"
-import ThemeWrapper from "./components/common/ThemeWrapper"
+import { DesktopRouter } from "./routes";
+import ThemeWrapper from "./components/common/ThemeWrapper";
 
-import "normalize.css"
+import "normalize.css";
 
 const App = () => {
   return (
@@ -17,7 +17,7 @@ const App = () => {
         </ThemeWrapper>
       </Provider>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

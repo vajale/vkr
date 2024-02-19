@@ -1,17 +1,20 @@
-import React from "react"
+import React from "react";
 
-import { IButtonWithIcon } from "./types"
+import { IButtonWithIcon } from "./types";
 
-import { StyledButtonWithIcon } from "./styled"
-import { Typography } from "../../common/CustomTypography"
+import { StyledButtonWithIcon } from "./styled";
+import { Typography } from "../../common/CustomTypography";
 
-const ButtonWithIcon: React.FunctionComponent<IButtonWithIcon> = ({ svg, title }) => {
+const ButtonWithIcon: React.FunctionComponent<IButtonWithIcon> = ({
+  svg,
+  title,
+}) => {
   return (
     <StyledButtonWithIcon>
       {svg}
       <Typography>{title}</Typography>
     </StyledButtonWithIcon>
-  )
-}
+  );
+};
 
-export default ButtonWithIcon
+export default ButtonWithIcon;

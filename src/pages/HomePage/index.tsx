@@ -1,7 +1,6 @@
-import React from "react"
-import { MainLayout } from "../../components/layouts/main/MainLayout"
-import PageView from "../../components/PageView/ui/PageView/PageView";
+import React from "react";
+import { MainLayout } from "../../components/layouts/main/MainLayout";
 
 export const HomePage = () => {
-  return <MainLayout><PageView /></MainLayout>
-}
+  return <MainLayout></MainLayout>;
+};

@@ -10,6 +10,9 @@
     "eslint": "eslint src/",
     "prettier": "prettier src/ --write"
   },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
   "browser": {
     "fs": false,
     "path": false
@@ -40,7 +43,7 @@
     "eslint-plugin-react": "^7.33.2",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.6.0",
-    "prettier": "3.2.4",
+    "prettier": "^3.2.4",
     "sass": "^1.71.0",
     "sass-loader": "^14.1.0",
     "style-loader": "^3.3.4",

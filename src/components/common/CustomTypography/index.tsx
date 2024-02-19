@@ -1,10 +1,12 @@
-import React from "react"
+import React from "react";
 
-import { ICustomTypography } from "./types"
-import { StyledCustomTypography } from "./styled"
+import { ICustomTypography } from "./types";
+import { StyledCustomTypography } from "./styled";
 
-const Typography: React.FunctionComponent<ICustomTypography> = ({ children }) => {
-  return <StyledCustomTypography>{children}</StyledCustomTypography>
-}
+const Typography: React.FunctionComponent<ICustomTypography> = ({
+  children,
+}) => {
+  return <StyledCustomTypography>{children}</StyledCustomTypography>;
+};
 
-export { Typography }
+export { Typography };

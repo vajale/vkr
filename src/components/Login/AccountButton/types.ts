@@ -1,7 +1,7 @@
-import React from "react"
+import React from "react";
 
 export interface IAccountButton {
-  image?: string
-  accountName: string
-  svgIcon?: React.ReactNode
+  image?: string;
+  accountName: string;
+  svgIcon?: React.ReactNode;
 }

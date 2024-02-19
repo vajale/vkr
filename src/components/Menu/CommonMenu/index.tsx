@@ -1,10 +1,10 @@
-import React from "react"
+import React from "react";
 
-import PidorButton from "../../PidorButton"
-import Login from "../../Login"
-import MenuMainButtons from "../../StatickBlocks/MenuMainButtons"
+import PidorButton from "../../PidorButton";
+import Login from "../../Login";
+import MenuMainButtons from "../../StatickBlocks/MenuMainButtons";
 
-import { StyledCommonMenu } from "./styled"
+import { StyledCommonMenu } from "./styled";
 
 export const CommonMenu: React.FC = () => {
   return (
@@ -13,5 +13,5 @@ export const CommonMenu: React.FC = () => {
       <MenuMainButtons />
       <PidorButton></PidorButton>
     </StyledCommonMenu>
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-import { styled } from "@mui/material"
+import { styled } from "@mui/material";
 
 const StyledMainLayout = styled("div")(() => ({
   display: "flex",
@@ -7,6 +7,6 @@ const StyledMainLayout = styled("div")(() => ({
   height: "100vw",
   minHeight: "100vh",
   maxWidth: "100%",
-}))
+}));
 
-export { StyledMainLayout }
+export { StyledMainLayout };
