@@ -4,8 +4,8 @@ import { TITLES } from "../constants";
 
 import { AccountButton } from "../AccountButton";
 
-import { ReactComponent as NotLoggedSvg } from "../../../../src/assets/svg/NotLoggedAvatar.svg";
+import NotLoggedSvg from "@/assets/svg/NotLoggedAvatar.svg";
 
 export const NotLoggedUser: React.FC = () => {
-    return <AccountButton svgIcon={<NotLoggedSvg />} accountName={TITLES.LOG_IN} />;
+    return <AccountButton image={NotLoggedSvg} accountName={TITLES.LOG_IN} />;
 };

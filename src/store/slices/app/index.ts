@@ -1,6 +1,6 @@
-import { IAppTypes } from "./types";
-import { createSlice } from "@reduxjs/toolkit";
-import { themePalette } from "../../../enums/themePalette";
+import {IAppTypes} from "./types";
+import {createSlice} from "@reduxjs/toolkit";
+import {themePalette} from "@/enums/themePalette";
 
 const initialState: IAppTypes = {
     colorMode: themePalette.Light,
@@ -16,6 +16,6 @@ export const appSlice = createSlice({
     },
 });
 
-export const { setColorMode } = appSlice.actions;
+export const {setColorMode} = appSlice.actions;
 
 export default appSlice.reducer;

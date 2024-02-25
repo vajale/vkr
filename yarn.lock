@@ -6545,6 +6545,11 @@
   "resolved" "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
   "version" "1.0.0"
 
+"svg-loader@^0.0.2":
+  "integrity" "sha512-otmaUALijTGJJpvPVTHhHIzseEsrB7DyJJxygb0XkiZPeJT9t+PiK7tDT9YWSUDqHqqqutTqF0ldXth/+T72wg=="
+  "resolved" "https://registry.npmjs.org/svg-loader/-/svg-loader-0.0.2.tgz"
+  "version" "0.0.2"
+
 "svg-parser@^2.0.4":
   "integrity" "sha512-e4hG1hRwoOdRb37cIMSgzNsxyzKfayW6VOflrwvR+/bzrkyxY/31WkbgnQpgtrNp1SdpJvpUAGTa/ZoiPNDuRQ=="
   "resolved" "https://registry.npmjs.org/svg-parser/-/svg-parser-2.0.4.tgz"
