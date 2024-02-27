@@ -1,4 +1,4 @@
-import { ThemeOptions } from "@mui/material";
+import {ThemeOptions} from "@mui/material";
 
 export interface IExtendedTheme extends ThemeOptions {
     menuBackground: string;
@@ -24,6 +24,7 @@ export interface IExtendedTheme extends ThemeOptions {
         sizeRadiusXS: string;
         sizeRadiusS: string;
         sizeRadius: string;
+        sizeRadiusMax: string;
     };
     spaceSize: {
         space3XS: string;
