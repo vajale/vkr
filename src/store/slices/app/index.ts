@@ -16,6 +16,7 @@ export const appThemeSlice = createSlice({
    },
 });
 
+export const {setColorMode} = appSlice.actions;
 export default appThemeSlice.reducer;
 
 export const { actions: appThemeActions } = appThemeSlice;

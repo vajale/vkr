@@ -4,7 +4,7 @@ import { ICustomTypography } from "./types";
 import { StyledCustomTypography } from "./styled";
 
 const Typography: React.FunctionComponent<ICustomTypography> = ({ children }) => {
-   return <StyledCustomTypography>{children}</StyledCustomTypography>;
+    return <StyledCustomTypography>{children}</StyledCustomTypography>;
 };
 
 export { Typography };
