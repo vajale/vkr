@@ -7,10 +7,10 @@ interface ListProps {
 }
 
 const blockTypes: Record<string, DocumentBlockType> = {
-    code: DocumentBlockType.CODE,
-    text: DocumentBlockType.TEXT,
-    checkbox: DocumentBlockType.CHECKBOX,
-    image: DocumentBlockType.IMAGE
+   code: DocumentBlockType.CODE,
+   text: DocumentBlockType.TEXT,
+   checkbox: DocumentBlockType.CHECKBOX,
+   image: DocumentBlockType.IMAGE,
 };
 
 const EditList = ({ onTypeEdit }: ListProps) => {
@@ -30,11 +30,11 @@ const EditList = ({ onTypeEdit }: ListProps) => {
             background: "white",
             listStyle: "none",
             display: "flex",
-            flexDirection: "column"
+            flexDirection: "column",
          }}>
          {Object.values(DocumentBlockType).map((value) => (
             <button
-                style={{ border: 'none', marginBottom: 7, padding: 7, borderRadius: 7, width: 140 }}
+               style={{ border: "none", marginBottom: 7, padding: 7, borderRadius: 7, width: 140 }}
                onClick={() => {
                   handleEditType(value);
                }}

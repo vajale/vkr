@@ -3,7 +3,7 @@ import { type DocumentCheckboxBlock, type DocumentCodeBlock } from "../../../mod
 
 interface CodeBlockProps {
    block: DocumentCodeBlock;
-   contentEditable?: boolean
+   contentEditable?: boolean;
 }
 
 const codeStyle = {
@@ -15,11 +15,18 @@ const codeStyle = {
    marginBottom: 7,
    display: "flex",
    alignItems: "center",
-   width: " 100%"
+   width: " 100%",
 };
 
 const DocumentBlockCode = ({ block, contentEditable }: CodeBlockProps) => {
-   return <code contentEditable={contentEditable} suppressContentEditableWarning={true} style={codeStyle}>{block.content}</code>;
+   return (
+      <code
+         contentEditable={contentEditable}
+         suppressContentEditableWarning={true}
+         style={codeStyle}>
+         {block.content}
+      </code>
+   );
 };
 
 export default DocumentBlockCode;

@@ -15,125 +15,133 @@ import DocumentBlockBase from "../DocumentBlockComponents/DocumentBlockBase/Docu
 import { useGetDocumentsQuery } from "../../model/services/getDocumentsData";
 
 const PageView = () => {
-    const dispatch = useAppDispatch();
-    const { data, isLoading, isSuccess } = useGetDocumentsQuery();
+   const dispatch = useAppDispatch();
+   // const { data, isLoading, isSuccess } = useGetDocumentsQuery();
+   //
+   // useEffect(() => {
+   //    if (isSuccess) {
+   //       dispatch(documentPageActions.updateDocuments(data));
+   //    }
+   // }, [isLoading, isSuccess]);
 
-    useEffect(() => {
-        if (isSuccess) {
-            dispatch(documentPageActions.updateDocuments(data));
-        }
-    }, [isLoading, isSuccess]);
+   const docs = useAppSelector((state) => state.documentPage.data);
+   const [editId, setEditId] = useState<string>();
 
-    const docs = useAppSelector((state) => state.documentPage.data);
-    const [editId, setEditId] = useState<string>();
+   const handleDragEnd = (e: DragEndEvent) => {
+      const { active, over } = e;
 
-    const handleDragEnd = (e: DragEndEvent) => {
-        const { active, over } = e;
+      if (over === null || active.id === over.id) {
+         return;
+      }
 
-        if (over === null || active.id === over.id) {
-            return;
-        }
+      const oldIndex = docs.findIndex((block) => block.id === active.id);
+      const newIndex = docs.findIndex((block) => block.id === over.id);
+      const newArray = arrayMove(docs, oldIndex, newIndex);
 
-        const oldIndex = docs.findIndex((block) => block.id === active.id);
-        const newIndex = docs.findIndex((block) => block.id === over.id);
-        const newArray = arrayMove(docs, oldIndex, newIndex);
+      dispatch(documentPageActions.updateDocuments(newArray));
+   };
 
-        dispatch(documentPageActions.updateDocuments(newArray));
-    };
+   const handleDragMove = (e: DragEndEvent) => {
+      // const { over } = e;
+      //
+      // if (over === null) return;
+   };
 
-    const handleDragMove = (e: DragEndEvent) => {
-        // const { over } = e;
-        //
-        // if (over === null) return;
-    };
+   // const getDocument = useMemo(() => {
+   //
+   // }, []);
 
-    // const getDocument = useMemo(() => {
-    //
-    // }, []);
+   const isContentEditable = true;
 
-    const isContentEditable = true;
+   return (
+      <>
+         <PageHeader text={"Page"} />
+         <Paper
+            sx={{
+               width: 600,
+               height: 900,
+               p: 2,
+               bgcolor: "whitesmoke"
+            }}>
+            <DndContext
+               collisionDetection={closestCenter}
+               onDragEnd={handleDragEnd}
+               onDragMove={handleDragMove}>
+               <SortableContext items={docs} strategy={verticalListSortingStrategy}>
+                  {docs.map((item) => {
+                     const isMenuOpen = editId === item.id;
 
-    return (
-        <>
-            <PageHeader text={"Page"}/>
-            <Paper
-                sx={{
-                    width: 600,
-                    height: 900,
-                    p: 2,
-                    bgcolor: "whitesmoke"
-                }}>
-                <DndContext
-                    collisionDetection={closestCenter}
-                    onDragEnd={handleDragEnd}
-                    onDragMove={handleDragMove}>
-                    <SortableContext items={docs} strategy={verticalListSortingStrategy}>
-                        {docs.map((item) => {
-                            const isMenuOpen = editId === item.id;
+                     const handleEditButtonClick = (id: string) => {
+                        if (id === "") return;
 
-                            const handleEditButtonClick = (id: string) => {
-                                if (id === "") return;
+                        setEditId(id);
+                     };
 
-                                setEditId(id);
-                            };
+                     const handleListClick = (type: DocumentBlockType) => {
+                        setEditId("");
+                     };
 
-                            const handleListClick = (type: DocumentBlockType) => {
-                                setEditId("");
-                            };
+                     const baseProps = {
+                        disableEditButtons: isMenuOpen,
+                        onEditButtonClick: handleEditButtonClick,
+                        onTypeChange: handleListClick,
+                        isMenuOpen
+                     };
 
-                            const baseProps = {
-                                disableEditButtons: isMenuOpen,
-                                onEditButtonClick: handleEditButtonClick,
-                                onTypeChange: handleListClick,
-                                isMenuOpen
-                            };
-
-                            switch (item.type) {
-                                case DocumentBlockType.CODE:
-                                    return (
-                                        <Dropable key={item.id} id={item.id}>
-                                            <DocumentBlockBase id={item.id} {...baseProps}>
-                                                <DocumentBlockCode block={item}/>
-                                            </DocumentBlockBase>
-                                        </Dropable>
-                                    );
-                                case DocumentBlockType.CHECKBOX:
-                                    return (
-                                        <Dropable key={item.id} id={item.id}>
-                                            <DocumentBlockBase id={item.id} {...baseProps}>
-                                                <DocumentBlockCheckbox block={item}
-                                                                       onContentChange={(data) => {
-                                                                           dispatch(documentPageActions.updateDocumentBlock({
-                                                                               ...item,
-                                                                               content: data
-                                                                           }));
-                                                                       }}/>
-                                            </DocumentBlockBase>
-                                        </Dropable>
-                                    );
-                                case DocumentBlockType.TEXT:
-                                    return (
-                                        <Dropable key={item.id} id={item.id}>
-                                            <DocumentBlockBase id={item.id} {...baseProps}>
-                                                <DocumentBlockText block={item}
-                                                                   onContentChange={(data) => {
-                                                                       dispatch(documentPageActions.updateDocumentBlock({
-                                                                           ...item,
-                                                                           content: data
-                                                                       }));
-                                                                   }}/>
-                                            </DocumentBlockBase>
-                                        </Dropable>
-                                    );
-                                default:
-                                    break;
-                            }
-                        })}
-                    </SortableContext>
-                </DndContext>
-            </Paper>
-        </>
-    );
+                     switch (item.type) {
+                        case DocumentBlockType.CODE:
+                           return (
+                              <Dropable key={item.id} id={item.id}>
+                                 <DocumentBlockBase id={item.id} {...baseProps}>
+                                    <DocumentBlockCode block={item} />
+                                 </DocumentBlockBase>
+                              </Dropable>
+                           );
+                        case DocumentBlockType.CHECKBOX:
+                           return (
+                              <Dropable key={item.id} id={item.id}>
+                                 <DocumentBlockBase id={item.id} {...baseProps}>
+                                    <DocumentBlockCheckbox
+                                       block={item}
+                                       onContentChange={(data) => {
+                                          dispatch(
+                                             documentPageActions.updateDocumentBlock({
+                                                ...item,
+                                                content: data
+                                             })
+                                          );
+                                       }}
+                                    />
+                                 </DocumentBlockBase>
+                              </Dropable>
+                           );
+                        case DocumentBlockType.TEXT:
+                           return (
+                              <Dropable key={item.id} id={item.id}>
+                                 <DocumentBlockBase id={item.id} {...baseProps}>
+                                    <DocumentBlockText
+                                       block={item}
+                                       onContentChange={(data) => {
+                                          dispatch(
+                                             documentPageActions.updateDocumentBlock({
+                                                ...item,
+                                                content: data
+                                             })
+                                          );
+                                       }}
+                                    />
+                                 </DocumentBlockBase>
+                              </Dropable>
+                           );
+                        default:
+                           break;
+                     }
+                  })}
+               </SortableContext>
+            </DndContext>
+         </Paper>
+      </>
+   );
 };
 
 export default PageView;

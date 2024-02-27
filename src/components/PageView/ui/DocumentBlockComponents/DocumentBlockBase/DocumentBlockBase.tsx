@@ -28,7 +28,7 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
       disableEditButtons = false,
       isMenuOpen = false,
       id,
-      onTypeChange
+      onTypeChange,
    } = props;
 
    const [isEditabale, setIsEditabale] = useState<boolean>(isMenuOpen);
@@ -47,7 +47,7 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
       marginBottom: 7,
       display: "flex",
       border: "none",
-      opacity: active?.id === id ? 0.7 : 1
+      opacity: active?.id === id ? 0.7 : 1,
    };
 
    const handleEditClick = () => {
@@ -65,8 +65,8 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
       dispatch(
          documentPageActions.updateDocumentType({
             type,
-            id
-         })
+            id,
+         }),
       );
    };
 
@@ -75,14 +75,14 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
          <Stack flexDirection={"row"} ref={docRef}>
             <Stack flexDirection={"row"} marginRight={2} alignItems={"flex-start"}>
                <div style={{ width: 40 }}>
-                  {(isHover && !disableEditButtons) && (
+                  {isHover && !disableEditButtons && (
                      <Stack flexDirection={"row"} gap={0.4}>
                         <button
                            style={{
                               width: 24,
                               border: "none",
                               background: "white",
-                              borderRadius: 4
+                              borderRadius: 4,
                            }}
                            onClick={handleEditClick}>
                            +
@@ -93,7 +93,7 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
                                  width: 24,
                                  border: "none",
                                  background: "white",
-                                 borderRadius: 4
+                                 borderRadius: 4,
                               }}
                               onClick={() => onMoveButtonClick}>
                               ||

@@ -3,6 +3,7 @@ import appReducer from "./slices/app/index";
 import { documentPageReducer } from "./slices/pageSlice";
 import { type IAppThemeSchema } from "./slices/app/types";
 import { type DocumentsPageSchema } from "./slices/pageSlice/types";
+import { documentsApi } from "../components/PageView/model/services/getDocumentsData";
 
 export interface StateSchema {
    documentPage: DocumentsPageSchema;
@@ -11,7 +12,7 @@ export interface StateSchema {
 
 const rootReducer: ReducersMapObject<StateSchema> = {
    documentPage: documentPageReducer,
-   app: appReducer,
+   app: appReducer
 };
 
 export default rootReducer;

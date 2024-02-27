@@ -11,13 +11,13 @@ export const mockDocs: DocumentBlock[] = [
       type: DocumentBlockType.TEXT,
       content:
          'negro el pidrasos "' +
-         'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"'
+         'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"',
    },
    {
       id: "2243",
       type: DocumentBlockType.CHECKBOX,
       content: "bombaclat",
-      flag: true
+      flag: true,
    },
    {
       id: "236236",
@@ -26,33 +26,33 @@ export const mockDocs: DocumentBlock[] = [
       children: {
          id: "sinok ebany",
          type: DocumentBlockType.CODE,
-         content: "event.poshelNahoy()"
-      }
+         content: "event.poshelNahoy()",
+      },
    },
    {
       id: "345",
       type: DocumentBlockType.TEXT,
-      content: `Lorem ipsum \n ${mock} \n ${mock2}`
+      content: `Lorem ipsum \n ${mock} \n ${mock2}`,
    },
    {
       id: "346",
       type: DocumentBlockType.TEXT,
       content:
-          'negro el pidrasos "' +
-          'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"'
+         'negro el pidrasos "' +
+         'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"',
    },
    {
       id: "2134",
       type: DocumentBlockType.TEXT,
       content:
-          'negro el pidrasos "' +
-          'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"'
+         'negro el pidrasos "' +
+         'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"',
    },
    {
       id: "421",
       type: DocumentBlockType.TEXT,
       content:
-          'negro el pidrasos "' +
-          'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"'
-   }
+         'negro el pidrasos "' +
+         'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"',
+   },
 ];

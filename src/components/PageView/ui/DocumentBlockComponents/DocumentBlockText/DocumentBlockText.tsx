@@ -3,8 +3,8 @@ import { type DocumentContentType, type DocumentTextBlock } from "../../../model
 
 interface TextBlockProps {
    block: DocumentTextBlock;
-   contentEditable?: boolean,
-   onContentChange?: (data: DocumentContentType) => void
+   contentEditable?: boolean;
+   onContentChange?: (data: DocumentContentType) => void;
 }
 
 const defaultStyle = {
@@ -16,7 +16,7 @@ const defaultStyle = {
    marginBottom: 7,
    display: "flex",
    alignItems: "center",
-   border: "none"
+   border: "none",
 };
 
 const DocumentBlockText = ({ block, contentEditable = true, onContentChange }: TextBlockProps) => {
@@ -29,8 +29,14 @@ const DocumentBlockText = ({ block, contentEditable = true, onContentChange }: T
    return (
       <div style={defaultStyle}>
          <div>
-            <span onInput={(e) => { handleContentChange(e.currentTarget.textContent); }}
-                  contentEditable={contentEditable} suppressContentEditableWarning={true}>{block.content}</span>
+            <span
+               onInput={(e) => {
+                  handleContentChange(e.currentTarget.textContent);
+               }}
+               contentEditable={contentEditable}
+               suppressContentEditableWarning={true}>
+               {block.content}
+            </span>
          </div>
       </div>
    );
