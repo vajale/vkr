@@ -7,36 +7,52 @@ export const mock2 =
 
 export const mockDocs: DocumentBlock[] = [
    {
-      id: "1",
+      id: "999",
       type: DocumentBlockType.TEXT,
-      title: "negro el pidrasos",
-      paragraphs: ["lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"]
+      content:
+         'negro el pidrasos "' +
+         'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"'
    },
    {
-      id: "2",
+      id: "2243",
       type: DocumentBlockType.CHECKBOX,
-      title: "bombaclat",
+      content: "bombaclat",
       flag: true
    },
    {
-      id: "3",
+      id: "236236",
       type: DocumentBlockType.CODE,
-      code: "window.sosnihuica()",
+      content: "window.sosnihuica()",
       children: {
          id: "sinok ebany",
          type: DocumentBlockType.CODE,
-         code: "event.poshelNahoy()",
-         children: {
-            id: "sinok ebany",
-            type: DocumentBlockType.CODE,
-            code: "event.poshelNahoy()"
-         }
+         content: "event.poshelNahoy()"
       }
    },
    {
-      id: "4",
+      id: "345",
       type: DocumentBlockType.TEXT,
-      title: "Lorem ipsum ",
-      paragraphs: [mock, mock2]
+      content: `Lorem ipsum \n ${mock} \n ${mock2}`
+   },
+   {
+      id: "346",
+      type: DocumentBlockType.TEXT,
+      content:
+          'negro el pidrasos "' +
+          'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"'
+   },
+   {
+      id: "2134",
+      type: DocumentBlockType.TEXT,
+      content:
+          'negro el pidrasos "' +
+          'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"'
+   },
+   {
+      id: "421",
+      type: DocumentBlockType.TEXT,
+      content:
+          'negro el pidrasos "' +
+          'lee quo minus id, quod maxime placeat, facere possimus, omnis voluptas assumenda  perferendis doloribus asperiores repellat"'
    }
 ];

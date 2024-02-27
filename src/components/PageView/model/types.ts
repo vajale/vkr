@@ -6,38 +6,36 @@ export enum DocumentBlockType {
    IMAGE = "IMAGE",
 }
 
-export type DocumentBlockBase = {
+export interface DocumentBlockBase {
    id: string;
    type: DocumentBlockType;
+   content: DocumentContentType;
    children?: DocumentBlock;
-};
+}
+
+export type DocumentContentType = string;
 
 export interface DocumentCodeBlock extends DocumentBlockBase {
    type: DocumentBlockType.CODE;
-   code: string;
 }
 
 export interface DocumentImageBlock extends DocumentBlockBase {
    type: DocumentBlockType.IMAGE;
-   title?: string;
    src: string;
 }
 
 export interface DocumentCheckboxBlock extends DocumentBlockBase {
    type: DocumentBlockType.CHECKBOX;
-   title: string;
    flag: boolean;
 }
 
 export interface DocumentQuoteBlock extends DocumentBlockBase {
    type: DocumentBlockType.QUOTE;
-   title: string;
    quote: boolean;
 }
 
 export interface DocumentTextBlock extends DocumentBlockBase {
    type: DocumentBlockType.TEXT;
-   paragraphs: string[];
    title?: string;
 }
 

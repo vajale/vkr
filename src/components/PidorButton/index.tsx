@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@mui/material";
 import { useAppSelector } from "../../store/hooks";
 import { themePalette } from "../../enums/themePalette";
-import { setColorMode } from "../../store/slices/app";
+import { appThemeActions } from "../../store/slices/app";
 import { useDispatch } from "react-redux";
 
 const PidorButton = () => {
@@ -12,11 +12,11 @@ const PidorButton = () => {
 
    const handleClick = () => {
       if (currentColorMode === themePalette.Light) {
-         dispatch(setColorMode(themePalette.Dark));
+         dispatch(appThemeActions.setColorMode(themePalette.Dark));
          return;
       }
 
-      dispatch(setColorMode(themePalette.Light));
+      dispatch(appThemeActions.setColorMode(themePalette.Light));
    };
 
    return <Button onClick={handleClick}>TI PIDOR</Button>;
