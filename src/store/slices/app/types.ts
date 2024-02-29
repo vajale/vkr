@@ -1,5 +1,5 @@
-import { PaletteMode } from "@mui/material";
+import { type PaletteMode } from "@mui/material";
 
-export interface IAppTypes {
-    colorMode: PaletteMode;
+export interface IAppThemeSchema {
+   colorMode: PaletteMode;
 }

@@ -1,48 +1,46 @@
 export enum DocumentBlockType {
-    TEXT = "TEXT",
-    CHECKBOX = "CHECKBOX",
-    CODE = "CODE",
-    QUOTE = "QUOTE",
-    IMAGE = "IMAGE",
+   TEXT = "TEXT",
+   CHECKBOX = "CHECKBOX",
+   CODE = "CODE",
+   QUOTE = "QUOTE",
+   IMAGE = "IMAGE",
 }
 
-export type DocumentBlockBase = {
-    id: string;
-    type: DocumentBlockType;
-    children?: DocumentBlock;
-};
+export interface DocumentBlockBase {
+   id: string;
+   type: DocumentBlockType;
+   content: DocumentContentType;
+   children?: DocumentBlock;
+}
+
+export type DocumentContentType = string;
 
 export interface DocumentCodeBlock extends DocumentBlockBase {
-    type: DocumentBlockType.CODE;
-    code: string;
+   type: DocumentBlockType.CODE;
 }
 
 export interface DocumentImageBlock extends DocumentBlockBase {
-    type: DocumentBlockType.IMAGE;
-    title?: string;
-    src: string;
+   type: DocumentBlockType.IMAGE;
+   src: string;
 }
 
 export interface DocumentCheckboxBlock extends DocumentBlockBase {
-    type: DocumentBlockType.CHECKBOX;
-    title: string;
-    flag: boolean;
+   type: DocumentBlockType.CHECKBOX;
+   flag: boolean;
 }
 
 export interface DocumentQuoteBlock extends DocumentBlockBase {
-    type: DocumentBlockType.QUOTE;
-    title: string;
-    quote: boolean;
+   type: DocumentBlockType.QUOTE;
+   quote: boolean;
 }
 
 export interface DocumentTextBlock extends DocumentBlockBase {
-    type: DocumentBlockType.TEXT;
-    paragraphs: string[];
-    title?: string;
+   type: DocumentBlockType.TEXT;
+   title?: string;
 }
 
 export type DocumentBlock =
-    | DocumentTextBlock
-    | DocumentImageBlock
-    | DocumentCodeBlock
-    | DocumentCheckboxBlock;
+   | DocumentTextBlock
+   | DocumentImageBlock
+   | DocumentCodeBlock
+   | DocumentCheckboxBlock;

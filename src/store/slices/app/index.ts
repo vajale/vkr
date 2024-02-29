@@ -1,12 +1,12 @@
-import {IAppTypes} from "./types";
+import {type IAppThemeSchema} from "./types";
 import {createSlice} from "@reduxjs/toolkit";
 import {themePalette} from "@/enums/themePalette";
 
-const initialState: IAppTypes = {
+const initialState: IAppThemeSchema = {
     colorMode: themePalette.Light,
 };
 
-export const appSlice = createSlice({
+export const appThemeSlice = createSlice({
     name: "app",
     initialState,
     reducers: {
@@ -16,6 +16,8 @@ export const appSlice = createSlice({
     },
 });
 
-export const {setColorMode} = appSlice.actions;
+export const {setColorMode} = appThemeSlice.actions;
+export default appThemeSlice.reducer;
 
-export default appSlice.reducer;
+export const {actions: appThemeActions} = appThemeSlice;
+export const {reducer: appThemeReducer} = appThemeSlice;
