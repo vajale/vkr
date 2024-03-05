@@ -1,6 +1,5 @@
 import React from "react";
 import { type DocumentCheckboxBlock, type DocumentCodeBlock } from "../../../model/types";
-import { usePageSettings } from "../../../model/hooks/usePageSettings";
 
 interface CodeBlockProps {
    block: DocumentCodeBlock;
@@ -20,8 +19,6 @@ const codeStyle = {
 };
 
 const DocumentBlockCode = ({ block, contentEditable }: CodeBlockProps) => {
-   const { fullWidth } = usePageSettings();
-
    return (
       <code
          contentEditable={contentEditable}

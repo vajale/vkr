@@ -1,6 +1,5 @@
 import React from "react";
 import { type DocumentContentType, type DocumentTextBlock } from "../../../model/types";
-import { usePageSettings } from "../../../model/hooks/usePageSettings";
 
 interface TextBlockProps {
    block: DocumentTextBlock;
@@ -21,8 +20,6 @@ const defaultStyle = {
 };
 
 const DocumentBlockText = ({ block, contentEditable = true, onContentChange }: TextBlockProps) => {
-   const { fullWidth } = usePageSettings();
-
    const handleContentChange = (textContent: string | null) => {
       if (onContentChange == null || textContent == null) return;
 
