@@ -1,5 +1,6 @@
 import { type DocumentCheckboxBlock, type DocumentContentType } from "../../../model/types";
 import React from "react";
+import { usePageSettings } from "../../../model/hooks/usePageSettings";
 
 interface CheckboxBlockProps {
    block: DocumentCheckboxBlock;
@@ -25,6 +26,8 @@ const DocumentBlockCheckbox = ({
    onContentChange,
    contentEditable = "true",
 }: CheckboxBlockProps) => {
+   const { fullWidth } = usePageSettings();
+
    const alignItemsStyle = block.content.length > 52 ? "flex-start" : "center";
    const marginStyle = block.content.length > 52 ? 7 : 0;
 

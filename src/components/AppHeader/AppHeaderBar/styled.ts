@@ -1,8 +1,8 @@
-import {styled} from "@mui/material";
+import { styled } from "@mui/material";
 
 export const StyledHeaderBar = styled("div")(() => ({
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+   display: "flex",
+   flexDirection: "row",
+   justifyContent: "space-between",
+   alignItems: "center",
 }));
