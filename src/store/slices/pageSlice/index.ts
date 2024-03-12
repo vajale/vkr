@@ -2,8 +2,10 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { type DocumentsPageSchema } from "./types";
 import { mockDocs } from "../../../utils/mock/mockdata";
 import {
+    DocumentBlockType,
     type DocumentBlock,
-    type DocumentBlockType
+    type DocumentTextBlock,
+    type DocumentCheckboxBlock, type DocumentCodeBlock
 } from "../../../components/PageView/model/types";
 
 const initialState: DocumentsPageSchema = {
@@ -75,9 +77,48 @@ export const documentPageSlice = createSlice({
                         ...action.payload
                     };
                 }
-
                 return item;
             });
+        }),
+        addDocumentBlock: create.reducer((state, action: PayloadAction<DocumentBlockType>) => {
+            const type = action.payload;
+            const id = new Date().toJSON();
+            const defaultContent = '';
+
+            if (type === DocumentBlockType.TEXT) {
+                const newblock = {
+                    id,
+                    type,
+                    content: defaultContent
+                } satisfies DocumentTextBlock;
+
+                state.data = [...state.data, newblock];
+                return;
+            }
+            if (type === DocumentBlockType.CHECKBOX) {
+                const newblock = {
+                    id,
+                    type,
+                    content: defaultContent,
+                    flag: false
+                } satisfies DocumentCheckboxBlock;
+
+                state.data = [...state.data, newblock];
+                return;
+            }
+
+            if (type === DocumentBlockType.CODE) {
+                const newblock: DocumentCodeBlock = {
+                    id,
+                    type,
+                    content: defaultContent
+                };
+
+                state.data = [...state.data, newblock];
+            }
+        }),
+        removeDocumentBlock: create.reducer((state, action: PayloadAction<{ id: string }>) => {
+            state.data = state.data.filter(item => item.id !== action.payload.id);
         })
     }),
     selectors: {
@@ -97,5 +138,6 @@ export const {
     selectDocumentsLoading,
     selectDocumentsError,
     selectDocumentsIsEdit,
-    selectDocumentHeaderFlag, selectDocumentLogo
+    selectDocumentHeaderFlag,
+    selectDocumentLogo
 } = documentPageSlice.selectors;

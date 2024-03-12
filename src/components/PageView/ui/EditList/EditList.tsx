@@ -1,48 +1,42 @@
 import React from "react";
 
 import { DocumentBlockType } from "../../model/types";
+import { StyledList, StyledListButton } from "./styled";
 
-interface ListProps {
-   onTypeEdit?: (type: DocumentBlockType) => void;
+interface EditListProps {
+   onEdit?: (type: DocumentBlockType) => void;
 }
 
-const blockTypes: Record<string, DocumentBlockType> = {
-   code: DocumentBlockType.CODE,
-   text: DocumentBlockType.TEXT,
-   checkbox: DocumentBlockType.CHECKBOX,
-   image: DocumentBlockType.IMAGE,
-};
-
-const EditList = ({ onTypeEdit }: ListProps) => {
+const EditList = ({ onEdit }: EditListProps) => {
    const handleEditType = (newType: DocumentBlockType) => {
-      if (onTypeEdit == null) return;
+      if (onEdit == null) return;
 
       if (newType === DocumentBlockType.IMAGE || newType === DocumentBlockType.QUOTE) return;
 
-      onTypeEdit(newType);
+      onEdit(newType);
    };
 
    return (
-      <ul
-         style={{
-            position: "fixed",
-            padding: 7,
-            background: "white",
-            listStyle: "none",
-            display: "flex",
-            flexDirection: "column",
-         }}>
+      <StyledList>
          {Object.values(DocumentBlockType).map((value) => (
-            <button
-               style={{ border: "none", marginBottom: 7, padding: 7, borderRadius: 7, width: 140 }}
+            <StyledListButton
                onClick={() => {
                   handleEditType(value);
                }}
                key={value}>
                {value}
-            </button>
+            </StyledListButton>
          ))}
-      </ul>
+         {Object.values(DocumentBlockType).map((value) => (
+             <button
+                 onClick={() => {
+                    handleEditType(value);
+                 }}
+                 key={value}>
+                {value}
+             </button>
+         ))}
+      </StyledList>
    );
 };
 

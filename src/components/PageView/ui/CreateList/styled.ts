@@ -1,12 +1,13 @@
 import { styled } from "@mui/material";
 
-export const StyledList = styled("div")(() => ({
+export const StyledEditList = styled("div")(() => ({
    display: "flex",
    position: "fixed",
    flexDirection: "column",
    backgroundColor: "white",
    width: 140,
-   padding: 7
+   padding: 7,
+   overflow: 'auto'
 }));
 
 export const StyledListButton = styled("button")(() => ({

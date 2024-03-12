@@ -1,48 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import { type DocumentContentType, type DocumentTextBlock } from "../../../model/types";
-import { usePageSettings } from "../../../model/hooks/usePageSettings";
 
 interface TextBlockProps {
-   block: DocumentTextBlock;
-   contentEditable?: boolean;
-   onContentChange?: (data: DocumentContentType) => void;
+    block: DocumentTextBlock;
+    contentEditable?: boolean;
+    onContentChange?: (data: DocumentContentType) => void;
+    onHotKeyInput?: (id: string, input: string) => void;
 }
 
 const defaultStyle = {
-   background: "white",
-   padding: 7,
-   borderRadius: 7,
-   color: "none",
-   height: "auto",
-   marginBottom: 7,
-   display: "flex",
-   alignItems: "center",
-   border: "none",
+    padding: 7,
+    borderRadius: 7,
+    color: "none",
+    marginBottom: 7,
+    display: "flex",
+    alignItems: "center",
+    border: "none",
+    outline: "none",
+    resize: "none",
+    width: 500
 };
 
-const DocumentBlockText = ({ block, contentEditable = true, onContentChange }: TextBlockProps) => {
-   const { fullWidth } = usePageSettings();
+const DocumentBlockText = (props: TextBlockProps) => {
+    const { block, onContentChange } = props;
 
-   const handleContentChange = (textContent: string | null) => {
-      if (onContentChange == null || textContent == null) return;
+    const [content, setContent] = useState<string>(() => block.content);
 
-      onContentChange(textContent);
-   };
+    const handleContentInput = (textContent: string | null) => {
+        if (onContentChange == null || textContent == null) return;
 
-   return (
-      <div style={defaultStyle}>
-         <div>
-            <span
-               onInput={(e) => {
-                  handleContentChange(e.currentTarget.textContent);
-               }}
-               contentEditable={contentEditable}
-               suppressContentEditableWarning={true}>
-               {block.content}
-            </span>
-         </div>
-      </div>
-   );
+        setContent(textContent);
+    };
+
+    const handleContentBlur = () => {
+        if (onContentChange != null) {
+            onContentChange(content);
+        }
+    };
+
+    return (
+        <textarea
+            style={{ ...defaultStyle }}
+            onInput={(e) => {
+                handleContentInput(e.currentTarget.value);
+            }}
+            rows={block.content.length / 60}
+            spellCheck={true}
+            contentEditable={true}
+            suppressContentEditableWarning={true}
+            placeholder="Type / or something..."
+            onBlur={handleContentBlur}>
+                {content}
+            </textarea>
+    );
 };
 
 export default DocumentBlockText;

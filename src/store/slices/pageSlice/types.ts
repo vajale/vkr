@@ -7,7 +7,7 @@ export interface DocumentsPageSchema {
    formData: DocumentBlock[];
    isPageEdit: boolean;
    style: {
-      header: boolean,
-      logo: string | 'none'
-   }
+      header: boolean;
+      logo: string | "none";
+   };
 }

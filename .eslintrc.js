@@ -32,6 +32,7 @@ module.exports = {
 		"@typescript-eslint/no-empty-interface": ["warn", { "allowSingleExtends": true }],
 		"@typescript-eslint/explicit-module-boundary-types": "off",
 		"@typescript-eslint/no-var-requires": 0,
+		'@typescript-eslint/explicit-function-return-type': 'off',
 
 	},
 }
