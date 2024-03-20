@@ -8,7 +8,7 @@ import DocumentBlockText from "../DocumentBlockComponents/DocumentBlockText/Docu
 import DocumentBlockBase from "../DocumentBlockComponents/DocumentBlockBase/DocumentBlockBase";
 import DocumentBlockCheckbox from "../DocumentBlockComponents/DocumentCheckbox/DocumentBlockCheckbox";
 
-import { documentPageActions, selectDocumentHeaderFlag } from "../../../../store/slices/pageSlice";
+import { documentPageActions, selectDocumentHeaderFlag, selectDocuments } from "../../../../store/slices/pageSlice";
 
 import { DocumentBlockType } from "../../model/types";
 
@@ -18,18 +18,21 @@ import {
    DndContext,
    type DragEndEvent,
    useSensor,
-   MouseSensor,
+   MouseSensor
 } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import {
+   DocumentPageLinkComponent
+} from "@/components/PageView/ui/DocumentBlockComponents/DocumenkPageLinkComponent/DocumentPageLinkComponent";
 
 const PageView = () => {
    const [pageViewData, setPageViewData] = useState({
       currentId: "",
-      isCanEdit: true,
+      isCanEdit: true
    });
 
-   const docs = useAppSelector((state) => state.documentPage.data);
+   const docs = useAppSelector(selectDocuments);
    const isHaveHeader = useAppSelector(selectDocumentHeaderFlag);
 
    const dispatch = useAppDispatch();
@@ -58,8 +61,8 @@ const PageView = () => {
    const mouseSensor = useSensor(MouseSensor, {
       // Require the mouse to move by 10 pixels before activating
       activationConstraint: {
-         distance: 50,
-      },
+         distance: 50
+      }
    });
 
    return (
@@ -70,7 +73,7 @@ const PageView = () => {
                width: 600,
                height: 900,
                p: 2,
-               bgcolor: "whitesmoke",
+               bgcolor: "whitesmoke"
             }}>
             <h1>Page</h1>
             <DndContext
@@ -88,7 +91,7 @@ const PageView = () => {
 
                      const baseProps = {
                         // ignoreButtonsHover: pageViewData.isCanEdit,
-                        onEditButtonClick: handleEditButtonClick,
+                        onEditButtonClick: handleEditButtonClick
                      };
 
                      const handleHotKeyClick = () => {};
@@ -104,8 +107,8 @@ const PageView = () => {
                                           dispatch(
                                              documentPageActions.updateDocumentBlock({
                                                 ...item,
-                                                content: data,
-                                             }),
+                                                content: data
+                                             })
                                           );
                                        }}
                                     />
@@ -122,8 +125,8 @@ const PageView = () => {
                                           dispatch(
                                              documentPageActions.updateDocumentBlock({
                                                 ...item,
-                                                content: data,
-                                             }),
+                                                content: data
+                                             })
                                           );
                                        }}
                                     />
@@ -141,13 +144,21 @@ const PageView = () => {
                                           dispatch(
                                              documentPageActions.updateDocumentBlock({
                                                 ...item,
-                                                content: data,
-                                             }),
+                                                content: data
+                                             })
                                           );
                                        }}
                                     />
                                  </DocumentBlockBase>
                               </Dropable>
+                           );
+                        case DocumentBlockType.LINK:
+                           return (
+                               <Dropable key={item.id} id={item.id}>
+                                  <DocumentBlockBase item={item} {...baseProps}>
+                                     <DocumentPageLinkComponent block={item}/>
+                                  </DocumentBlockBase>
+                               </Dropable>
                            );
                         default:
                            break;
