@@ -4,6 +4,7 @@ export enum DocumentBlockType {
    CODE = "CODE",
    QUOTE = "QUOTE",
    IMAGE = "IMAGE",
+   LINK = "LINK",
 }
 
 export interface DocumentBlockBase {
@@ -39,8 +40,20 @@ export interface DocumentTextBlock extends DocumentBlockBase {
    title?: string;
 }
 
+export interface DocumentPageLinkBlock extends DocumentBlockBase {
+   type: DocumentBlockType.LINK;
+   src?: string;
+}
+
 export type DocumentBlock =
    | DocumentTextBlock
    | DocumentImageBlock
    | DocumentCodeBlock
-   | DocumentCheckboxBlock;
+   | DocumentCheckboxBlock
+    | DocumentPageLinkBlock;
+
+export interface Page {
+   id: string;
+   documentBlocks: DocumentBlock[];
+   parent?: string
+}

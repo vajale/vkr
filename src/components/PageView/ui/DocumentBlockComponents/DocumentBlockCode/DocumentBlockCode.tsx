@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
    type DocumentCheckboxBlock,
    type DocumentCodeBlock,
-   type DocumentContentType
+   type DocumentContentType,
 } from "../../../model/types";
 import { usePageSettings } from "../../../model/hooks/usePageSettings";
 
@@ -17,7 +17,7 @@ const codeStyle = {
    display: "flex",
    alignItems: "center",
    width: 487,
-   outline: "none"
+   outline: "none",
 };
 
 interface CodeBlockProps {
@@ -31,7 +31,7 @@ const DocumentBlockCode = ({
    block,
    contentEditable,
    onContentChange,
-   onHotKeyInput
+   onHotKeyInput,
 }: CodeBlockProps) => {
    const [content, setContent] = useState<string>(() => block.content);
 

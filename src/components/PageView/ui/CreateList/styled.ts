@@ -7,12 +7,12 @@ export const StyledEditList = styled("div")(() => ({
    backgroundColor: "white",
    width: 140,
    padding: 7,
-   overflow: 'auto'
+   overflow: "auto",
 }));
 
 export const StyledListButton = styled("button")(() => ({
    border: "none",
    borderRadius: 7,
    padding: 7,
-   hover: "opacity: 0.6"
+   hover: "opacity: 0.6",
 }));

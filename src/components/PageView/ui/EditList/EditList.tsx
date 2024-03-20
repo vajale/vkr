@@ -28,13 +28,13 @@ const EditList = ({ onEdit }: EditListProps) => {
             </StyledListButton>
          ))}
          {Object.values(DocumentBlockType).map((value) => (
-             <button
-                 onClick={() => {
-                    handleEditType(value);
-                 }}
-                 key={value}>
-                {value}
-             </button>
+            <button
+               onClick={() => {
+                  handleEditType(value);
+               }}
+               key={value}>
+               {value}
+            </button>
          ))}
       </StyledList>
    );
