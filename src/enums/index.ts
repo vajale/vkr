@@ -1,7 +1,7 @@
 import { themePalette } from "./themePalette";
 
 const GLOBAL_ENUMS = {
-   themePalette,
+    themePalette,
 };
 
 export default GLOBAL_ENUMS;

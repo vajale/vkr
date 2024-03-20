@@ -1,13 +1,19 @@
-import { Button, styled } from "@mui/material";
+import {Button, styled} from "@mui/material";
 
 export const StyledAccountButton = styled(Button)(() => ({
-   display: "flex",
-   justifyContent: "start",
-   gap: "8px",
-   width: "100%",
+    display: "flex",
+    justifyContent: "start",
+    gap: "8px",
+    width: "fit-content",
+    height: "fit-content",
 
-   img: {
-      width: "40px",
-      height: "40px",
-   },
+    svg: {
+        width: "30px",
+        height: "30px",
+    },
+
+    img: {
+        width: "30px",
+        height: "30px",
+    },
 }));
