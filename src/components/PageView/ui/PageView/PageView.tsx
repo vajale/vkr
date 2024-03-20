@@ -1,31 +1,38 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 
 import PageHeader from "../PageHeader/PageHeader";
-import { Paper } from "@mui/material";
-import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
-import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import Dropable from "../../../DnDComponents/Dropable/Dropable";
-import { documentPageActions } from "../../../../store/slices/pageSlice";
-import { DocumentBlockType, DocumentContentType } from "../../model/types";
+import { Paper, Stack } from "@mui/material";
+
 import DocumentBlockCode from "../DocumentBlockComponents/DocumentBlockCode/DocumentBlockCode";
-import DocumentBlockCheckbox from "../DocumentBlockComponents/DocumentCheckbox/DocumentBlockCheckbox";
 import DocumentBlockText from "../DocumentBlockComponents/DocumentBlockText/DocumentBlockText";
 import DocumentBlockBase from "../DocumentBlockComponents/DocumentBlockBase/DocumentBlockBase";
-import { useGetDocumentsQuery } from "../../model/services/getDocumentsData";
+import DocumentBlockCheckbox from "../DocumentBlockComponents/DocumentCheckbox/DocumentBlockCheckbox";
+
+import { documentPageActions, selectDocumentHeaderFlag } from "../../../../store/slices/pageSlice";
+
+import { DocumentBlockType } from "../../model/types";
+
+import Dropable from "../../../DnDComponents/Dropable/Dropable";
+import {
+   closestCenter,
+   DndContext,
+   type DragEndEvent,
+   useSensor,
+   MouseSensor,
+} from "@dnd-kit/core";
+import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 
 const PageView = () => {
-   const dispatch = useAppDispatch();
-   // const { data, isLoading, isSuccess } = useGetDocumentsQuery();
-   //
-   // useEffect(() => {
-   //    if (isSuccess) {
-   //       dispatch(documentPageActions.updateDocuments(data));
-   //    }
-   // }, [isLoading, isSuccess]);
+   const [pageViewData, setPageViewData] = useState({
+      currentId: "",
+      isCanEdit: true,
+   });
 
    const docs = useAppSelector((state) => state.documentPage.data);
-   const [editId, setEditId] = useState<string>();
+   const isHaveHeader = useAppSelector(selectDocumentHeaderFlag);
+
+   const dispatch = useAppDispatch();
 
    const handleDragEnd = (e: DragEndEvent) => {
       const { active, over } = e;
@@ -38,77 +45,85 @@ const PageView = () => {
       const newIndex = docs.findIndex((block) => block.id === over.id);
       const newArray = arrayMove(docs, oldIndex, newIndex);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       dispatch(documentPageActions.updateDocuments(newArray));
    };
 
    const handleDragMove = (e: DragEndEvent) => {
-      // const { over } = e;
-      //
-      // if (over === null) return;
+      const { active } = e;
+
+      console.log(active.id);
    };
 
-   // const getDocument = useMemo(() => {
-   //
-   // }, []);
-
-   const isContentEditable = true;
+   const mouseSensor = useSensor(MouseSensor, {
+      // Require the mouse to move by 10 pixels before activating
+      activationConstraint: {
+         distance: 50,
+      },
+   });
 
    return (
-      <>
-         <PageHeader text={"Page"} />
+      <Stack flexDirection={"column"}>
+         <PageHeader text={"Header"} isHaveHover={isHaveHeader} />
          <Paper
             sx={{
                width: 600,
                height: 900,
                p: 2,
-               bgcolor: "whitesmoke"
+               bgcolor: "whitesmoke",
             }}>
+            <h1>Page</h1>
             <DndContext
+               sensors={[mouseSensor]}
                collisionDetection={closestCenter}
                onDragEnd={handleDragEnd}
                onDragMove={handleDragMove}>
                <SortableContext items={docs} strategy={verticalListSortingStrategy}>
                   {docs.map((item) => {
-                     const isMenuOpen = editId === item.id;
-
                      const handleEditButtonClick = (id: string) => {
                         if (id === "") return;
 
-                        setEditId(id);
-                     };
-
-                     const handleListClick = (type: DocumentBlockType) => {
-                        setEditId("");
+                        setPageViewData((prevState) => ({ ...prevState, isCanEdit: false }));
                      };
 
                      const baseProps = {
-                        disableEditButtons: isMenuOpen,
+                        // ignoreButtonsHover: pageViewData.isCanEdit,
                         onEditButtonClick: handleEditButtonClick,
-                        onTypeChange: handleListClick,
-                        isMenuOpen
                      };
+
+                     const handleHotKeyClick = () => {};
 
                      switch (item.type) {
                         case DocumentBlockType.CODE:
                            return (
                               <Dropable key={item.id} id={item.id}>
-                                 <DocumentBlockBase id={item.id} {...baseProps}>
-                                    <DocumentBlockCode block={item} />
+                                 <DocumentBlockBase item={item} {...baseProps}>
+                                    <DocumentBlockCode
+                                       block={item}
+                                       onContentChange={(data) => {
+                                          dispatch(
+                                             documentPageActions.updateDocumentBlock({
+                                                ...item,
+                                                content: data,
+                                             }),
+                                          );
+                                       }}
+                                    />
                                  </DocumentBlockBase>
                               </Dropable>
                            );
                         case DocumentBlockType.CHECKBOX:
                            return (
                               <Dropable key={item.id} id={item.id}>
-                                 <DocumentBlockBase id={item.id} {...baseProps}>
+                                 <DocumentBlockBase item={item} {...baseProps}>
                                     <DocumentBlockCheckbox
                                        block={item}
                                        onContentChange={(data) => {
                                           dispatch(
                                              documentPageActions.updateDocumentBlock({
                                                 ...item,
-                                                content: data
-                                             })
+                                                content: data,
+                                             }),
                                           );
                                        }}
                                     />
@@ -118,15 +133,16 @@ const PageView = () => {
                         case DocumentBlockType.TEXT:
                            return (
                               <Dropable key={item.id} id={item.id}>
-                                 <DocumentBlockBase id={item.id} {...baseProps}>
+                                 <DocumentBlockBase item={item} {...baseProps}>
                                     <DocumentBlockText
                                        block={item}
+                                       onHotKeyInput={handleHotKeyClick}
                                        onContentChange={(data) => {
                                           dispatch(
                                              documentPageActions.updateDocumentBlock({
                                                 ...item,
-                                                content: data
-                                             })
+                                                content: data,
+                                             }),
                                           );
                                        }}
                                     />
@@ -140,7 +156,7 @@ const PageView = () => {
                </SortableContext>
             </DndContext>
          </Paper>
-      </>
+      </Stack>
    );
 };
 

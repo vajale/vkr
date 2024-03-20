@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { useMouseView } from "../../../model/hooks/useMouseView";
 
@@ -7,34 +7,32 @@ import { DndContext, useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useAppDispatch } from "../../../../../store/hooks";
 import { documentPageActions } from "../../../../../store/slices/pageSlice";
+import { type DocumentBlock, type DocumentBlockType } from "../../../model/types";
 import EditList from "../../EditList/EditList";
-import { type DocumentBlockType } from "../../../model/types";
+import CreateList from "../../CreateList/CreateList";
 
 interface DocumentBlockBaseProps {
-   id: string;
-   disableEditButtons?: boolean;
-   isMenuOpen?: boolean;
-   onMoveButtonClick?: (id: string) => void;
-   onEditButtonClick?: (id: string) => void;
+   item: DocumentBlock;
+   ignoreButtonsHover?: boolean;
+   isAddMenuOpen?: boolean;
+   onMove?: (id: string) => void;
+   onAdd?: (type: DocumentBlockType) => void;
    children: React.ReactNode;
    onTypeChange?: (type: DocumentBlockType, id: string) => void;
 }
 
 const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
-   const {
-      children,
-      onMoveButtonClick,
-      onEditButtonClick,
-      disableEditButtons = false,
-      isMenuOpen = false,
-      id,
-      onTypeChange,
-   } = props;
+   const { children, onMove, onAdd, item, ignoreButtonsHover = false } = props;
 
-   const [isEditabale, setIsEditabale] = useState<boolean>(isMenuOpen);
+   const [buttonsOptions, setButtonOptions] = useState({
+      isAddMenuOpened: false,
+      isEditButtonsDisable: false,
+      isEditMenuOpened: false,
+   });
+
    const dispatch = useAppDispatch();
 
-   const { setNodeRef, listeners, attributes, transform, active } = useDraggable({ id });
+   const { setNodeRef, listeners, attributes, transform, active } = useDraggable({ id: item.id });
    const docRef = useRef<HTMLDivElement>(null);
 
    const [isHover] = useMouseView(docRef);
@@ -44,38 +42,63 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
       background: "none",
       color: "none",
       height: "auto",
-      marginBottom: 7,
       display: "flex",
       border: "none",
-      opacity: active?.id === id ? 0.7 : 1,
+      opacity: active?.id === item.id ? 0.7 : 1,
+   };
+
+   useEffect(() => {
+      setButtonOptions((prevState) => ({
+         ...prevState,
+         isEditButtonsDisable: ignoreButtonsHover,
+      }));
+   }, [ignoreButtonsHover]);
+
+   const handleTypeEdit = (type: DocumentBlockType) => {
+      dispatch(documentPageActions.updateDocumentType({ id: item.id, type }));
+
+      setButtonOptions((prevState) => ({ ...prevState, isEditMenuOpened: false }));
+   };
+
+   const handleAddButtonClick = () => {
+      setButtonOptions((prevState) => ({
+         ...prevState,
+         isAddMenuOpened: !prevState.isAddMenuOpened,
+      }));
+   };
+
+   const handleAddBlock = (type: DocumentBlockType) => {
+      if (onAdd != null) {
+         onAdd(type);
+      }
+
+      setButtonOptions((prevState) => ({
+         ...prevState,
+         isAddMenuOpened: false,
+      }));
+
+      dispatch(documentPageActions.addDocumentBlock(type));
+      console.log(item.id);
+   };
+
+   const handleDeleteButtonClick = () => {
+      console.log(item.id);
+      dispatch(documentPageActions.removeDocumentBlock({ id: item.id }));
    };
 
    const handleEditClick = () => {
-      if (onEditButtonClick == null) return;
-
-      onEditButtonClick(id);
-      setIsEditabale((prevState) => !prevState);
-   };
-
-   const handleTypeEdit = (type: DocumentBlockType) => {
-      if (onTypeChange == null) return;
-
-      onTypeChange(type, id);
-      setIsEditabale(false);
-      dispatch(
-         documentPageActions.updateDocumentType({
-            type,
-            id,
-         }),
-      );
+      setButtonOptions((prevState) => ({
+         ...prevState,
+         isEditMenuOpened: !prevState.isEditMenuOpened,
+      }));
    };
 
    return (
-      <div ref={setNodeRef} style={style} id={id}>
+      <div ref={setNodeRef} style={style} id={item.id}>
          <Stack flexDirection={"row"} ref={docRef}>
-            <Stack flexDirection={"row"} marginRight={2} alignItems={"flex-start"}>
+            <Stack marginRight={2}>
                <div style={{ width: 40 }}>
-                  {isHover && !disableEditButtons && (
+                  {isHover && !buttonsOptions.isEditButtonsDisable && (
                      <Stack flexDirection={"row"} gap={0.4}>
                         <button
                            style={{
@@ -83,33 +106,55 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
                               border: "none",
                               background: "white",
                               borderRadius: 4,
+                              justifyContent: "center",
                            }}
-                           onClick={handleEditClick}>
+                           onClick={handleAddButtonClick}>
                            +
                         </button>
-                        <div id={id} {...listeners} {...attributes}>
+                        <div id={item.id} {...listeners} {...attributes}>
                            <button
+                              onClick={handleEditClick}
                               style={{
-                                 width: 24,
+                                 width: 16,
                                  border: "none",
                                  background: "white",
                                  borderRadius: 4,
-                              }}
-                              onClick={() => onMoveButtonClick}>
-                              ||
+                                 display: "flex",
+                                 justifyContent: "center",
+                              }}>
+                              ::
                            </button>
                         </div>
                      </Stack>
                   )}
-                  {isMenuOpen && <EditList onTypeEdit={handleTypeEdit} />}
+                  {buttonsOptions.isAddMenuOpened && <CreateList onTypeClick={handleAddBlock} />}
+                  {buttonsOptions.isEditMenuOpened && (
+                     <CreateList
+                        onTypeClick={(type) => {
+                           handleTypeEdit(type);
+                        }}
+                     />
+                  )}
                </div>
             </Stack>
-            {children && (
+            {(
                <DndContext>
                   <div>{children}</div>
                </DndContext>
-            )}
+            ) && children}
          </Stack>
+         <button
+            style={{
+               width: 24,
+               height: 24,
+               marginLeft: 7,
+               border: "none",
+               background: "white",
+               borderRadius: 4,
+            }}
+            onClick={handleDeleteButtonClick}>
+            x
+         </button>
       </div>
    );
 };

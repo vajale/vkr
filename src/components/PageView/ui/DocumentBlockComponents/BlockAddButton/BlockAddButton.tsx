@@ -1,41 +1,34 @@
-import React, { useMemo, useState } from "react";
-
-import { blockTypes } from "../../../model/hooks/documentParser";
-import { Button } from "@mui/material";
+import React, { forwardRef, useMemo, useState } from "react";
 
 interface BlockAddButtonProps {
-    onClick?: () => void;
-    buttonContent: string;
+   onClick?: () => void;
+   buttonContent: string;
 }
 
-const BlockAddButton = (props: BlockAddButtonProps) => {
-    const { onClick, buttonContent } = props;
-    const [isMenuOpen, setMenuOpen] = useState<boolean>(false);
+// eslint-disable-next-line react/display-name
+const BlockAddButton = forwardRef<HTMLButtonElement, BlockAddButtonProps>(
+   (props: BlockAddButtonProps, buttonRef) => {
+      const { onClick, buttonContent } = props;
 
-    const handleClick = () => {
-        if (!onClick) return;
+      const handleClick = () => {
+         if (onClick == null) return;
+         onClick();
+      };
 
-        onClick();
-    };
-
-    const typeList = useMemo(
-        () => Object.entries(blockTypes).map((item, index) => <li key={index}>item</li>),
-        [blockTypes],
-    );
-
-    return (
-        <button
+      return (
+         <button
+            ref={buttonRef}
             style={{
-                width: 20,
-                border: "none",
-                background: "white",
-                borderRadius: 4,
+               width: 20,
+               border: "none",
+               background: "white",
+               borderRadius: 4,
             }}
             onClick={handleClick}>
             {buttonContent}
-            {/*{isMenuOpen && <ul>{typeList}</ul>}*/}
-        </button>
-    );
-};
+         </button>
+      );
+   },
+);
 
 export default BlockAddButton;

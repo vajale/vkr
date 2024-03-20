@@ -1,5 +1,5 @@
 export interface ILinkItem {
-    href: string;
-    svg: string;
-    title: string;
+   href: string;
+   svg: string;
+   title: string;
 }
