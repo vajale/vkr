@@ -1,11 +1,8 @@
-import { type DocumentBlock } from "../../../components/PageView/model/types";
+import { type Page } from "@/components/PageView/model/types";
 
 export interface DocumentsPageSchema {
-   isLoading: boolean;
-   error: undefined | string;
-   data: DocumentBlock[];
-   formData: DocumentBlock[];
-   isPageEdit: boolean;
+   pageData: Page;
+   isPageEdit?: boolean;
    style: {
       header: boolean;
       logo: string | "none";

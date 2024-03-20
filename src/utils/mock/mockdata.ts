@@ -9,7 +9,12 @@ export const mockDocs1: DocumentBlock[] = [
    {
       id: "1",
       type: DocumentBlockType.TEXT,
-      content: ""
+      content: "BIDLO"
+   },
+   {
+      id: "3",
+      type: DocumentBlockType.LINK,
+      content: "asfasfasfsaf"
    }
 ];
 

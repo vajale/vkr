@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {memo, useEffect, useRef, useState} from "react";
 
 import { useMouseView } from "../../../model/hooks/useMouseView";
 
@@ -21,13 +21,13 @@ interface DocumentBlockBaseProps {
    onTypeChange?: (type: DocumentBlockType, id: string) => void;
 }
 
-const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
+const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
    const { children, onMove, onAdd, item, ignoreButtonsHover = false } = props;
 
    const [buttonsOptions, setButtonOptions] = useState({
       isAddMenuOpened: false,
       isEditButtonsDisable: false,
-      isEditMenuOpened: false,
+      isEditMenuOpened: false
    });
 
    const dispatch = useAppDispatch();
@@ -44,13 +44,13 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
       height: "auto",
       display: "flex",
       border: "none",
-      opacity: active?.id === item.id ? 0.7 : 1,
+      opacity: active?.id === item.id ? 0.7 : 1
    };
 
    useEffect(() => {
       setButtonOptions((prevState) => ({
          ...prevState,
-         isEditButtonsDisable: ignoreButtonsHover,
+         isEditButtonsDisable: ignoreButtonsHover
       }));
    }, [ignoreButtonsHover]);
 
@@ -63,7 +63,7 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
    const handleAddButtonClick = () => {
       setButtonOptions((prevState) => ({
          ...prevState,
-         isAddMenuOpened: !prevState.isAddMenuOpened,
+         isAddMenuOpened: !prevState.isAddMenuOpened
       }));
    };
 
@@ -74,22 +74,21 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
 
       setButtonOptions((prevState) => ({
          ...prevState,
-         isAddMenuOpened: false,
+         isAddMenuOpened: false
       }));
 
       dispatch(documentPageActions.addDocumentBlock(type));
-      console.log(item.id);
    };
 
    const handleDeleteButtonClick = () => {
-      console.log(item.id);
+      console.log(item.id)
       dispatch(documentPageActions.removeDocumentBlock({ id: item.id }));
    };
 
    const handleEditClick = () => {
       setButtonOptions((prevState) => ({
          ...prevState,
-         isEditMenuOpened: !prevState.isEditMenuOpened,
+         isEditMenuOpened: !prevState.isEditMenuOpened
       }));
    };
 
@@ -106,7 +105,7 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
                               border: "none",
                               background: "white",
                               borderRadius: 4,
-                              justifyContent: "center",
+                              justifyContent: "center"
                            }}
                            onClick={handleAddButtonClick}>
                            +
@@ -120,7 +119,7 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
                                  background: "white",
                                  borderRadius: 4,
                                  display: "flex",
-                                 justifyContent: "center",
+                                 justifyContent: "center"
                               }}>
                               ::
                            </button>
@@ -150,13 +149,13 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
                marginLeft: 7,
                border: "none",
                background: "white",
-               borderRadius: 4,
+               borderRadius: 4
             }}
             onClick={handleDeleteButtonClick}>
             x
          </button>
       </div>
    );
-};
+});
 
 export default DocumentBlockBase;

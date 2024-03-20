@@ -49,11 +49,10 @@ export type DocumentBlock =
    | DocumentTextBlock
    | DocumentImageBlock
    | DocumentCodeBlock
-   | DocumentCheckboxBlock
-    | DocumentPageLinkBlock;
+   | DocumentCheckboxBlock | DocumentPageLinkBlock;
 
 export interface Page {
-   id: string;
    documentBlocks: DocumentBlock[];
-   parent?: string
+   id: string;
+   parent?: string | null
 }

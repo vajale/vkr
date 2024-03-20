@@ -1,11 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./rootReducer";
-import { documentsApi } from "../components/PageView/model/services/getDocumentsData";
+import {firebaseDocumentsAPI} from "@/components/PageView/model/services/firebaseDocumentsAPI";
 
 const store = configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
-    devTools: true,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(firebaseDocumentsAPI.middleware),
+    devTools: true
 });
 
 export type RootState = ReturnType<typeof store.getState>;

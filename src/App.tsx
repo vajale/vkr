@@ -1,4 +1,4 @@
-import React from "react";
+import React, {createContext, useContext} from "react";
 import { Provider } from "react-redux";
 
 import store from "./store/store";
@@ -8,13 +8,15 @@ import ThemeWrapper from "./components/common/ThemeWrapper";
 
 import "normalize.css";
 
+const FirebaseContext = createContext(null)
+
 const App = () => {
     return (
         <div className="app">
             <Provider store={store}>
-                <ThemeWrapper>
-                    <DesktopRouter />
-                </ThemeWrapper>
+                    <ThemeWrapper>
+                        <DesktopRouter />
+                    </ThemeWrapper>
             </Provider>
         </div>
     );
