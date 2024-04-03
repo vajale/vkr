@@ -1,7 +1,25 @@
 import {ThemeOptions} from "@mui/material";
 
 export interface IExtendedTheme extends ThemeOptions {
-    menuBackground: string;
+    menuBackground: {
+        primary: string;
+        secondary: string;
+    }
+    palette: {
+        text: {
+            primary: string,
+        },
+        primary: {
+            main: string,
+        },
+        secondary: {
+            main: string,
+        },
+        borderColors: {
+            primary: string,
+        }
+    },
+
     textSize: {
         sizeText10: string;
         sizeText12: string;
