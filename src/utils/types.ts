@@ -1,8 +1,6 @@
 export interface User {
-    isAuth: boolean;
-    user: UserData;
+    id: string;
+    username: string;
+    avatar?: string;
 }
 
-export interface UserData {
-    name: string;
-}

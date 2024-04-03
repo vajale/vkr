@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {memo, useEffect, useRef, useState} from "react";
 
 import { useMouseView } from "../../../model/hooks/useMouseView";
 
@@ -21,7 +21,7 @@ interface DocumentBlockBaseProps {
    onTypeChange?: (type: DocumentBlockType, id: string) => void;
 }
 
-const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
+const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
    const { children, onMove, onAdd, item, ignoreButtonsHover = false } = props;
 
    const [buttonsOptions, setButtonOptions] = useState({
@@ -78,11 +78,10 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
       }));
 
       dispatch(documentPageActions.addDocumentBlock(type));
-      console.log(item.id);
    };
 
    const handleDeleteButtonClick = () => {
-      console.log(item.id);
+      console.log(item.id)
       dispatch(documentPageActions.removeDocumentBlock({ id: item.id }));
    };
 
@@ -157,6 +156,6 @@ const DocumentBlockBase = (props: DocumentBlockBaseProps) => {
          </button>
       </div>
    );
-};
+});
 
 export default DocumentBlockBase;

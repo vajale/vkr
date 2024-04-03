@@ -8,25 +8,19 @@ interface PageLinkProps {
     block: DocumentPageLinkBlock
 }
 
-const defaultStyle = {
+const defaultStyle: React.CSSProperties = {
     padding: 7,
-    borderRadius: 7,
-    color: "none",
-    marginBottom: 7,
-    display: "flex",
-    alignItems: "center",
-    border: "none",
-    outline: "none",
-    resize: "none",
-    width: 500
+    fontSize: 21,
+    width: 500,
+    textDecoration: 'none'
 };
 
 export const DocumentPageLinkComponent = (props: PageLinkProps) => {
-    const { label = 'Page_link', block } = props;
+    const { label = 'Page link', block } = props;
     const { id } = block;
 
     return (
-        <Link id={id}>
+        <Link id={id} href={block.src} style={defaultStyle}>
             {label}
         </Link>
     );
