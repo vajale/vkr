@@ -22,6 +22,8 @@ module.exports = {
 	plugins: ["react"],
 	rules: {
 		semi: "off",
+		"no-tabs": "off",
+		"@typescript-eslint/comma-dangle": ["error", "only-multiline"],
 		"@typescript-eslint/semi": ["error", "always"],
 		"@typescript-eslint/quotes": 0,
 		"@typescript-eslint/indent": 0,

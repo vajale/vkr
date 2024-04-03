@@ -1,44 +1,48 @@
-import React, {useMemo, useState} from "react";
-import {NotLoggedUser} from "./NotLoggedUser";
-import {useFirebaseAuth} from "@/components/FireBase";
-import AuthForm from "@/components/AuthForm/AuthForm";
-import RegisterForm from "@/components/RegisterForm/RegisterForm";
-import {Skeleton} from "@mui/material";
+import React, { useState } from "react";
+import { NotLoggedUser } from "./NotLoggedUser";
+import { useFirebaseAuth } from "@/components/FireBase";
+import AuthForm from "@/components/Login/AuthForm/AuthForm";
+import RegisterForm from "@/components/Login/RegisterForm/RegisterForm";
+import { Skeleton } from "@mui/material";
+import LoginModal from "@/components/Login/LoginModal";
+import { ButtonType } from "@/components/Login/enums";
 
 const Login: React.FC = () => {
-
-    const [loginState, setLoginState] = useState(() => ({
+    const [loginState, setLoginState] = useState<{ isModalOpen: boolean; modalType: ButtonType }>(() => ({
         isModalOpen: false,
-        modalType: "auth"
-    }))
+        modalType: ButtonType.login
+    }));
 
-    const {authState: [user, loading, error]} = useFirebaseAuth()
+    const { authState: [user, loading, error] } = useFirebaseAuth();
 
     const handleLoggedButtonClick = () => {
-        setLoginState(prevState => ({isModalOpen: true, modalType: prevState.modalType}))
+        setLoginState(prevState => ({ isModalOpen: true, modalType: prevState.modalType }));
     };
 
     const handleRegisterClick = () => {
-        setLoginState(prevState => ({isModalOpen: prevState.isModalOpen, modalType: 'register'}))
+        setLoginState(prevState => ({ isModalOpen: prevState.isModalOpen, modalType: ButtonType.register }));
     };
 
     const handleAuthClick = () => {
-        setLoginState(prevState => ({isModalOpen: prevState.isModalOpen, modalType: 'auth'}))
+        setLoginState(prevState => ({ isModalOpen: prevState.isModalOpen, modalType: ButtonType.login }));
     };
 
     const handleModelClose = () => {
-        setLoginState(prevState => ({isModalOpen: false, modalType: 'auth'}))
-    }
+        setLoginState(prevState => ({ isModalOpen: false, modalType: ButtonType.login }));
+    };
 
-    if(loading) {
-        return <Skeleton width={140} height={30}/>
+    if (loading) {
+        return <Skeleton width={140} height={30}/>;
     }
 
     return (
         <div>
             <NotLoggedUser onClick={handleLoggedButtonClick}/>
-            {loginState.isModalOpen && (loginState.modalType == 'auth' ?
-                <AuthForm onAuth={handleModelClose} onRegisterClick={handleRegisterClick}/> : <RegisterForm onRegister={handleModelClose} onAuthClick={handleAuthClick}/>)}
+            <LoginModal onModalClose={handleModelClose} modalOpen={loginState.isModalOpen}>
+                {loginState.isModalOpen && (loginState.modalType === ButtonType.login
+                    ? <AuthForm onAuth={handleModelClose} onRegisterClick={handleRegisterClick}/>
+                    : <RegisterForm onRegister={handleModelClose} onAuthClick={handleAuthClick}/>)}
+            </LoginModal>
         </div>
     );
 };

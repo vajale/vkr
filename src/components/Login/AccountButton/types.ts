@@ -1,8 +1,8 @@
-import React, {MouseEventHandler} from "react";
+import type React from "react";
 
 export interface IAccountButton {
     image?: string;
     accountName: string;
     svgIcon?: React.ReactNode;
-    onClick?: () => void
+    onClick?: (e: EventTarget) => void
 }

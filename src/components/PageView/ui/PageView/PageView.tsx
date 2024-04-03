@@ -1,9 +1,9 @@
-import React, {memo, useEffect, useState} from "react";
+import React, { memo, useEffect, useState } from "react";
 
 import PageHeader from "../PageHeader/PageHeader";
-import {Button, Paper, Stack} from "@mui/material";
+import { Paper, Stack } from "@mui/material";
 
-import {documentPageActions, selectDocumentHeaderFlag, selectDocuments} from "../../../../store/slices/pageSlice";
+import { documentPageActions, selectDocumentHeaderFlag, selectDocuments } from "@/store/slices/pageSlice";
 
 import {
     type DragEndEvent,
@@ -12,11 +12,11 @@ import {
     closestCenter,
     DndContext
 } from "@dnd-kit/core";
-import {SortableContext, arrayMove, verticalListSortingStrategy} from "@dnd-kit/sortable";
-import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
-import {useFetchPagesQuery, useUpdatePageMutation} from "@/components/PageView/model/services/firebaseDocumentsAPI";
-import {selectUser} from "@/store/slices/userSlice";
+import { useFetchPagesQuery, useUpdatePageMutation } from "@/components/PageView/model/services/firebaseDocumentsAPI";
+import { selectUser } from "@/store/slices/userSlice";
 import { DocumentBlockType } from "../../model/types";
 import Dropable from "@/components/DnDComponents/Dropable/Dropable";
 import DocumentBlockBase from "../DocumentBlockComponents/DocumentBlockBase/DocumentBlockBase";
@@ -26,10 +26,11 @@ import DocumentBlockCheckbox from "../DocumentBlockComponents/DocumentCheckbox/D
 import {
     DocumentPageLinkComponent
 } from "../DocumentBlockComponents/DocumenkPageLinkComponent/DocumentPageLinkComponent";
-
+import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
+import { Typography } from "@/components/common/CustomTypography";
 
 const PageView = memo(() => {
-    const {data, isLoading, isError, refetch} = useFetchPagesQuery({userId: '2rLcXc4sd4WD97mu8o8jiyXRMxt1'})
+    const { data, isLoading, isError, refetch } = useFetchPagesQuery({ userId: '2rLcXc4sd4WD97mu8o8jiyXRMxt1' });
 
     const [pageViewData, setPageViewData] = useState({
         currentId: "",
@@ -39,20 +40,20 @@ const PageView = memo(() => {
     const dispatch = useAppDispatch();
 
     const isHaveHeader = useAppSelector(selectDocumentHeaderFlag);
-    const {documentBlocks: docs} = useAppSelector(selectDocuments);
+    const { documentBlocks: docs } = useAppSelector(selectDocuments);
     const page = useAppSelector(selectDocuments);
     const user = useAppSelector(selectUser);
 
-    const [updateRandomPage, {isLoading: updateLoading}] = useUpdatePageMutation()
+    const [updateRandomPage, { isLoading: updateLoading }] = useUpdatePageMutation();
 
     useEffect(() => {
-        if(data) {
-            dispatch(documentPageActions.setPage(data[0]))
+        if (data) {
+            dispatch(documentPageActions.setPage(data[0]));
         }
     }, [data, isLoading]);
 
     const handleDragEnd = async (e: DragEndEvent) => {
-        const {active, over} = e;
+        const { active, over } = e;
 
         if (over === null || active.id === over.id) {
             return;
@@ -63,16 +64,15 @@ const PageView = memo(() => {
         const newArray = arrayMove(docs, oldIndex, newIndex);
 
         dispatch(documentPageActions.updateDocuments(newArray));
-        updateRandomPage({userId: user.id, id: page.id, newPage: page}).then(() => refetch())
+        updateRandomPage({ userId: user.id, id: page.id, newPage: page }).then(async () => await refetch());
     };
 
     const handleDragMove = (e: DragEndEvent) => {
-        const {active} = e;
+        const { active } = e;
     };
 
     const handleAddDocuments = () => {
-        updateRandomPage({userId: user.id, id: page.id, newPage: page}).then(() => refetch())
-
+        updateRandomPage({ userId: user.id, id: page.id, newPage: page }).then(async () => await refetch());
     };
 
     const mouseSensor = useSensor(MouseSensor, {
@@ -90,16 +90,17 @@ const PageView = memo(() => {
     }
 
     return (
-        <Stack flexDirection={"column"}>
+        <StyledPageView>
             <PageHeader text={"Header"} isHaveHover={isHaveHeader}/>
+            <Typography className={"page-title"}>Page title</Typography>
             <Paper
+                className={"page-view-paper"}
                 sx={{
-                    width: 600,
+                    width: 800,
                     height: 900,
                     p: 2,
                     bgcolor: "whitesmoke"
                 }}>
-                <h1>Page</h1>
                 <DndContext
                     sensors={[mouseSensor]}
                     collisionDetection={closestCenter}
@@ -110,7 +111,7 @@ const PageView = memo(() => {
                             const handleEditButtonClick = (id: string) => {
                                 if (id === "") return;
 
-                                setPageViewData((prevState) => ({...prevState, isCanEdit: false}));
+                                setPageViewData((prevState) => ({ ...prevState, isCanEdit: false }));
                             };
 
                             const baseProps = {
@@ -193,7 +194,7 @@ const PageView = memo(() => {
                     </SortableContext>
                 </DndContext>
             </Paper>
-        </Stack>
+        </StyledPageView>
     );
 });
 

@@ -9,5 +9,5 @@ export const StyledCommonBar = styled("div")(({ theme }: IExtendedThemeProps) =>
    maxHeight: "100%",
    maxWidth: "100%",
    justifyContent: "space-between ",
-   backgroundColor: theme?.menuBackground,
+   backgroundColor: theme?.menuBackground.primary,
 }));

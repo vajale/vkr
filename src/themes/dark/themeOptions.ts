@@ -1,8 +1,12 @@
-import { IExtendedTheme } from "../types";
+import { type IExtendedTheme } from "../types";
 import { COMMON_OPTIONS } from "../common";
 
 const themeOptions: IExtendedTheme = {
-    menuBackground: "#404040",
+    menuBackground: {
+        primary: "#404040",
+        secondary: "#505050",
+        third: "#fcf3d7"
+    },
     ...COMMON_OPTIONS,
     palette: {
         text: {
@@ -14,6 +18,9 @@ const themeOptions: IExtendedTheme = {
         secondary: {
             main: "#F50057",
         },
+        borderColors: {
+            primary: "#bdbdbd",
+        }
     },
 };
 

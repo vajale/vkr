@@ -1,22 +1,21 @@
 import React from "react";
 
-import {IAccountButton} from "./types";
+import { type IAccountButton } from "./types";
 
-import {TITLES} from "@/components/Login/constants";
+import { TITLES } from "@/components/Login/constants";
 
-import {StyledAccountButton} from "./styled";
-import {Typography} from "../../common/CustomTypography";
+import { StyledAccountButton } from "./styled";
+import { Typography } from "../../common/CustomTypography";
 
-export const AccountButton: React.FC<IAccountButton> = ({image, accountName, svgIcon, onClick}) => {
-
+export const AccountButton: React.FC<IAccountButton> = ({ image, accountName, svgIcon, onClick }) => {
     const IconElement = () => {
         if (svgIcon) return svgIcon;
         return <img src={image} alt={TITLES.IMAGE_ALT}/>;
     };
 
-    const handleButtonClick = () => {
-        if (onClick) {
-            onClick()
+    const handleButtonClick = (e: React.MouseEvent) => {
+        if (onClick != null) {
+            onClick(e.target);
         }
     };
 
