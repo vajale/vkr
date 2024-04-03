@@ -22,7 +22,7 @@ const SwitchButton: React.FC<ISwitchButtonProps> = ({ onClick, isValid, formType
 		const isSelected = formType === buttonType;
 
 		if (isSelected) {
-			return <Button disabled={!isValid} onClick={onClick} type={"submit"}>{title}</Button>;
+			return <Button disabled={!isValid} type={"submit"}>{title}</Button>;
 		}
 
 		return <Button onClick={onClick} type={"button"}>{unActiveTitle}</Button>;

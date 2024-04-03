@@ -1,10 +1,11 @@
-import { IExtendedTheme } from "../types";
+import { type IExtendedTheme } from "../types";
 import { COMMON_OPTIONS } from "../common";
 
 const themeOptions: IExtendedTheme = {
     menuBackground: {
         primary: "#EDEDED",
         secondary: "#f5f5f5",
+        third: "white"
     },
     ...COMMON_OPTIONS,
     palette: {

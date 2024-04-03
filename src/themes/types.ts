@@ -1,9 +1,10 @@
-import {ThemeOptions} from "@mui/material";
+import { type ThemeOptions } from "@mui/material";
 
 export interface IExtendedTheme extends ThemeOptions {
     menuBackground: {
         primary: string;
         secondary: string;
+        third: string;
     }
     palette: {
         text: {

@@ -40,8 +40,8 @@ const Login: React.FC = () => {
             <NotLoggedUser onClick={handleLoggedButtonClick}/>
             <LoginModal onModalClose={handleModelClose} modalOpen={loginState.isModalOpen}>
                 {loginState.isModalOpen && (loginState.modalType === ButtonType.login
-                    ? <AuthForm onAuth={handleModelClose} onRegisterClick={handleRegisterClick} />
-                    : <RegisterForm onRegister={handleModelClose} onAuthClick={handleAuthClick} />)}
+                    ? <AuthForm onAuth={handleModelClose} onRegisterClick={handleRegisterClick}/>
+                    : <RegisterForm onRegister={handleModelClose} onAuthClick={handleAuthClick}/>)}
             </LoginModal>
         </div>
     );

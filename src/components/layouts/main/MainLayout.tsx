@@ -1,11 +1,10 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
-import { StyledMainLayout } from "./styled";
+import { StyledMainLayout, StyledContentWrapper } from "./styled";
 import PageView from "../../PageView/ui/PageView/PageView";
 import AppHeader from "../../AppHeader";
 
 export const MainLayout: React.FC = () => {
-
     useEffect(() => {
 
     }, []);
@@ -13,7 +12,10 @@ export const MainLayout: React.FC = () => {
     return (
         <StyledMainLayout>
             <AppHeader></AppHeader>
-            <PageView />
+            <StyledContentWrapper>
+                <PageView />
+            </StyledContentWrapper>
+
         </StyledMainLayout>
     );
 };

@@ -1,4 +1,5 @@
-import {styled} from "@mui/material";
+import { styled } from "@mui/material";
+import { type IExtendedThemeProps } from "@/themes/types";
 
 const StyledMainLayout = styled("div")(() => ({
     display: "flex",
@@ -11,4 +12,13 @@ const StyledMainLayout = styled("div")(() => ({
     "&:hover": {}
 }));
 
-export {StyledMainLayout};
+const StyledContentWrapper = styled("div")(({ theme }: IExtendedThemeProps) => ({
+    height: "100%",
+    backgroundColor: theme?.menuBackground.third,
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-around",
+}));
+
+export { StyledMainLayout, StyledContentWrapper };
