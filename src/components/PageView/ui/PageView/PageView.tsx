@@ -15,7 +15,10 @@ import {
 import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
-import { useFetchPagesQuery, useUpdatePageMutation } from "@/components/PageView/model/services/firebaseDocumentsAPI";
+import {
+    useFetchPageDataQuery,
+    useUpdatePageMutation
+} from "@/components/PageView/model/services/firebaseDocumentsAPI";
 import { selectUser } from "@/store/slices/userSlice";
 import { DocumentBlockType } from "../../model/types";
 import Dropable from "@/components/DnDComponents/Dropable/Dropable";
@@ -30,7 +33,7 @@ import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
 import { Typography } from "@/components/common/CustomTypography";
 
 const PageView = memo(() => {
-    const { data, isLoading, isError, refetch } = useFetchPagesQuery({ userId: '2rLcXc4sd4WD97mu8o8jiyXRMxt1' });
+    const { data, isLoading, isError, refetch } = useFetchPageDataQuery({ userId: '2rLcXc4sd4WD97mu8o8jiyXRMxt1' });
 
     const [pageViewData, setPageViewData] = useState({
         currentId: "",
@@ -92,7 +95,7 @@ const PageView = memo(() => {
     return (
         <StyledPageView>
             <PageHeader text={"Header"} isHaveHover={isHaveHeader}/>
-            <Typography className={"page-title"}>Page title</Typography>
+            <Typography className={"page-title"}>{page.id}</Typography>
             <Paper
                 className={"page-view-paper"}
                 sx={{

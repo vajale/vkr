@@ -1,4 +1,4 @@
-import React, {createContext, useContext} from "react";
+import React, { createContext, useContext } from "react";
 import { Provider } from "react-redux";
 
 import store from "./store/store";
@@ -7,8 +7,9 @@ import { DesktopRouter } from "./routes";
 import ThemeWrapper from "./components/common/ThemeWrapper";
 
 import "normalize.css";
+import "./style.css";
 
-const FirebaseContext = createContext(null)
+const FirebaseContext = createContext(null);
 
 const App = () => {
     return (

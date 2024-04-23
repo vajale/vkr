@@ -10,13 +10,13 @@ const codeStyle = {
    background: "lightgrey",
    borderRadius: 7,
    border: "none",
-   padding: 14,
+   padding: 7,
    color: "none",
    height: "auto",
    marginBottom: 7,
    display: "flex",
    alignItems: "center",
-   width: 487,
+   width: 700,
    outline: "none",
 };
 

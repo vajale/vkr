@@ -19,7 +19,7 @@ const defaultStyle = {
    border: "none",
    outline: "none",
    resize: "none",
-   width: 480,
+   width: 700,
    height: 50,
    overflow: "hidden",
 };

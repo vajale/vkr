@@ -18,7 +18,8 @@ const defaultStyle = {
     border: "none",
     outline: "none",
     resize: "none",
-    width: 500
+    width: 700
+
 };
 
 const DocumentBlockText = (props: TextBlockProps) => {
@@ -44,7 +45,7 @@ const DocumentBlockText = (props: TextBlockProps) => {
             onInput={(e) => {
                 handleContentInput(e.currentTarget.value);
             }}
-            rows={block.content.length / 60}
+            rows={content.length / 40}
             spellCheck={true}
             contentEditable={true}
             suppressContentEditableWarning={true}

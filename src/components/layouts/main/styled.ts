@@ -18,7 +18,7 @@ const StyledContentWrapper = styled("div")(({ theme }: IExtendedThemeProps) => (
     display: "flex",
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
 }));
 
 export { StyledMainLayout, StyledContentWrapper };

@@ -1,15 +1,15 @@
-import React, {memo, useEffect, useRef, useState} from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 
-import { useMouseView } from "../../../model/hooks/useMouseView";
+import { useMouseHover } from "../../../model/hooks/useMouseHover";
 
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { DndContext, useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { useAppDispatch } from "../../../../../store/hooks";
-import { documentPageActions } from "../../../../../store/slices/pageSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { documentPageActions } from "@/store/slices/pageSlice";
 import { type DocumentBlock, type DocumentBlockType } from "../../../model/types";
-import EditList from "../../EditList/EditList";
 import CreateList from "../../CreateList/CreateList";
+import { MaterialIcon } from "@/assets/Icon";
 
 interface DocumentBlockBaseProps {
    item: DocumentBlock;
@@ -22,7 +22,7 @@ interface DocumentBlockBaseProps {
 }
 
 const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
-   const { children, onMove, onAdd, item, ignoreButtonsHover = false } = props;
+   const { children, onAdd, item, ignoreButtonsHover = false } = props;
 
    const [buttonsOptions, setButtonOptions] = useState({
       isAddMenuOpened: false,
@@ -35,7 +35,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
    const { setNodeRef, listeners, attributes, transform, active } = useDraggable({ id: item.id });
    const docRef = useRef<HTMLDivElement>(null);
 
-   const [isHover] = useMouseView(docRef);
+   const [isHover] = useMouseHover(docRef);
 
    const style = {
       transform: CSS.Translate.toString(transform),
@@ -44,7 +44,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
       height: "auto",
       display: "flex",
       border: "none",
-      opacity: active?.id === item.id ? 0.7 : 1
+      opacity: active?.id === item.id ? 0.7 : 1,
    };
 
    useEffect(() => {
@@ -81,7 +81,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
    };
 
    const handleDeleteButtonClick = () => {
-      console.log(item.id)
+      console.log(item.id);
       dispatch(documentPageActions.removeDocumentBlock({ id: item.id }));
    };
 
@@ -142,18 +142,9 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
                </DndContext>
             ) && children}
          </Stack>
-         <button
-            style={{
-               width: 24,
-               height: 24,
-               marginLeft: 7,
-               border: "none",
-               background: "white",
-               borderRadius: 4
-            }}
-            onClick={handleDeleteButtonClick}>
-            x
-         </button>
+         <Button sx={{ minWidth: 20, maxHeight: 30, ml: 2 }} onClick={handleDeleteButtonClick}>
+            <MaterialIcon name={"MdDeleteOutline"}/>
+         </Button>
       </div>
    );
 });
