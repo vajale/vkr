@@ -33,7 +33,7 @@ const EditList = ({ block }: EditListProps) => {
     const blockTypeSettings = useMemo(() => {
         if (block.type === DocumentBlockType.TEXT) {
             return ['h1', 'h2', 'h3', 'h4', 'h5', 'subtitle1'].map((value, index) => (
-                <MenuItem value={value}>
+                <MenuItem key={index} value={value}>
                     <MaterialIcon name={"MdNotes"}/>{value}
                 </MenuItem>
             ));
