@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { StyledColorMode } from "./styled";
 
 import ColorMode from "@/assets/svg/DayNightMode.svg";
+import { MaterialIcon } from "@/assets/Icon";
 
 const ColorModeButton = () => {
    const currentColorMode = useAppSelector((state) => state.app.colorMode);
@@ -26,7 +27,8 @@ const ColorModeButton = () => {
 
    return (
       <StyledColorMode dayMode={isDayMode} onClick={handleClick}>
-         <img src={ColorMode} alt="Day/Night" />
+         {/* <img src={ColorMode} alt="Day/Night" /> */}
+         <MaterialIcon name={'MdOutlinePalette'}/>
       </StyledColorMode>
    );
 };

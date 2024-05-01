@@ -1,13 +1,12 @@
-import { styled } from "@mui/material";
+import { Box, Stack, styled } from "@mui/material";
+import { type IExtendedThemeProps } from "@/themes/types";
 
-export const StyledList = styled("div")(() => ({
-   display: "flex",
-   position: "fixed",
-   flexDirection: "column",
-   backgroundColor: "white",
-   width: 140,
-   padding: 7,
-   overflow: "auto",
+export const StyledBox = styled(Box)((theme: IExtendedThemeProps) => ({
+   backgroundColor: theme.theme?.menuBackground.secondary,
+}));
+
+export const StyledList = styled(Stack)((theme: IExtendedThemeProps) => ({
+   backgroundColor: theme.theme?.menuBackground.secondary,
 }));
 
 export const StyledListButton = styled("button")(() => ({

@@ -7,7 +7,7 @@ export const AppHeaderEnd: React.FunctionComponent = () => {
    return (
       <StyledHeaderEnd>
          <MenuMainButtons />
-         <ColorModeButton></ColorModeButton>
+         <ColorModeButton/>
       </StyledHeaderEnd>
    );
 };

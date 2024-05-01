@@ -9,12 +9,18 @@ export const mockDocs1: DocumentBlock[] = [
    {
       id: "1",
       type: DocumentBlockType.TEXT,
-      content: "BIDLO"
+      content: "BIDLO",
+      textType: {
+         variant: 'subtitle1'
+      }
    },
    {
       id: "3",
       type: DocumentBlockType.LINK,
-      content: "asfasfasfsaf"
+      content: "asfasfasfsaf",
+      textType: {
+         variant: 'subtitle1'
+      }
    }
 ];
 
@@ -22,18 +28,27 @@ export const mockDocs2: DocumentBlock[] = [
    {
       id: "4124124",
       type: DocumentBlockType.TEXT,
-      content: ""
+      content: "jkzdvkasfvkjsdvbnk",
+      textType: {
+         variant: 'subtitle1'
+      }
    },
    {
-      id: "4124",
+      id: "65iuj5jrs",
       type: DocumentBlockType.TEXT,
-      content: ""
+      content: "52125512",
+      textType: {
+         variant: 'h5'
+      }
    },
    {
-      id: "12312",
-      type: DocumentBlockType.TEXT,
-      content: ""
-   }
+      id: "ewrewr",
+      type: DocumentBlockType.CODE,
+      content: "xcbxcbxcb",
+      textType: {
+         variant: 'subtitle1'
+      }
+   },
 ];
 
 export const mockPage1: Page = {

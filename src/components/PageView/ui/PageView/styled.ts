@@ -4,13 +4,15 @@ import { type IExtendedThemeProps } from "@/themes/types";
 export const StyledPageView = styled(Stack)(({ theme }: IExtendedThemeProps) => ({
 	display: "flex",
 	flexDirection: "column",
-	alignItems: "center",
+	alignItems: "flex-start",
+	width: 1200,
+	height: 600,
 	".page-title": {
-		fontSize: theme?.textSize.sizeText24,
+		// fontSize: theme?.textSize.sizeText24,
 	},
 	".page-view-paper": {
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
+		// display: "flex",
+		// flexDirection: "column",
+		// alignItems: "center",
 	}
 }));

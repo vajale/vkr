@@ -1,11 +1,12 @@
 import { styled } from "@mui/material";
 import { type IExtendedThemeProps } from "@/themes/types";
 
-const StyledMainLayout = styled("div")(() => ({
+const StyledMainLayout = styled("div")(({ theme }: IExtendedThemeProps) => ({
+    backgroundColor: theme?.menuBackground.primary,
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     width: "100vw",
-    height: "100vh",
+    height: "70vh",
     minHeight: "100vh",
     maxWidth: "100%",
 
@@ -13,12 +14,11 @@ const StyledMainLayout = styled("div")(() => ({
 }));
 
 const StyledContentWrapper = styled("div")(({ theme }: IExtendedThemeProps) => ({
-    height: "100%",
-    backgroundColor: theme?.menuBackground.third,
+    backgroundColor: theme?.menuBackground.secondary,
     display: "flex",
-    alignItems: "center",
+    alignItems: "flex-start",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "flex-start",
 }));
 
 export { StyledMainLayout, StyledContentWrapper };

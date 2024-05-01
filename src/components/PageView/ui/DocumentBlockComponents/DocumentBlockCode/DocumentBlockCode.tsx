@@ -7,7 +7,7 @@ import {
 import { usePageSettings } from "../../../model/hooks/usePageSettings";
 
 const codeStyle = {
-   background: "lightgrey",
+   background: "#ececec",
    borderRadius: 7,
    border: "none",
    padding: 7,
@@ -22,14 +22,14 @@ const codeStyle = {
 
 interface CodeBlockProps {
    block: DocumentCodeBlock;
-   contentEditable?: boolean;
+   canEdit?: boolean;
    onContentChange?: (data: DocumentContentType) => void;
    onHotKeyInput?: () => void;
 }
 
 const DocumentBlockCode = ({
    block,
-   contentEditable,
+   canEdit,
    onContentChange,
    onHotKeyInput,
 }: CodeBlockProps) => {
@@ -52,6 +52,7 @@ const DocumentBlockCode = ({
          onInput={(e) => {
             handleContentInput(e.currentTarget.textContent);
          }}
+         disabled={!canEdit}
          spellCheck={true}
          contentEditable={true}
          onBlur={handleContentBlur}

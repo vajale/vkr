@@ -9,10 +9,10 @@ import {
     type Page
 } from "@/components/PageView/model/types";
 import { documentObjectHelper } from "@/utils/documentObjectHelper";
-import {mockPage1} from "@/utils/mock/mockdata";
+import { mockPage1, mockPage2 } from "@/utils/mock/mockdata";
 
 const initialState: DocumentsPageSchema = {
-    pageData: mockPage1,
+    pageData: mockPage2,
     isPageEdit: false,
     style: {
         header: false,
@@ -26,6 +26,9 @@ export const documentPageSlice = createSlice({
     reducers: (create) => ({
         setPage: create.reducer((state, action: PayloadAction<Page>) => {
             state.pageData = action.payload;
+        }),
+        setEditDocumentId: create.reducer((state, action: PayloadAction<string>) => {
+            state.editDocumentId = action.payload;
         }),
         updateDocuments: create.reducer((state, action: PayloadAction<DocumentBlock[]>) => {
             state.pageData.documentBlocks = action.payload;
@@ -76,16 +79,16 @@ export const documentPageSlice = createSlice({
         })
     }),
     selectors: {
-        selectDocuments: (state) => state.pageData,
-        selectDocumentsIsEdit: (state) => state.isPageEdit,
-        selectDocumentHeaderFlag: (state) => state.style.header,
-        selectDocumentLogo: (state) => state.style.logo
+        selectPage: (state) => state.pageData,
+        selectPageIsEdit: (state) => state.isPageEdit,
+        selectPageHeaderFlag: (state) => state.style.header,
+        selectPageLogo: (state) => state.style.logo,
+        selectEditDocumentId: (state) => state.editDocumentId
     }
 });
 
 export const { actions: documentPageActions } = documentPageSlice;
 export const { reducer: documentPageReducer } = documentPageSlice;
 export const {
-    selectDocuments,
-    selectDocumentHeaderFlag
+selectPage, selectPageHeaderFlag, selectEditDocumentId
 } = documentPageSlice.selectors;

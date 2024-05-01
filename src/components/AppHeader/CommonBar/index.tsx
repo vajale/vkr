@@ -8,7 +8,7 @@ export const CommonBar: React.FC = () => {
    return (
       <StyledCommonBar>
          <AppHeaderBar />
-         <BottomBar />
+         {/*<BottomBar />*/}
       </StyledCommonBar>
    );
 };

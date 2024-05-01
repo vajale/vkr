@@ -2,151 +2,124 @@ import React, { memo, useEffect, useRef, useState } from "react";
 
 import { useMouseHover } from "../../../model/hooks/useMouseHover";
 
-import { Button, Stack } from "@mui/material";
+import { Box, Button, Popover, Popper, Stack } from "@mui/material";
 import { DndContext, useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useAppDispatch } from "@/store/hooks";
 import { documentPageActions } from "@/store/slices/pageSlice";
 import { type DocumentBlock, type DocumentBlockType } from "../../../model/types";
-import CreateList from "../../CreateList/CreateList";
 import { MaterialIcon } from "@/assets/Icon";
+import { motion } from "framer-motion";
+import CreateList from "../../CreateList/CreateList";
+import EditList from "@/components/PageView/ui/EditList/EditList";
 
 interface DocumentBlockBaseProps {
-   item: DocumentBlock;
-   ignoreButtonsHover?: boolean;
-   isAddMenuOpen?: boolean;
-   onMove?: (id: string) => void;
-   onAdd?: (type: DocumentBlockType) => void;
-   children: React.ReactNode;
-   onTypeChange?: (type: DocumentBlockType, id: string) => void;
+    item: DocumentBlock;
+    ignoreButtonsHover?: boolean;
+    isAddMenuOpen?: boolean;
+    onMove?: (id: string) => void;
+    onAdd?: (type: DocumentBlockType) => void;
+    children: React.ReactNode;
+    onTypeChange?: (type: DocumentBlockType, id: string) => void;
+    canEdit?: boolean
 }
 
 const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
-   const { children, onAdd, item, ignoreButtonsHover = false } = props;
+    const { children, onAdd, item, ignoreButtonsHover = false, canEdit } = props;
 
-   const [buttonsOptions, setButtonOptions] = useState({
-      isAddMenuOpened: false,
-      isEditButtonsDisable: false,
-      isEditMenuOpened: false
-   });
+    const [addListOpen, setAddListOpen] = React.useState(false);
+    const [editListOpen, setEditListOpen] = React.useState(false);
 
-   const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-   const { setNodeRef, listeners, attributes, transform, active } = useDraggable({ id: item.id });
-   const docRef = useRef<HTMLDivElement>(null);
+    const { setNodeRef, listeners, attributes, transform, active } = useDraggable({ id: item.id });
 
-   const [isHover] = useMouseHover(docRef);
+    const docRef = useRef<HTMLDivElement>(null);
+    const [isHover] = useMouseHover(docRef);
 
-   const style = {
-      transform: CSS.Translate.toString(transform),
-      background: "none",
-      color: "none",
-      height: "auto",
-      display: "flex",
-      border: "none",
-      opacity: active?.id === item.id ? 0.7 : 1,
-   };
+    const style = {
+        transform: CSS.Translate.toString(transform),
+        color: "none",
+        height: "auto",
+        display: "flex",
+        border: "none",
+        opacity: active?.id === item.id ? 0.7 : 1,
+    };
 
-   useEffect(() => {
-      setButtonOptions((prevState) => ({
-         ...prevState,
-         isEditButtonsDisable: ignoreButtonsHover
-      }));
-   }, [ignoreButtonsHover]);
+    useEffect(() => {
+    }, [ignoreButtonsHover]);
 
-   const handleTypeEdit = (type: DocumentBlockType) => {
-      dispatch(documentPageActions.updateDocumentType({ id: item.id, type }));
+    const handleTypeEdit = (type: DocumentBlockType) => {
+        dispatch(documentPageActions.updateDocumentType({ id: item.id, type }));
+    };
 
-      setButtonOptions((prevState) => ({ ...prevState, isEditMenuOpened: false }));
-   };
+    const handleAddBlock = (type: DocumentBlockType) => {
+        if (onAdd != null) {
+            onAdd(type);
+        }
 
-   const handleAddButtonClick = () => {
-      setButtonOptions((prevState) => ({
-         ...prevState,
-         isAddMenuOpened: !prevState.isAddMenuOpened
-      }));
-   };
+        setAddListOpen(false);
+        setEditListOpen(false);
 
-   const handleAddBlock = (type: DocumentBlockType) => {
-      if (onAdd != null) {
-         onAdd(type);
-      }
+        dispatch(documentPageActions.addDocumentBlock(type));
+        dispatch(documentPageActions.setEditDocumentId(''));
+    };
 
-      setButtonOptions((prevState) => ({
-         ...prevState,
-         isAddMenuOpened: false
-      }));
+    const handleEditClick = () => {
+        setAddListOpen(false);
+        setEditListOpen(false);
+        dispatch(documentPageActions.setEditDocumentId(''));
+    };
 
-      dispatch(documentPageActions.addDocumentBlock(type));
-   };
+    const showButtons = canEdit && (isHover || (addListOpen || editListOpen));
 
-   const handleDeleteButtonClick = () => {
-      console.log(item.id);
-      dispatch(documentPageActions.removeDocumentBlock({ id: item.id }));
-   };
-
-   const handleEditClick = () => {
-      setButtonOptions((prevState) => ({
-         ...prevState,
-         isEditMenuOpened: !prevState.isEditMenuOpened
-      }));
-   };
-
-   return (
-      <div ref={setNodeRef} style={style} id={item.id}>
-         <Stack flexDirection={"row"} ref={docRef}>
-            <Stack marginRight={2}>
-               <div style={{ width: 40 }}>
-                  {isHover && !buttonsOptions.isEditButtonsDisable && (
-                     <Stack flexDirection={"row"} gap={0.4}>
-                        <button
-                           style={{
-                              width: 24,
-                              border: "none",
-                              background: "white",
-                              borderRadius: 4,
-                              justifyContent: "center"
-                           }}
-                           onClick={handleAddButtonClick}>
-                           +
-                        </button>
-                        <div id={item.id} {...listeners} {...attributes}>
-                           <button
-                              onClick={handleEditClick}
-                              style={{
-                                 width: 16,
-                                 border: "none",
-                                 background: "white",
-                                 borderRadius: 4,
-                                 display: "flex",
-                                 justifyContent: "center"
-                              }}>
-                              ::
-                           </button>
-                        </div>
-                     </Stack>
-                  )}
-                  {buttonsOptions.isAddMenuOpened && <CreateList onTypeClick={handleAddBlock} />}
-                  {buttonsOptions.isEditMenuOpened && (
-                     <CreateList
-                        onTypeClick={(type) => {
-                           handleTypeEdit(type);
-                        }}
-                     />
-                  )}
-               </div>
+    return (
+        <div ref={setNodeRef} style={style} id={item.id}>
+            <Stack flexDirection={"row"} ref={docRef}>
+                <Stack marginRight={2}>
+                    <div style={{ width: 60 }}>
+                        {showButtons && <motion.div initial={{ scale: 1 }} animate={{ scale: 1.1 }}>
+                            <Stack flexDirection={"row"}>
+                                <Button
+                                    style={{
+                                        minWidth: 30,
+                                        borderRadius: 4,
+                                    }}
+                                    onClick={() => {
+                                        setAddListOpen(prevState => !prevState);
+                                        setEditListOpen(false);
+                                        dispatch(documentPageActions.setEditDocumentId(item.id));
+                                    }}>
+                                    <MaterialIcon name={"MdAdd"}/>
+                                </Button>
+                                <div id={item.id} {...listeners} {...attributes}>
+                                    <Button
+                                        onClick={() => {
+                                            setEditListOpen(prevState => !prevState);
+                                            setAddListOpen(false);
+                                            dispatch(documentPageActions.setEditDocumentId(item.id));
+                                        }}
+                                        style={{
+                                            minWidth: 30,
+                                            borderRadius: 4,
+                                        }}>
+                                        <MaterialIcon name={"MdGrid3X3"}/>
+                                    </Button>
+                                </div>
+                            </Stack>
+                        </motion.div>}
+                        {addListOpen && <CreateList onTypeClick={handleAddBlock}/>}
+                        {editListOpen && <EditList block={item}/> }
+                    </div>
+                </Stack>
+                {(
+                    <DndContext>
+                        <div>{children}</div>
+                    </DndContext>
+                ) && children}
             </Stack>
-            {(
-               <DndContext>
-                  <div>{children}</div>
-               </DndContext>
-            ) && children}
-         </Stack>
-         <Button sx={{ minWidth: 20, maxHeight: 30, ml: 2 }} onClick={handleDeleteButtonClick}>
-            <MaterialIcon name={"MdDeleteOutline"}/>
-         </Button>
-      </div>
-   );
+        </div>
+    );
 });
 
 export default DocumentBlockBase;
