@@ -32,11 +32,7 @@ const EditList = ({ block }: EditListProps) => {
 
     const blockTypeSettings = useMemo(() => {
         if (block.type === DocumentBlockType.TEXT) {
-            return ['h1', 'h2', 'h3', 'h4', 'h5', 'subtitle1'].map((value, index) => (
-                <MenuItem key={index} value={value}>
-                    <MaterialIcon name={"MdNotes"}/>{value}
-                </MenuItem>
-            ));
+            return ['h1', 'h2', 'h3', 'h4', 'h5', 'subtitle1'];
         }
 
         return null;
@@ -74,7 +70,10 @@ const EditList = ({ block }: EditListProps) => {
                             label="Тип"
                             onChange={handleChange}
                         >
-                            {blockTypeSettings}
+                            {blockTypeSettings && blockTypeSettings.map((value, index) => (
+                                <MenuItem key={index} value={value}>
+                                    <MaterialIcon name={"MdNotes"}/>{value}
+                                </MenuItem>))}
                         </Select>
                     </FormControl>
                 </motion.div>

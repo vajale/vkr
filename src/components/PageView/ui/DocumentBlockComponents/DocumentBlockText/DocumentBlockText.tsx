@@ -71,7 +71,6 @@ const DocumentBlockText = (props: TextBlockProps) => {
                         onInput={(e) => {
                             setContent(e.currentTarget.textContent!);
                         }}
-                        data-placeholder={'4251524125125 512'}
                         onBlur={() => {
                             if (onContentChange != null) {
                                 onContentChange(content);
