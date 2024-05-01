@@ -2,35 +2,17 @@ import React from "react";
 
 import ButtonWithIcon from "../../common/ButtonWithIcon";
 
-import {StyledMainButtons} from "./styled";
+import { StyledMainButtons } from "./styled";
+import AuthProfilePopover from "@/components/AuthProfilePopover";
+import Login from "@/components/Login";
+import { useFirebaseAuth } from "@/components/FireBase";
 
 const MenuMainButtons: React.FC = () => {
+    const { isAuth } = useFirebaseAuth();
+
     return (
         <StyledMainButtons>
-            <ButtonWithIcon
-                svg={
-                    <div
-                        style={{
-                            minHeight: "10px",
-                            minWidth: "10px",
-                            background: "red",
-                        }}
-                    />
-                }
-                title={"Обновления"}
-            />
-            <ButtonWithIcon
-                svg={
-                    <div
-                        style={{
-                            minHeight: "10px",
-                            minWidth: "10px",
-                            background: "red",
-                        }}
-                    />
-                }
-                title={"Участники"}
-            />
+            {isAuth ? <AuthProfilePopover/> : <Login/>}
         </StyledMainButtons>
     );
 };

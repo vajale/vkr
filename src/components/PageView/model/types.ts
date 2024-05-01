@@ -1,58 +1,62 @@
 export enum DocumentBlockType {
-   TEXT = "TEXT",
-   CHECKBOX = "CHECKBOX",
-   CODE = "CODE",
-   QUOTE = "QUOTE",
-   IMAGE = "IMAGE",
-   LINK = "LINK",
+    TEXT = "TEXT",
+    CHECKBOX = "CHECKBOX",
+    CODE = "CODE",
+    QUOTE = "QUOTE",
+    IMAGE = "IMAGE",
+    LINK = "LINK",
 }
 
 export interface DocumentBlockBase {
-   id: string;
-   type: DocumentBlockType;
-   content: DocumentContentType;
-   children?: DocumentBlock;
+    id: string;
+    type: DocumentBlockType;
+    content: DocumentContentType;
+    children?: DocumentBlock;
+    textType: {
+        variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'subtitle1'
+        weight?: 'strong' | 'bald' | 'pussy'
+    } | null
 }
 
 export type DocumentContentType = string;
 
 export interface DocumentCodeBlock extends DocumentBlockBase {
-   type: DocumentBlockType.CODE;
+    type: DocumentBlockType.CODE;
 }
 
 export interface DocumentImageBlock extends DocumentBlockBase {
-   type: DocumentBlockType.IMAGE;
-   src: string;
+    type: DocumentBlockType.IMAGE;
+    src: string;
 }
 
 export interface DocumentCheckboxBlock extends DocumentBlockBase {
-   type: DocumentBlockType.CHECKBOX;
-   flag: boolean;
+    type: DocumentBlockType.CHECKBOX;
+    flag: boolean;
 }
 
 export interface DocumentQuoteBlock extends DocumentBlockBase {
-   type: DocumentBlockType.QUOTE;
-   quote: boolean;
+    type: DocumentBlockType.QUOTE;
+    quote: boolean;
 }
 
 export interface DocumentTextBlock extends DocumentBlockBase {
-   type: DocumentBlockType.TEXT;
-   title?: string;
+    type: DocumentBlockType.TEXT;
+    title?: string;
 }
 
 export interface DocumentPageLinkBlock extends DocumentBlockBase {
-   type: DocumentBlockType.LINK;
-   src?: string;
+    type: DocumentBlockType.LINK;
+    src?: string;
 }
 
 export type DocumentBlock =
-   | DocumentTextBlock
-   | DocumentImageBlock
-   | DocumentCodeBlock
-   | DocumentCheckboxBlock | DocumentPageLinkBlock;
+    | DocumentTextBlock
+    | DocumentImageBlock
+    | DocumentCodeBlock
+    | DocumentCheckboxBlock | DocumentPageLinkBlock;
 
 export interface Page {
-   documentBlocks: DocumentBlock[];
-   id: string;
-   parent?: string | null
+    documentBlocks: DocumentBlock[];
+    id: string;
+    parent?: string | null
 }

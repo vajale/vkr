@@ -20,6 +20,7 @@ export const StyledSwitchButton = styled(Stack)(({ theme, isAuthorization }: IPr
 		".divider": {
 			backgroundColor: "black",
 			width: "1px",
-		}
+		},
+		menuBackground: 'whitesmoke'
 	});
 });

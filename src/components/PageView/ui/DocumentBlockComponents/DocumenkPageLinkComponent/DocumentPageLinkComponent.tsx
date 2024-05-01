@@ -1,4 +1,3 @@
-import { Route } from "react-router-dom";
 import { type DocumentPageLinkBlock } from "../../../model/types";
 import React from "react";
 import { Link } from "@mui/material";

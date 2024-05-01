@@ -3,8 +3,8 @@ import { COMMON_OPTIONS } from "../common";
 
 const themeOptions: IExtendedTheme = {
     menuBackground: {
-        primary: "#EDEDED",
-        secondary: "#f5f5f5",
+        primary: "#eeeeee",
+        secondary: "#e5e5e5",
         third: "white"
     },
     ...COMMON_OPTIONS,

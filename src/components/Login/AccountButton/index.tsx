@@ -21,8 +21,8 @@ export const AccountButton: React.FC<IAccountButton> = ({ image, accountName, sv
 
     return (
         <StyledAccountButton onClick={handleButtonClick}>
-            {IconElement()}
             <Typography>{accountName}</Typography>
+            {IconElement()}
         </StyledAccountButton>
     );
 };

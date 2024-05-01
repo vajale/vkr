@@ -7,29 +7,29 @@ import {
 import { usePageSettings } from "../../../model/hooks/usePageSettings";
 
 const codeStyle = {
-   background: "lightgrey",
+   background: "#ececec",
    borderRadius: 7,
    border: "none",
-   padding: 14,
+   padding: 7,
    color: "none",
    height: "auto",
    marginBottom: 7,
    display: "flex",
    alignItems: "center",
-   width: 487,
+   width: 700,
    outline: "none",
 };
 
 interface CodeBlockProps {
    block: DocumentCodeBlock;
-   contentEditable?: boolean;
+   canEdit?: boolean;
    onContentChange?: (data: DocumentContentType) => void;
    onHotKeyInput?: () => void;
 }
 
 const DocumentBlockCode = ({
    block,
-   contentEditable,
+   canEdit,
    onContentChange,
    onHotKeyInput,
 }: CodeBlockProps) => {
@@ -52,6 +52,7 @@ const DocumentBlockCode = ({
          onInput={(e) => {
             handleContentInput(e.currentTarget.textContent);
          }}
+         disabled={!canEdit}
          spellCheck={true}
          contentEditable={true}
          onBlur={handleContentBlur}
