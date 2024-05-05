@@ -24,7 +24,6 @@ const defaultStyle = {
     border: "none",
     outline: "none",
     resize: "none",
-    width: 700
 
 };
 
@@ -32,12 +31,6 @@ const DocumentBlockText = (props: TextBlockProps) => {
     const { block, onContentChange, canEdit } = props;
 
     const [content, setContent] = useState<string>(() => block.content);
-
-    const handleContentInput = (textContent: string | null) => {
-        if (onContentChange == null || textContent == null) return;
-
-        setContent(textContent);
-    };
 
     const getFontPadding = useMemo(() => {
         const { textType } = block;
@@ -56,13 +49,14 @@ const DocumentBlockText = (props: TextBlockProps) => {
             case "subtitle1":
                 return 0;
             default:
-                return 0;
+                return 'subtitle1';
         }
     }, []);
 
     return (
-        <motion.div whileHover={{ backgroundColor: block.content == '' ? "whitesmoke" : 'none' }}>
-            <Typography width={"600px"} p={getFontPadding}
+        <motion.div>
+            <Typography sx={{ opacity: block.content.length == 0 ? 0.5 : 1 }}
+                        width={"600px"} p={getFontPadding}
                         component={'div'}
                         data-placeholder={'asffas'}
                         variant={block.textType?.variant}
@@ -75,9 +69,8 @@ const DocumentBlockText = (props: TextBlockProps) => {
                             if (onContentChange != null) {
                                 onContentChange(content);
                             }
-                        }}
-            >
-                {block.content}
+                        }}>
+                {block.content.length == 0 ? 'Напишите что-нибудь' : block.content}
             </Typography>
         </motion.div>
 

@@ -2,6 +2,7 @@ export enum DocumentBlockType {
     TEXT = "TEXT",
     CHECKBOX = "CHECKBOX",
     CODE = "CODE",
+    TODO = "TODO",
     QUOTE = "QUOTE",
     IMAGE = "IMAGE",
     LINK = "LINK",
@@ -49,11 +50,22 @@ export interface DocumentPageLinkBlock extends DocumentBlockBase {
     src?: string;
 }
 
+interface Todo {
+    title: string,
+    completed: boolean,
+    id: string
+}
+
+export interface DocumentTodoBlock extends DocumentBlockBase {
+    type: DocumentBlockType.TODO;
+    todos: Todo[];
+}
+
 export type DocumentBlock =
     | DocumentTextBlock
     | DocumentImageBlock
     | DocumentCodeBlock
-    | DocumentCheckboxBlock | DocumentPageLinkBlock;
+    | DocumentCheckboxBlock | DocumentPageLinkBlock | DocumentTodoBlock;
 
 export interface Page {
     documentBlocks: DocumentBlock[];
