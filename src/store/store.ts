@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./rootReducer";
-import {firebaseDocumentsAPI} from "@/components/PageView/model/services/firebaseDocumentsAPI";
+import { firebaseDocumentsAPI } from "@/components/PageView/model/services/firebaseDocumentsAPI";
 
 const store = configureStore({
     reducer: rootReducer,

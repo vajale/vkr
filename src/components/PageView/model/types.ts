@@ -72,3 +72,16 @@ export interface Page {
     id: string;
     parent?: string | null
 }
+
+export interface CalendarPage {
+    id: string,
+    tasks: Task[]
+}
+
+export interface Task {
+    id: string,
+    content: string,
+    priority: string
+    date: string
+    time: string
+}

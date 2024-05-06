@@ -1,60 +1,50 @@
+import React, { useState } from "react";
 import { MainLayout } from "@/components/layouts/main/MainLayout";
-import React from "react";
-import { useCalendar } from "@/utils/hooks/useCalendar";
-import { motion } from "framer-motion";
-import { daysOfTheWeek, months } from "@/utils/hooks/useCalendar/lib/helpers";
-import { Button, Divider, Stack, Typography } from "@mui/material";
-import { MaterialIcon } from "@/assets/Icon";
+import { Box } from "@mui/material";
+import CalendarHeader from "@/pages/Calendar/CalendarHeader";
+import CalendarMonthWrapper from "@/pages/Calendar/CalendarMonthWrapper";
+import { type DateCellItem, useCalendar } from "@/utils/hooks/useCalendar";
 
-export enum CalendarSwitch {
-    NEXT = "next",
-    PREVIOUS = "prev",
-}
+import CreateTaskModal from "@/components/CreateTaskModal/CreateTaskModal";
 
-export const CalendarPage = () => {
+const CalendarPage = () => {
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [selectedCellDate, setSelectedCellDate] = useState<DateCellItem | null>(null);
+
     const { monthDateCells, date, month, year, controls } = useCalendar({
-        selectedValue: new Date(2024, 4, 5)
+        selectedValue: new Date()
     });
 
     const { switchMonthNext, switchMonthPrevious } = controls;
 
+    const handleOpenCreateTaskModal = (date: DateCellItem) => {
+        setSelectedCellDate(date);
+        setModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
+
     return (
         <MainLayout>
-            <Stack ml={1} gap={1}>
-                <Stack flexDirection={'row'} gap={1} justifyContent={'flex-end'}>
-                    <Button onClick={switchMonthPrevious}>
-                        <MaterialIcon name={'MdKeyboardArrowLeft'}/>
-                    </Button>
-                    <Typography width={230} variant={'h4'}>{`${months[month]} ${year}`}</Typography>
-                    <Button onClick={switchMonthNext}>
-                        <MaterialIcon name={'MdKeyboardArrowRight'}/>
-                    </Button>
-                </Stack>
-                <Divider/>
-                <Typography style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", height: 40 }}>
-                    {daysOfTheWeek.map((cell) => <div key={cell}>{cell}</div>)}
-                </Typography>
-                <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(7, 1fr)",
-                    gridTemplateRows: 'repeat(7, 1fr)'
-                }}>
-                    {monthDateCells.map((dataCell) =>
-                        <motion.div
-                            whileHover={{ scale: 1.05, backgroundColor: 'whitesmoke' }}
-                            style={{
-                                height: 100,
-                                width: 160,
-                                padding: 7,
-                                opacity: dataCell.view?.type === "past" || dataCell.view?.type === "next" ? 0.3 : 1
-                            }}
-                            key={dataCell.date}>
-                            {dataCell.date}
-                        </motion.div>
-                    )}
-                </div>
-            </Stack>
-
+            <Box padding={1}>
+                <CalendarHeader
+                    month={month}
+                    date={date}
+                    year={year}
+                    onNext={switchMonthNext}
+                    onPrevious={switchMonthPrevious}/>
+                <CalendarMonthWrapper
+                    onCellClick={handleOpenCreateTaskModal}
+                    cells={monthDateCells}/>
+                 <CreateTaskModal
+                    modalOpen={modalOpen}
+                    defaultDate={selectedCellDate}
+                    onTaskCreate={handleCloseModal}/>
+            </Box>
         </MainLayout>
     );
 };
+
+export default CalendarPage;

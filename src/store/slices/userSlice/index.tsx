@@ -1,10 +1,9 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {themePalette} from "@/enums/themePalette";
-import {IUserSchema} from "@/store/slices/userSlice/types";
-import {User} from "@/utils/types";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { type IUserSchema } from "@/store/slices/userSlice/types";
+import { type User } from "@/utils/types";
 
 const initialState: IUserSchema = {
-
+    user: undefined
 };
 
 export const userSlice = createSlice({
@@ -30,9 +29,9 @@ export const userSlice = createSlice({
     }
 });
 
-export const {selectUserAuth} = userSlice.selectors
-export const {selectUser} = userSlice.selectors
+export const { selectUserAuth } = userSlice.selectors;
+export const { selectUser } = userSlice.selectors;
 export default userSlice.reducer;
 
-export const {actions: userActions} = userSlice;
-export const {reducer: userReducer} = userSlice;
+export const { actions: userActions } = userSlice;
+export const { reducer: userReducer } = userSlice;

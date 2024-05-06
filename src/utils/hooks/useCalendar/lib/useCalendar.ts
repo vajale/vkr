@@ -21,7 +21,7 @@ export const useCalendar = (props: CalendarProps) => {
     const [panelDate, setPanelDate] = useState(() => selectedValue.getDate());
 
     useLayoutEffect(() => {
-        if (!inputValue) {
+        if (inputValue == null) {
             return;
         }
 

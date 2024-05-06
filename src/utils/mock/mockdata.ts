@@ -77,3 +77,9 @@ export const mockPage2: Page = {
     documentBlocks: mockDocs2,
     parent: "ssaas"
 };
+
+export const mockTasksData: Page = {
+    id: 'ssaas',
+    documentBlocks: mockDocs2,
+    parent: "ssaas"
+};

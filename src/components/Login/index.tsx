@@ -41,7 +41,7 @@ const Login: React.FC = () => {
             <LoginModal onModalClose={handleModelClose} modalOpen={loginState.isModalOpen}>
                 {loginState.isModalOpen && (loginState.modalType === ButtonType.login
                     ? <AuthForm onAuth={handleModelClose} onRegisterClick={handleRegisterClick}/>
-                    : <RegisterForm onRegister={handleModelClose} onAuthClick={handleAuthClick}/>)}
+                    : <RegisterForm onRegisterFormClick={handleModelClose} onAuthFormClick={handleAuthClick}/>)}
             </LoginModal>
         </div>
     );

@@ -5,7 +5,7 @@ const themeOptions: IExtendedTheme = {
     menuBackground: {
         primary: "#eeeeee",
         secondary: "#e5e5e5",
-        third: "white"
+        third: "#000000"
     },
     ...COMMON_OPTIONS,
     palette: {
@@ -16,7 +16,7 @@ const themeOptions: IExtendedTheme = {
             main: "#000000",
         },
         secondary: {
-            main: "#F50057",
+            main: "#ffffff",
         },
         borderColors: {
             primary: "#262626",
