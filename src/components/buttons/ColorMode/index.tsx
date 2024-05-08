@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, {useEffect, useMemo} from "react";
 
 import { useAppSelector } from "@/store/hooks";
 import { themePalette } from "@/enums/themePalette";
@@ -7,16 +7,24 @@ import { useDispatch } from "react-redux";
 
 import { StyledColorMode } from "./styled";
 
-import ColorMode from "@/assets/svg/DayNightMode.svg";
+
 import { MaterialIcon } from "@/assets/Icon";
+import {
+   useLazyUpdatePageRealtimeQuery,
+} from "@/components/PageView/model/services/firebaseDocumentsAPI";
+import {selectPage} from "@/store/slices/pageSlice";
 
 const ColorModeButton = () => {
    const currentColorMode = useAppSelector((state) => state.app.colorMode);
    const dispatch = useDispatch();
-
    const isDayMode = useMemo(() => currentColorMode === themePalette.Light, [currentColorMode]);
 
-   const handleClick = () => {
+
+   const [updatePageData] = useLazyUpdatePageRealtimeQuery();
+   const page = useAppSelector(selectPage);
+
+   const handleClick = async () => {
+      updatePageData({ page })
       if (isDayMode) {
          dispatch(setColorMode(themePalette.Dark));
          return;

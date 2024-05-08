@@ -1,7 +1,8 @@
-import { firestoreDB } from "@/components/FireBase";
+import {firebaseAuth, firebaseDatabase, firestoreDB} from "@/components/FireBase";
 import { type DocumentData, type DocumentSnapshot, collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { DocumentBlockType, type Page } from "../types";
 import { firebaseApi } from "@/components/PageView/model/api/api";
+import { onValue, ref, set, get, child } from "firebase/database";
 
 function isPage (obj: any): obj is Page {
     return (
@@ -14,11 +15,26 @@ function isPage (obj: any): obj is Page {
 
 export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
-        fetchPageData: builder.query<Page[], { userId: string }>({
+        fetchPageData: builder.query<Page[], undefined>({
             // @ts-expect-error
-            async queryFn ({ userId }) {
-                const blogRef = collection(firestoreDB, "pages", '2rLcXc4sd4WD97mu8o8jiyXRMxt1', 'pages');
-                const querySnapshot = await getDocs(blogRef);
+            async queryFn () {
+                const userId = firebaseAuth.currentUser?.uid;
+
+                if (userId != null) {
+                    const dbRef = ref(firebaseDatabase);
+                    //const querySnapshot = await getDocs(blogRef);
+
+                    console.log(userId);
+                    get(child(dbRef, `${userId}`)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            console.log(snapshot.val());
+                        } else {
+                            console.log("No data available");
+                        }
+                    }).catch((error) => {
+                        console.error(error);
+                    });
+                }
 
                 const queryData = querySnapshot.docs;
 
@@ -58,8 +74,31 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                     return { error: error.message };
                 }
             }
-        })
+        }),
+        updatePageRealtime: builder.query<string, { page: Page }>({
+            queryFn: async (_arg) => {
+                const { page } = _arg;
+                const currentUserId = firebaseAuth.currentUser?.uid;
+
+
+                const addData = async () => {
+                    if (currentUserId != null) {
+                        const reference = ref(firebaseDatabase, `/${currentUserId}/` + page.id);
+                        await set(reference, page);
+                    }
+
+                    throw new Error("not logged");
+                };
+
+                try {
+                    await addData();
+                } catch (error) {
+                    return "error";
+                }
+            }
+        }),
+
     })
 });
 
-export const { useFetchPageDataQuery, useUpdatePageMutation } = firebaseDocumentsAPI;
+export const { useFetchPageDataQuery, useUpdatePageMutation, useLazyUpdatePageRealtimeQuery } = firebaseDocumentsAPI;

@@ -6,10 +6,8 @@ import { Button, Stack, Typography } from "@mui/material";
 import PageLink from "@/components/PageLink/PageLink";
 import { useFetchPageDataQuery } from "@/components/PageView/model/services/firebaseDocumentsAPI";
 import { useFirebaseAuth } from "@/components/FireBase";
-import AuthProfilePopover from "@/components/AuthProfilePopover";
-import Login from "@/components/Login";
 import { MaterialIcon } from "@/assets/Icon";
-import { mockPage1, mockPage2 } from "@/utils/mock/mockdata";
+import { mockPage1  } from "@/utils/mock/mockdata";
 
 interface LayoutProps {
     children: React.ReactNode | React.ReactElement
@@ -22,7 +20,7 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
     const { data, isLoading } = useFetchPageDataQuery({ userId: 'asdasd' });
 
     const pages = useMemo(() => {
-        const mockPages = [mockPage1, mockPage2];
+        const mockPages = [mockPage1];
 
         return mockPages?.map(page => (
             <PageLink showOptionsButton
@@ -64,10 +62,10 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
                     </Stack>
                 </Stack>
             </StyledContentWrapper>
-            <Stack>
+            <div className={"side-menu"}>
                 <AppHeader/>
                 {children}
-            </Stack>
+            </div>
         </StyledMainLayout>
     );
 };

@@ -9,8 +9,14 @@ const StyledMainLayout = styled("div")(({ theme }: IExtendedThemeProps) => ({
     height: "70vh",
     minHeight: "100vh",
     maxWidth: "100%",
+    "&:hover": {},
 
-    "&:hover": {}
+    ".side-menu": {
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+    }
 }));
 
 const StyledContentWrapper = styled("div")(({ theme }: IExtendedThemeProps) => ({

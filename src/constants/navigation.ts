@@ -1,4 +1,6 @@
 export const URL = {
-    HOME: "home",
-    CALENDAR: "calendar"
+    HOME: "/",
+    CALENDAR: "calendar",
+    PAGE: "page",
+    UNAUTHORIZED: "unauthorized",
 };
