@@ -4,7 +4,7 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import Constants from "../constants/index";
 
 import { HomePage } from "@/pages/HomePage";
-import { CalendarPage } from "@/pages/Calendar";
+import CalendarPage from "@/pages/Calendar";
 import { Page } from "@/pages/Page";
 import LandingPage from "@/pages/Landing";
 import { Navigate } from "react-router";

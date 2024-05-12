@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { documentPageActions, selectEditDocumentId, selectPage } from "@/store/slices/pageSlice";
 import { Box, Button, Paper, Popover, Stack, Typography } from "@mui/material";
 import { MaterialIcon } from "@/assets/Icon";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { closestCenter, DndContext, type DragEndEvent, MouseSensor, useSensor } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { type DocumentBlock, DocumentBlockType } from "@/components/PageView/model/types";
@@ -19,6 +19,7 @@ import { useFirebaseAuth } from "@/components/FireBase";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/slices/userSlice";
 import EmptyDocumentBlock from "@/components/PageView/ui/DocumentBlockComponents/EmptyDocumentBlock/EmptyDocumentBlock";
+import DocumentBlockToDo from "@/components/PageView/ui/DocumentBlockComponents/DocumentBlockToDo/DocumentBlockToDo";
 
 interface BlocksProps {
     docs: DocumentBlock[],
@@ -154,11 +155,19 @@ const DocumentBlocksList = (props: BlocksProps) => {
                                         </DocumentBlockBase>
                                     </Dropable>
                                 );
+                            case DocumentBlockType.TODO:
+                                return (
+                                    <Dropable key={item.id} id={item.id}>
+                                        <DocumentBlockBase canEdit={canEditDoc} item={item} {...baseProps}>
+                                            <DocumentBlockToDo block={item}/>
+                                        </DocumentBlockBase>
+                                    </Dropable>
+                                );
                             default:
                                 break;
                         }
                     })}
-                    <EmptyDocumentBlock onClick={handleEmptySpaceClick}/>
+                    {/* <EmptyDocumentBlock onClick={handleEmptySpaceClick}/> */}
                 </SortableContext>
             </DndContext>
         </div>

@@ -1,19 +1,19 @@
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { type IAuthForm } from "./types";
 import {
+    Button,
+    FormControl,
     IconButton,
+    Input,
     InputAdornment,
-    InputLabel,
-    OutlinedInput,
+    Stack,
     TextField,
+    Typography,
 } from "@mui/material";
 import React from "react";
 import { useFirebaseAuth } from "@/components/FireBase";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { StyledInputsWrapper } from "@/components/Login/styled";
-import { Typography } from "@/components/common/CustomTypography";
-import SwitchButton from "@/components/Login/SwitchButton";
-import { ButtonType } from "@/components/Login/enums";
+import { StyledAuthPaper, StyledLoginButton } from "@/components/Login/AuthForm/styled";
 
 interface AuthProps {
     onRegisterClick: () => void
@@ -35,29 +35,34 @@ const AuthForm = (props: AuthProps) => {
 
     const [showPassword, setShowPassword] = React.useState(false);
 
-    const handleClickShowPassword = () => { setShowPassword((show) => !show); };
+    const handleClickShowPassword = () => {
+        setShowPassword((show) => !show);
+    };
 
     return (
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <Typography className={"login-title"}>Авторизация</Typography>
-                <StyledInputsWrapper>
-                    <InputLabel htmlFor="outlined-adornment-password">EMAIL</InputLabel>
+        <StyledAuthPaper>
+            <FormControl variant={'standard'} sx={{ mt: 10 }} onSubmit={() => handleSubmit(onSubmit)}>
+                <Stack gap={1}>
+                    <Typography variant={'h4'}
+                                fontWeight={'700'}
+                                justifyContent={'center'}
+                                className={"login-title"} mb={7}>Вход в аккаунт</Typography>
                     <TextField
-                        className={"input"}
-                        {...register("email", {
-                            required: "email is required",
-                            minLength: {
-                                value: 5,
-                                message: "Минимум 5 букв"
-                            }
-                        })}
-                        required
-                        id="outlined-required"
-                        fullWidth
-                        placeholder="Почта"
+                               className={"input"}
+                               {...register("email", {
+                                   required: "email is required",
+                                   minLength: {
+                                       value: 5,
+                                       message: "Минимум 5 букв"
+                                   }
+                               })}
+                               required
+                               variant={'standard'}
+                               id="outlined-required"
+                               fullWidth
+                               placeholder="Почта"
                     />
-                    <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                    <OutlinedInput
+                    <Input
                         className={"input"}
                         fullWidth
                         {...register("password", { required: "password is required" })}
@@ -75,9 +80,21 @@ const AuthForm = (props: AuthProps) => {
                             </InputAdornment>
                         }
                     />
-                </StyledInputsWrapper>
-                <SwitchButton onClick={onRegisterClick} isValid={isValid} formType={ButtonType.login}/>
-            </form>);
+                    <StyledLoginButton type={'submit'} sx={{ mt: 7 }} onClick={onAuth} fullWidth>
+                        <Typography>
+                            Войти
+                        </Typography>
+                    </StyledLoginButton>
+                    <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
+                        <Button variant={'outlined'} sx={{ border: 'none' }} sx={{ mt: 7 }} onClick={onRegisterClick}>
+                            <Typography>Зарегистрироваться</Typography>
+                        </Button>
+                    </Stack>
+                    {/* <SwitchButton onClick={onRegisterClick} isValid={isValid} formType={ButtonType.login}/> */}
+                </Stack>
+            </FormControl>
+        </StyledAuthPaper>
+    );
 };
 
 export default AuthForm;

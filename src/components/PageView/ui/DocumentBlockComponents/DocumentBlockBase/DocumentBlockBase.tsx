@@ -12,6 +12,7 @@ import { MaterialIcon } from "@/assets/Icon";
 import { motion } from "framer-motion";
 import CreateList from "../../CreateList/CreateList";
 import EditList from "@/components/PageView/ui/EditList/EditList";
+import { useSortable } from "@dnd-kit/sortable";
 
 interface DocumentBlockBaseProps {
     item: DocumentBlock;
@@ -32,7 +33,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
 
     const dispatch = useAppDispatch();
 
-    const { setNodeRef, listeners, attributes, transform, active } = useDraggable({ id: item.id });
+    const { setNodeRef, listeners, attributes, transform, active } = useSortable({ id: item.id });
 
     const docRef = useRef<HTMLDivElement>(null);
     const [isHover] = useMouseHover(docRef);
@@ -74,7 +75,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
     const showButtons = canEdit && (isHover || (addListOpen || editListOpen));
 
     return (
-        <div ref={setNodeRef} style={style} id={item.id}>
+        <motion.div ref={setNodeRef} style={style} id={item.id}>
             <Stack flexDirection={"row"} ref={docRef}>
                 <Stack marginRight={2}>
                     <div style={{ width: 60 }}>
@@ -109,16 +110,21 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
                             </Stack>
                         </motion.div>}
                         {addListOpen && <CreateList onTypeClick={handleAddBlock}/>}
-                        {editListOpen && <EditList block={item}/> }
+                        {editListOpen && <EditList block={item}/>}
                     </div>
                 </Stack>
-                {(
+                {
                     <DndContext>
-                        <div>{children}</div>
+                        <div style={{
+                            padding: 4,
+                            borderRadius: 7,
+                            opacity: editListOpen ? 0.7 : 1,
+                            backgroundColor: editListOpen && '#ADD8E6'
+                        }}>{children}</div>
                     </DndContext>
-                ) && children}
+                }
             </Stack>
-        </div>
+        </motion.div>
     );
 });
 

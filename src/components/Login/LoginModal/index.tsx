@@ -14,7 +14,7 @@ const LoginModal = (props: ModalProps) => {
 	const { onModalClose, modalOpen, children } = props;
 	return (
 		<Modal open={modalOpen} onClose={onModalClose} >
-			<StyledLoginWrapper className="auth-form">
+			<StyledLoginWrapper>
 				{children}
 			</StyledLoginWrapper>
 		</Modal>

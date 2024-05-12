@@ -2,8 +2,9 @@ import {
     DocumentBlockType,
     type DocumentCheckboxBlock, type DocumentCodeBlock,
     type DocumentPageLinkBlock,
-    type DocumentTextBlock
+    type DocumentTextBlock, type DocumentTodoBlock
 } from "@/components/PageView/model/types";
+import type DocumentBlockToDo from "@/components/PageView/ui/DocumentBlockComponents/DocumentBlockToDo/DocumentBlockToDo";
 
 export const documentObjectHelper = (type: DocumentBlockType) => {
     const id = new Date().toJSON();
@@ -13,7 +14,10 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
         const newBlock: DocumentTextBlock = {
             id,
             type,
-            content: defaultContent
+            content: defaultContent,
+            textType: {
+                variant: "subtitle1"
+            }
         };
 
         return newBlock;
@@ -23,7 +27,10 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
             id,
             type,
             content: defaultContent,
-            flag: false
+            flag: false,
+            textType: {
+                variant: "subtitle1"
+            }
         };
 
         return newBlock;
@@ -34,7 +41,10 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
             id,
             type,
             src: '/',
-            content: "Page_link"
+            content: "Page_link",
+            textType: {
+                variant: "subtitle1"
+            }
         };
 
         return newBlock;
@@ -44,7 +54,24 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
         const newBlock: DocumentCodeBlock = {
             id,
             type,
-            content: defaultContent
+            content: defaultContent,
+            textType: {
+                variant: "subtitle1"
+            }
+        };
+
+        return newBlock;
+    }
+
+    if (type === DocumentBlockType.TODO) {
+        const newBlock: DocumentTodoBlock = {
+            id,
+            type,
+            content: defaultContent,
+            textType: {
+                variant: "subtitle1"
+            },
+            todos: []
         };
 
         return newBlock;
