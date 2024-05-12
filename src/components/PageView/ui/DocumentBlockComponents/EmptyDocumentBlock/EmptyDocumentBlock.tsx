@@ -15,7 +15,7 @@ const EmptyDocumentBlock = (props: BlockProps) => {
     };
 
     return (
-        <div onClick={handleClick} style={{ height: 400, cursor: 'text' }}>
+        <div onClick={handleClick} style={{ height: 200, cursor: 'text' }}>
 
         </div>
     );

@@ -1,6 +1,6 @@
-const path = require("path")
-const HtmlWebpackPlugin = require("html-webpack-plugin")
-const TsConfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const TsConfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
     mode: "development",
@@ -37,7 +37,7 @@ module.exports = {
             {
                 test: /\.svg$/i,
                 issuer: /\.[jt]sx?$/,
-                use: [{loader: "@svgr/webpack", options: {icon: true}}],
+                use: [{ loader: "@svgr/webpack", options: { icon: true } }],
             },
             {
                 test: /\.(sa|sc|c)ss$/,
@@ -46,7 +46,7 @@ module.exports = {
             {
                 test: /\.(png|woff|woff2|eot|ttf|svg)$/,
                 loader: "url-loader",
-                options: {limit: false},
+                options: { limit: false },
             },
             {
                 test: /\.(png|jpe?g|gif)$/i,
@@ -61,4 +61,4 @@ module.exports = {
             },
         ],
     },
-}
+};

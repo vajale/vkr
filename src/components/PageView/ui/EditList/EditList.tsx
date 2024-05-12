@@ -32,11 +32,15 @@ const EditList = ({ block }: EditListProps) => {
 
     const blockTypeSettings = useMemo(() => {
         if (block.type === DocumentBlockType.TEXT) {
-            return ['h1', 'h2', 'h3', 'h4', 'h5', 'subtitle1'].map((value, index) => (
-                <MenuItem key={index} value={value}>
-                    <MaterialIcon name={"MdNotes"}/>{value}
-                </MenuItem>
-            ));
+            return ['h1', 'h2', 'h3', 'h4', 'h5', 'subtitle1'];
+        }
+
+        if (block.type === DocumentBlockType.CHECKBOX) {
+            return ['h1', 'h2', 'h3', 'h4', 'h5', 'subtitle1'];
+        }
+
+        if (block.type === DocumentBlockType.TODO) {
+            return ['h1', 'h2', 'h3', 'h4', 'h5', 'subtitle1'];
         }
 
         return null;
@@ -49,7 +53,7 @@ const EditList = ({ block }: EditListProps) => {
 
     return (
         <StyledBox position={'absolute'}>
-            <StyledList>
+            <StyledList alignContent={'flex-start'}>
                 <motion.div>
                     <Button fullWidth sx={{ maxHeight: 40 }}
                             onClick={handleDeleteButtonClick}>
@@ -65,16 +69,25 @@ const EditList = ({ block }: EditListProps) => {
                     </Button>
                 </motion.div>
                 <motion.div>
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Тип</InputLabel>
+                    <Button fullWidth sx={{ maxHeight: 40 }}
+                            onClick={handleDeleteButtonClick}>
+                        <MaterialIcon name={"MdPallet"}/>
+                        Поменять цвет
+                    </Button>
+                </motion.div>
+                <motion.div>
+                    <FormControl variant={'standard'} fullWidth>
                         <Select
+                            sx={{ maxHeight: 30 }}
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={block.textType?.variant}
-                            label="Тип"
                             onChange={handleChange}
                         >
-                            {blockTypeSettings}
+                            {blockTypeSettings && blockTypeSettings.map((value, index) => (
+                                <MenuItem key={index} value={value}>
+                                    <MaterialIcon name={"MdNotes"}/>{value}
+                                </MenuItem>))}
                         </Select>
                     </FormControl>
                 </motion.div>

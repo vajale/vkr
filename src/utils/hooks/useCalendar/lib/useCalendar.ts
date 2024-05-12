@@ -14,16 +14,14 @@ interface CalendarProps {
 }
 
 export const useCalendar = (props: CalendarProps) => {
-    const {
-        selectedValue, inputValue,
-    } = props;
+    const { selectedValue, inputValue } = props;
 
     const [panelYear, setPanelYear] = useState(() => selectedValue.getFullYear());
     const [panelMonth, setPanelMonth] = useState(() => selectedValue.getMonth());
     const [panelDate, setPanelDate] = useState(() => selectedValue.getDate());
 
     useLayoutEffect(() => {
-        if (!inputValue) {
+        if (inputValue == null) {
             return;
         }
 

@@ -1,6 +1,6 @@
 import { Box, Button, Stack } from "@mui/material";
 import { DocumentBlockType } from "../../model/types";
-import { StyledList, StyledListButton } from "../EditList/styled";
+import { StyledBox, StyledList, StyledListButton } from "../EditList/styled";
 import React from "react";
 
 interface ListProps {
@@ -17,9 +17,8 @@ const CreateList = ({ onTypeClick }: ListProps) => {
    };
 
    return (
-      <Box style={{
-          backgroundColor: 'white'
-      }} width={140} position={'absolute'}>
+      <StyledBox width={140} position={'absolute'}>
+         Создать блок...
          <Stack>
             {Object.values(DocumentBlockType).map((value) => (
                 <Button
@@ -31,7 +30,7 @@ const CreateList = ({ onTypeClick }: ListProps) => {
                 </Button>
             ))}
          </Stack>
-      </Box>
+      </StyledBox>
    );
 };
 
