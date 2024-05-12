@@ -6,10 +6,10 @@ import { Button, Stack, Typography } from "@mui/material";
 import PageLink from "@/components/PageLink/PageLink";
 import { useFetchPageDataQuery } from "@/components/PageView/model/services/firebaseDocumentsAPI";
 import { useFirebaseAuth } from "@/components/FireBase";
-import AuthProfilePopover from "@/components/AuthProfilePopover";
-import Login from "@/components/Login";
 import { MaterialIcon } from "@/assets/Icon";
-import { mockPage1, mockPage2 } from "@/utils/mock/mockdata";
+import { mockPage1  } from "@/utils/mock/mockdata";
+import {useNavigate} from "react-router-dom";
+import Constants from "@/constants";
 
 interface LayoutProps {
     children: React.ReactNode | React.ReactElement
@@ -18,11 +18,12 @@ interface LayoutProps {
 export const MainLayout: React.FC<LayoutProps> = (props) => {
     const { children } = props;
 
+    const navigate = useNavigate();
     const { isAuth } = useFirebaseAuth();
     const { data, isLoading } = useFetchPageDataQuery({ userId: 'asdasd' });
 
     const pages = useMemo(() => {
-        const mockPages = [mockPage1, mockPage2];
+        const mockPages = [mockPage1];
 
         return mockPages?.map(page => (
             <PageLink showOptionsButton
@@ -38,6 +39,10 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
 
     };
 
+    const handleMainButton = () => {
+        navigate(Constants.URL.HOME);
+    }
+
     return (
         <StyledMainLayout>
             <StyledContentWrapper>
@@ -47,7 +52,7 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
                            height: 800,
                            position: "sticky"
                        }}>
-                    <Typography mb={4} variant={'h5'} fontWeight={900}>
+                    <Typography className={"main-button"} mb={4} variant={'h5'} fontWeight={900} onClick={handleMainButton}>
                         СЕЙФ +
                     </Typography>
                     <PageLink href={'/calendar'} label={'Поиск'} icon={"MdSearch"}/>
@@ -64,10 +69,10 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
                     </Stack>
                 </Stack>
             </StyledContentWrapper>
-            <Stack>
+            <div className={"side-menu"}>
                 <AppHeader/>
                 {children}
-            </Stack>
+            </div>
         </StyledMainLayout>
     );
 };

@@ -5,12 +5,13 @@ const themeOptions: IExtendedTheme = {
     menuBackground: {
         primary: "#404040",
         secondary: "#505050",
-        third: "#fcf3d7"
+        third: "#fcf3d7",
     },
     ...COMMON_OPTIONS,
     palette: {
         text: {
             primary: "#FFF",
+            primaryAbsolute: "#121212",
         },
         primary: {
             main: "#FFFFFF",
@@ -20,7 +21,7 @@ const themeOptions: IExtendedTheme = {
         },
         borderColors: {
             primary: "#bdbdbd",
-        }
+        },
     },
 };
 

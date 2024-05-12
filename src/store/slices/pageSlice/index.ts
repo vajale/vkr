@@ -3,13 +3,10 @@ import { type DocumentsPageSchema } from "./types";
 import {
     type DocumentBlock,
     type DocumentBlockType,
-    type DocumentCheckboxBlock,
-    type DocumentCodeBlock, type DocumentPageLinkBlock,
-    type DocumentTextBlock,
     type Page
 } from "@/components/PageView/model/types";
 import { documentObjectHelper } from "@/utils/documentObjectHelper";
-import { mockPage1, mockPage2 } from "@/utils/mock/mockdata";
+import { mockPage2 } from "@/utils/mock/mockdata";
 
 const initialState: DocumentsPageSchema = {
     pageData: mockPage2,
