@@ -40,4 +40,10 @@ const SPACE_SIZES = {
     space6XL: "96px",
 };
 
-export {TEXT_SIZES, RADIUS_SIZES, SPACE_SIZES};
+const FONT_WEIGHTS = {
+    baldLight: "300",
+    baldNormal: "bald",
+    baldHard: "900",
+};
+
+export { TEXT_SIZES, RADIUS_SIZES, SPACE_SIZES, FONT_WEIGHTS };

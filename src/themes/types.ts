@@ -5,21 +5,22 @@ export interface IExtendedTheme extends ThemeOptions {
         primary: string;
         secondary: string;
         third: string;
-    }
+    };
     palette: {
         text: {
-            primary: string,
-        },
+            primary: string;
+            primaryAbsolute: "#121212";
+        };
         primary: {
-            main: string,
-        },
+            main: string;
+        };
         secondary: {
-            main: string,
-        },
+            main: string;
+        };
         borderColors: {
-            primary: string,
-        }
-    },
+            primary: string;
+        };
+    };
 
     textSize: {
         sizeText10: string;
@@ -59,6 +60,12 @@ export interface IExtendedTheme extends ThemeOptions {
         space4XL: string;
         space5XL: string;
         space6XL: string;
+    };
+
+    fontWeights: {
+        baldLight: string;
+        baldNormal: string;
+        baldHard: string;
     };
 }
 

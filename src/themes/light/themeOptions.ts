@@ -5,22 +5,23 @@ const themeOptions: IExtendedTheme = {
     menuBackground: {
         primary: "#eeeeee",
         secondary: "#e5e5e5",
-        third: "#000000"
+        third: "white",
     },
     ...COMMON_OPTIONS,
     palette: {
         text: {
             primary: "#000",
+            primaryAbsolute: "#121212",
         },
         primary: {
             main: "#000000",
         },
         secondary: {
-            main: "#ffffff",
+            main: "#F50057",
         },
         borderColors: {
             primary: "#262626",
-        }
+        },
     },
 };
 
