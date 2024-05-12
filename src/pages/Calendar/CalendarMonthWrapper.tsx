@@ -34,7 +34,6 @@ const CalendarMonthWrapper = (props: WrapperProps) => {
             const cellContent = <CalendarCellTask task={taskForDate}/>;
 
             return <CalendarCell content={cellContent}
-                                 onClick={(date) => { handleCellClick(date, taskForDate); }}
                                  cell={cell}
                                  key={key}/>;
         }

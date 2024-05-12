@@ -31,6 +31,9 @@ export const calenderSlice = createSlice({
                 });
             }
         },
+        removeTask: (state, action: PayloadAction<Task>) => {
+            state.tasks = state.tasks.filter(task => task.id !== action.payload.id);
+        },
         selectTask: (state, action: PayloadAction<Task>) => {
             state.selectedTask = action.payload;
         }

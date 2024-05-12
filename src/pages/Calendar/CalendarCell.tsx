@@ -5,7 +5,7 @@ import { Box, Stack } from "@mui/material";
 
 interface CellProps {
     cell: DateCellItem
-    onClick: (date: DateCellItem) => void
+    onClick?: (date: DateCellItem) => void
     content?: React.ReactNode | null
 }
 
@@ -16,7 +16,9 @@ const CalendarCell = (props: CellProps) => {
         <motion.button
             whileHover={{ scale: 1.05, backgroundColor: 'whitesmoke' }}
             onClick={() => {
-                onClick(cell);
+                if (onClick != null) {
+                    onClick(cell);
+                }
             }}
             style={{
                 border: 'none',
