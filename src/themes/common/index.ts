@@ -1,4 +1,4 @@
-import { RADIUS_SIZES, SPACE_SIZES, TEXT_SIZES } from "../constants";
+import { FONT_WEIGHTS, RADIUS_SIZES, SPACE_SIZES, TEXT_SIZES } from "../constants";
 
 export const COMMON_OPTIONS = {
     radiusSize: {
@@ -10,4 +10,8 @@ export const COMMON_OPTIONS = {
     textSize: {
         ...TEXT_SIZES,
     },
+    fontWeights: {
+        ...FONT_WEIGHTS,
+    },
+    fontWeight: {},
 };

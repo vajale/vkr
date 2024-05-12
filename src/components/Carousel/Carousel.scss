@@ -1,0 +1,41 @@
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: calc(100% + 2 * var(--space-xs));
+  align-self: center;
+
+  .carousel__button {
+    position: absolute;
+    padding: 1.5rem 1rem;
+    border-radius: var(--size-radius-s);
+    z-index: 3;
+    display: flex;
+    cursor: pointer;
+    background: var(--color-grey--transparent);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(15px);
+
+    &:hover {
+      backdrop-filter: blur(var(--size-blur--light));
+    }
+
+    &--disabled {
+      cursor: not-allowed;
+    }
+
+    &--left {
+      left: -0.7rem;
+    }
+
+    &--right {
+      right: -0.7rem;
+    }
+  }
+
+  .carousel__arrow {
+    height: 0.75rem;
+    width: 0.375rem;
+  }
+}

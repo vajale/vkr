@@ -8,6 +8,8 @@ import { useFetchPageDataQuery } from "@/components/PageView/model/services/fire
 import { useFirebaseAuth } from "@/components/FireBase";
 import { MaterialIcon } from "@/assets/Icon";
 import { mockPage1  } from "@/utils/mock/mockdata";
+import {useNavigate} from "react-router-dom";
+import Constants from "@/constants";
 
 interface LayoutProps {
     children: React.ReactNode | React.ReactElement
@@ -16,6 +18,7 @@ interface LayoutProps {
 export const MainLayout: React.FC<LayoutProps> = (props) => {
     const { children } = props;
 
+    const navigate = useNavigate();
     const { isAuth } = useFirebaseAuth();
     const { data, isLoading } = useFetchPageDataQuery({ userId: 'asdasd' });
 
@@ -36,6 +39,10 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
 
     };
 
+    const handleMainButton = () => {
+        navigate(Constants.URL.HOME);
+    }
+
     return (
         <StyledMainLayout>
             <StyledContentWrapper>
@@ -45,7 +52,7 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
                            height: 800,
                            position: "sticky"
                        }}>
-                    <Typography mb={4} variant={'h5'} fontWeight={900}>
+                    <Typography className={"main-button"} mb={4} variant={'h5'} fontWeight={900} onClick={handleMainButton}>
                         СЕЙФ +
                     </Typography>
                     <PageLink href={'/calendar'} label={'Поиск'} icon={"MdSearch"}/>

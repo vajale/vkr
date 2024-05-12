@@ -14,8 +14,7 @@ const StyledMainLayout = styled("div")(({ theme }: IExtendedThemeProps) => ({
     ".side-menu": {
         width: "100%",
         display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: "column",
     }
 }));
 
@@ -25,6 +24,10 @@ const StyledContentWrapper = styled("div")(({ theme }: IExtendedThemeProps) => (
     alignItems: "flex-start",
     flexDirection: "row",
     justifyContent: "flex-start",
+
+    ".main-button": {
+        cursor: "pointer",
+    }
 }));
 
 export { StyledMainLayout, StyledContentWrapper };
