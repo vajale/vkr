@@ -9,7 +9,7 @@ import {
     updateDoc,
 } from "firebase/firestore";
 import { DocumentBlockType, type Page } from "../types";
-import { firebaseApi } from "@/components/PageView/model/api/api";
+import { firebaseApi } from "@/api";
 import { onValue, ref, set, get, child } from "firebase/database";
 
 function isPage(obj: any): obj is Page {

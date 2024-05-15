@@ -1,9 +1,14 @@
 import { type AppDispatch } from "@/store/store";
 import { axiosInstance } from "@/utils/api/api";
-import {type BaseQueryFn, createApi, fakeBaseQuery, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import {
+    type BaseQueryFn,
+    createApi,
+    fakeBaseQuery,
+    fetchBaseQuery,
+} from "@reduxjs/toolkit/query/react";
 import { type AxiosError, type AxiosRequestConfig } from "axios";
 
-const baseUrl = 'http://localhost:4000/';
+const baseUrl = "http://localhost:4000/";
 
 interface CustomQueryArgs extends AxiosRequestConfig {
     onSuccess?: (dispatch: AppDispatch, data: unknown) => Promise<void>;
@@ -11,7 +16,11 @@ interface CustomQueryArgs extends AxiosRequestConfig {
 
 export type CustomBaseQueryType = BaseQueryFn<CustomQueryArgs, unknown, unknown>;
 
-export const axiosBaseQuery: CustomBaseQueryType = async ({ onSuccess, ...args }, { dispatch }, extraOptions) => {
+export const axiosBaseQuery: CustomBaseQueryType = async (
+    { onSuccess, ...args },
+    { dispatch },
+    extraOptions,
+) => {
     try {
         const result = await axiosInstance.request(args);
 
@@ -19,7 +28,7 @@ export const axiosBaseQuery: CustomBaseQueryType = async ({ onSuccess, ...args }
             try {
                 await onSuccess(dispatch, result.data);
             } catch (e) {
-                console.error('Error in onSuccess method', e);
+                console.error("Error in onSuccess method", e);
                 throw e;
             }
         }
@@ -35,7 +44,7 @@ export const axiosBaseQuery: CustomBaseQueryType = async ({ onSuccess, ...args }
         }
 
         return {
-            error
+            error,
         };
     }
 };
@@ -43,13 +52,5 @@ export const axiosBaseQuery: CustomBaseQueryType = async ({ onSuccess, ...args }
 export const firebaseApi = createApi({
     reducerPath: "firebaseApi",
     baseQuery: fakeBaseQuery(),
-    endpoints: () => ({})
+    endpoints: () => ({}),
 });
-
-
-// export const mocDocumentsApi = createApi({
-//     reducerPath: "documentsApi",
-//     // tagTypes: ['pages'],
-//     baseQuery: axiosBaseQuery,
-//     endpoints: () => ({})
-// });

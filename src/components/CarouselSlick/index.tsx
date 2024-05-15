@@ -18,12 +18,13 @@ interface CarouselSlickProps {
     activeIndex?: number;
     className: string[];
     infinite?: boolean;
+    children: React.ReactNode;
 }
 
 const NextArrow: FC<ArrowProps> = ({ onClick }) => {
     return (
         <div className={`carousel-slick__button carousel-slick__button--right`} onClick={onClick}>
-            <img alt={"arrow"} src={Arrow} className="carousel-slick__arrow" />
+            <img alt={"arrow"} src={Arrow} className="slick-arrow" width={30} />
         </div>
     );
 };
@@ -31,7 +32,7 @@ const NextArrow: FC<ArrowProps> = ({ onClick }) => {
 const PrevArrow: FC<ArrowProps> = ({ onClick }) => {
     return (
         <div className={`carousel-slick__button carousel-slick__button--left`} onClick={onClick}>
-            <img alt={"arrow"} src={Arrow} className="carousel-slick__arrow" />
+            <img alt={"arrow"} src={Arrow} className="carousel-slick__arrow" width={30} />
         </div>
     );
 };

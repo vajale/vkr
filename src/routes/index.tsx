@@ -39,7 +39,7 @@ export const DesktopRouter = () => {
                             </SecureRoute>
                         }>
                         <Route
-                            path=""
+                            path={`${Constants.URL.MAIN}/*`}
                             element={
                                 <SecureRoute>
                                     <LandingCarousel />

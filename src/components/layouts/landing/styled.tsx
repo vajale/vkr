@@ -7,4 +7,11 @@ export const StyledLandingLayout = styled("div")(() => ({
     height: "100vh",
     flexDirection: "column",
     display: "flex",
+
+    ".layout-alarm": {
+        position: "fixed",
+        width: "25%",
+        top: "30%",
+        left: "30%",
+    },
 }));

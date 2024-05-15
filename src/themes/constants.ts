@@ -12,7 +12,9 @@ const TEXT_SIZES = {
     sizeText32: "32px",
     sizeText36: "36px",
     sizeText40: "40px",
+    sizeText48: "48px",
     sizeText56: "56px",
+    sizeText64: "64px",
     sizeText72: "72px",
     sizeText96: "96px",
 };

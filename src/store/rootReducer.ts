@@ -13,21 +13,21 @@ import { type ICalendarSchema } from "@/store/slices/calendarSlice/types";
 import { calendarReducer } from "@/store/slices/calendarSlice";
 
 export interface StateSchema {
-   user: IUserSchema
-   documentPage: DocumentsPageSchema;
-   app: IAppThemeSchema;
-   settings: PageSettingsSchema;
-   calendar: ICalendarSchema
+    user: IUserSchema;
+    documentPage: DocumentsPageSchema;
+    app: IAppThemeSchema;
+    settings: PageSettingsSchema;
+    calendar: ICalendarSchema;
 }
 
 const rootReducer: ReducersMapObject<StateSchema> = {
-   user: userReducer,
-   documentPage: documentPageReducer,
-   app: appReducer,
-   settings: pageSettingsReducer,
-   calendar: calendarReducer,
-   // @ts-expect-error
-   [firebaseDocumentsAPI.reducerPath]: firebaseDocumentsAPI.reducer
+    user: userReducer,
+    documentPage: documentPageReducer,
+    app: appReducer,
+    settings: pageSettingsReducer,
+    calendar: calendarReducer,
+    // @ts-expect-error
+    [firebaseDocumentsAPI.reducerPath]: firebaseDocumentsAPI.reducer,
 };
 
 export default rootReducer;
