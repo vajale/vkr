@@ -6,7 +6,7 @@ import { Box, Button, Popover, Popper, Stack } from "@mui/material";
 import { DndContext, useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useAppDispatch } from "@/store/hooks";
-import { documentPageActions } from "@/store/slices/pageSlice";
+import { pageActions } from "@/store/slices/pageSlice";
 import { type DocumentBlock, type DocumentBlockType } from "../../../model/types";
 import { MaterialIcon } from "@/assets/Icon";
 import { motion } from "framer-motion";
@@ -51,7 +51,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
     }, [ignoreButtonsHover]);
 
     const handleTypeEdit = (type: DocumentBlockType) => {
-        dispatch(documentPageActions.updateDocumentType({ id: item.id, type }));
+        dispatch(pageActions.updateDocumentType({ id: item.id, type }));
     };
 
     const handleAddBlock = (type: DocumentBlockType) => {
@@ -62,14 +62,14 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
         setAddListOpen(false);
         setEditListOpen(false);
 
-        dispatch(documentPageActions.addDocumentBlock(type));
-        dispatch(documentPageActions.setEditDocumentId(''));
+        dispatch(pageActions.addDocumentBlock(type));
+        dispatch(pageActions.setEditDocumentId(''));
     };
 
     const handleEditClick = () => {
         setAddListOpen(false);
         setEditListOpen(false);
-        dispatch(documentPageActions.setEditDocumentId(''));
+        dispatch(pageActions.setEditDocumentId(''));
     };
 
     const showButtons = canEdit && (isHover || (addListOpen || editListOpen));
@@ -89,7 +89,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
                                     onClick={() => {
                                         setAddListOpen(prevState => !prevState);
                                         setEditListOpen(false);
-                                        dispatch(documentPageActions.setEditDocumentId(item.id));
+                                        dispatch(pageActions.setEditDocumentId(item.id));
                                     }}>
                                     <MaterialIcon name={"MdAdd"}/>
                                 </Button>
@@ -98,7 +98,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
                                         onClick={() => {
                                             setEditListOpen(prevState => !prevState);
                                             setAddListOpen(false);
-                                            dispatch(documentPageActions.setEditDocumentId(item.id));
+                                            dispatch(pageActions.setEditDocumentId(item.id));
                                         }}
                                         style={{
                                             minWidth: 30,

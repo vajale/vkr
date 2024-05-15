@@ -1,4 +1,5 @@
 import { type DocumentBlock, DocumentBlockType, type Page } from "../../components/PageView/model/types";
+import { type User } from "@/utils/types";
 
 export const mock =
     "Sed ut perspiciatis, inventore veritatis et quasi architecto beatae vitae pedit, quo minus id, quod maxime   perferendis doloribus asperiores repellat.";
@@ -83,3 +84,9 @@ export const mockTasksData: Page = {
     documentBlocks: mockDocs2,
     parent: "ssaas"
 };
+
+export const mockUsersData: User[] = [
+    { id: '1241241225', username: 'balls', avatar: 'none' },
+    { id: '214124', username: 'big', avatar: 'none' },
+    { id: '1241241225', username: 'black', avatar: 'none' },
+];

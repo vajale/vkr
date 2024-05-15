@@ -10,7 +10,7 @@ import { StyledPageLink } from "@/components/PageLink/styled";
 
 interface LinkProps {
     href: string,
-    label: string,
+    label?: string,
     isLoading?: boolean,
     parent?: Page,
     showOptionsButton?: boolean
@@ -20,7 +20,7 @@ interface LinkProps {
 }
 
 const PageLink = (props: LinkProps) => {
-    const { label, href, parent, showOptionsButton, icon, isLoading, width, height } = props;
+    const { label = 'Страница', href, parent, showOptionsButton, icon, isLoading, width, height } = props;
 
     const [options, setOptions] = useState<{ isOptionsOpen: boolean }>(() => ({ isOptionsOpen: false }));
 
@@ -62,7 +62,7 @@ const PageLink = (props: LinkProps) => {
                                     <MaterialIcon name={buttonIconName}/>
                                 </Button>}
                             {icon && <MaterialIcon name={icon}/>}
-                            <Link sx={{ textDecoration: 'none', ml: 1 }} href={"#" + href}>
+                            <Link sx={{ textDecoration: 'none', ml: 1 }} href={"#/page/" + href}>
                                 {label}
                             </Link></Stack>
                         {isMouseHover && showOptionsButton &&

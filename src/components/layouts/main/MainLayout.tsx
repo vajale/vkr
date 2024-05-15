@@ -1,15 +1,16 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { StyledMainLayout, StyledContentWrapper } from "./styled";
 import AppHeader from "../../AppHeader";
 import { Button, Stack, Typography } from "@mui/material";
 import PageLink from "@/components/PageLink/PageLink";
-import { useFetchPageDataQuery } from "@/components/PageView/model/services/firebaseDocumentsAPI";
-import { useFirebaseAuth } from "@/components/FireBase";
+import { useFetchPagesQuery } from "@/components/PageView/model/services/firebaseDocumentsAPI";
 import { MaterialIcon } from "@/assets/Icon";
-import { mockPage1  } from "@/utils/mock/mockdata";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Constants from "@/constants";
+import { useGetUserQuery } from "@/features/usersService/usersService";
+import { useAppDispatch } from "@/store/hooks";
+import { userActions } from "@/store/slices/userSlice";
 
 interface LayoutProps {
     children: React.ReactNode | React.ReactElement
@@ -18,22 +19,32 @@ interface LayoutProps {
 export const MainLayout: React.FC<LayoutProps> = (props) => {
     const { children } = props;
 
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const { isAuth } = useFirebaseAuth();
-    const { data, isLoading } = useFetchPageDataQuery({ userId: 'asdasd' });
+
+    const { data, isLoading, isSuccess } = useGetUserQuery({});
+    const { data: pagesData, isLoading: pagesIsLoading, isSuccess: pagesSuccess } = useFetchPagesQuery(['VT8LVZQgp6WTGxScgr7E']);
+
+    useEffect(() => {
+        if (isSuccess) {
+            dispatch(userActions.setAuthData(data));
+        }
+    }, [data, isLoading]);
 
     const pages = useMemo(() => {
-        const mockPages = [mockPage1];
+        if (pagesSuccess) {
+            return pagesData?.map(page => (
+                <PageLink showOptionsButton
+                          href={page.id}
+                          key={page.id}
+                          label={page.name}
+                          width={290}
+                          icon={"MdSummarize"}/>
+            ));
+        }
 
-        return mockPages?.map(page => (
-            <PageLink showOptionsButton
-                      href={page.id}
-                      key={page.id}
-                      label={page.id}
-                      width={290}
-                      icon={"MdSummarize"}/>
-        ));
-    }, [data, isLoading]);
+        return null;
+    }, [pagesData, pagesIsLoading]);
 
     const handleAddPageClick = () => {
 
@@ -41,7 +52,7 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
 
     const handleMainButton = () => {
         navigate(Constants.URL.HOME);
-    }
+    };
 
     return (
         <StyledMainLayout>
@@ -52,11 +63,12 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
                            height: 800,
                            position: "sticky"
                        }}>
-                    <Typography className={"main-button"} mb={4} variant={'h5'} fontWeight={900} onClick={handleMainButton}>
+                    <Typography className={"main-button"} mb={4} variant={'h5'} fontWeight={900}
+                                onClick={handleMainButton}>
                         СЕЙФ +
                     </Typography>
                     <PageLink href={'/calendar'} label={'Поиск'} icon={"MdSearch"}/>
-                    <Stack mt={4 }>
+                    <Stack mt={4}>
                         <PageLink href={'/calendar'} label={'Календарь'} icon={"MdCalendarToday"}/>
                         <PageLink href={'/calendar'} label={'Участники'} icon={"MdGroup"}/>
                     </Stack>

@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { DocumentBlockType, type DocumentBlock, type DocumentBlockBase } from "../../model/types";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack } from "@mui/material";
 import { useAppDispatch } from "@/store/hooks";
-import { documentPageActions } from "@/store/slices/pageSlice";
+import { pageActions } from "@/store/slices/pageSlice";
 import { motion } from "framer-motion";
 import { MaterialIcon } from "@/assets/Icon";
 import { StyledBox, StyledList } from "@/components/PageView/ui/EditList/styled";
@@ -21,7 +21,7 @@ const EditList = ({ block }: EditListProps) => {
     const handleChange = (event) => {
         const type = event.target.value as string;
 
-        dispatch(documentPageActions.updateDocumentBlock({
+        dispatch(pageActions.updateDocumentBlock({
             ...block,
             textType: {
                 ...block.textType,
@@ -47,8 +47,8 @@ const EditList = ({ block }: EditListProps) => {
     }, [block]);
 
     const handleDeleteButtonClick = () => {
-        dispatch(documentPageActions.removeDocumentBlock({ id: block.id }));
-        dispatch(documentPageActions.setEditDocumentId(''));
+        dispatch(pageActions.removeDocumentBlock({ id: block.id }));
+        dispatch(pageActions.setEditDocumentId(''));
     };
 
     return (

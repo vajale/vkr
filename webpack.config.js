@@ -54,7 +54,7 @@ module.exports = {
                     {
                         loader: "file-loader",
                         options: {
-                            outputPath: "images", // specify the output directory for images
+                            outputPath: "images", //
                         },
                     },
                 ],
