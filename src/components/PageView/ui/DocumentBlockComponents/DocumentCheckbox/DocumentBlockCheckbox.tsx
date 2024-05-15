@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { usePageSettings } from "../../../model/hooks/usePageSettings";
 import { Checkbox, Typography } from "@mui/material";
 import { useAppDispatch } from "@/store/hooks";
-import { documentPageActions } from "@/store/slices/pageSlice";
+import { pageActions } from "@/store/slices/pageSlice";
 
 interface CheckboxBlockProps {
     block: DocumentCheckboxBlock;
@@ -52,7 +52,7 @@ const DocumentBlockCheckbox = ({ block, onContentChange, canEdit = true, onHotKe
     const marginStyle = block.content.length > 52 ? 7 : 0;
 
     const handleCheckboxChange = () => {
-        dispatch(documentPageActions.updateDocumentBlock({ ...block, flag: !block.flag }));
+        dispatch(pageActions.updateDocumentBlock({ ...block, flag: !block.flag }));
     };
 
     return (

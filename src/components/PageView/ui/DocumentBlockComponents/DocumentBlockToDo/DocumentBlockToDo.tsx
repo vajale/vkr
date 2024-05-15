@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import type { DocumentContentType, DocumentTextBlock, DocumentTodoBlock } from "@/components/PageView/model/types";
 import { Button, Checkbox, Stack, Typography } from "@mui/material";
 import { DndContext } from "@dnd-kit/core";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { useAppDispatch } from "@/store/hooks";
-import { documentPageActions } from "@/store/slices/pageSlice";
+import { pageActions } from "@/store/slices/pageSlice";
 import { MaterialIcon } from "@/assets/Icon";
 
 interface TodoProps {
@@ -19,7 +18,7 @@ const DocumentBlockToDo = (props: TodoProps) => {
     const { block } = props;
     const dispatch = useAppDispatch();
 
-    const [todos, setTodos] = useState(block.todos);
+    const [todos, setTodos] = useState(() => block.todos);
 
     const handleSetCheckTodo = (id: string) => {
         setTodos(prevTodos => {
@@ -31,7 +30,7 @@ const DocumentBlockToDo = (props: TodoProps) => {
             });
         });
 
-        dispatch(documentPageActions.updateDocumentBlock({ ...block, todos }));
+        dispatch(pageActions.updateDocumentBlock({ ...block, todos }));
     };
 
     const handleCreateNewTask = () => {
@@ -41,15 +40,37 @@ const DocumentBlockToDo = (props: TodoProps) => {
             title: 'Задача'
         }]);
 
-        dispatch(documentPageActions.updateDocumentBlock({ ...block, todos }));
+        dispatch(pageActions.updateDocumentBlock({ ...block, todos }));
     };
+
+    const todosRender = useMemo(() => {
+        if (todos === undefined) {
+            return null;
+        }
+
+        return todos?.map((item) => {
+            return (
+                <div key={item.id} id={item.id}>
+                    <Stack flexDirection={'row'} alignItems={'center'}>
+                        <Checkbox checked={item.completed} onChange={() => {
+                            handleSetCheckTodo(item.id);
+                        }}/>
+                        <Typography>{item.title}</Typography>
+                        <Button style={{ minWidth: 30, borderRadius: 4 }} onClick={handleCreateNewTask}>
+                            <MaterialIcon name={"MdAdd"}/>
+                        </Button>
+                    </Stack>
+                </div>
+            );
+        });
+    }, [todos]);
 
     return (
         <div>
             <Typography variant={block.textType?.variant}>{block.content}</Typography>
             <DndContext>
                 <SortableContext items={todos} strategy={verticalListSortingStrategy}>
-                    {todos.map((item) => {
+                    {todos?.map((item) => {
                         return (
                             <div key={item.id} id={item.id}>
                                 <Stack flexDirection={'row'} alignItems={'center'}>

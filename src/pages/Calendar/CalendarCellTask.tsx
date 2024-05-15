@@ -32,7 +32,7 @@ const CalendarCellTask = (props: TaskProps) => {
     };
 
     return (
-        <Stack sx={{ backgroundColor: getBackground(), borderRadius: 1 }} padding={1} gap={1}
+        <Stack sx={{ backgroundColor: getBackground(), borderRadius: 1, zIndex: 10, width: 140 }} padding={1} gap={1}
                flexDirection={'row'}>
             <Stack>
                 <Typography gutterBottom>{task.content}</Typography>

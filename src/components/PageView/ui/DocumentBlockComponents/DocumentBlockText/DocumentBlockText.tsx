@@ -56,7 +56,7 @@ const DocumentBlockText = (props: TextBlockProps) => {
     return (
         <motion.div>
             <Typography sx={{ opacity: block.content.length == 0 ? 0.5 : 1 }}
-                        width={"600px"} p={getFontPadding}
+                        width={"900px"} p={getFontPadding}
                         component={'div'}
                         data-placeholder={'asffas'}
                         variant={block.textType?.variant}
@@ -73,7 +73,6 @@ const DocumentBlockText = (props: TextBlockProps) => {
                 {block.content.length == 0 ? 'Напишите что-нибудь' : block.content}
             </Typography>
         </motion.div>
-
     );
 };
 
