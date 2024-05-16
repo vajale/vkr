@@ -9,13 +9,16 @@ import ThemeWrapper from "./components/common/ThemeWrapper";
 import "normalize.css";
 import "./style.css";
 import "./assets/fonts/Inter.ttf";
+import { AuthProvider } from "@/Providers/Auth";
 
 const App = () => {
     return (
         <div className="app">
             <Provider store={store}>
                 <ThemeWrapper>
-                    <DesktopRouter />
+                    <AuthProvider>
+                        <DesktopRouter />
+                    </AuthProvider>
                 </ThemeWrapper>
             </Provider>
         </div>

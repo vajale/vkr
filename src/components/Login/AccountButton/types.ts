@@ -4,5 +4,6 @@ export interface IAccountButton {
     image?: string;
     accountName: string;
     svgIcon?: React.ReactNode;
-    onClick?: (e: EventTarget) => void
+    onClick?: (e: EventTarget) => void;
+    isLanding?: boolean;
 }

@@ -11,12 +11,10 @@ export const usersService = firebaseApi.injectEndpoints({
                 return { data: mockUsersData };
             },
         }),
-        getUser: builder.query<User>({
-            async queryFn() {
-                // const userId = useAppSelector(selectUser);
-                // console.log(userId);
-
-                const blogRef = doc(firestoreDB, "users", "n8diMEUERjVuQti5qgvwYSDXYmg1");
+        getUser: builder.query<User, { userId: string }>({
+            queryFn: async (_arg) => {
+                const { userId } = _arg;
+                const blogRef = doc(firestoreDB, "users", userId);
 
                 const queryData = await getDoc(blogRef)
                     .then((doc) => {
@@ -31,27 +29,13 @@ export const usersService = firebaseApi.injectEndpoints({
 
                 return {
                     data: {
-                        id: "n8diMEUERjVuQti5qgvwYSDXYmg1",
+                        id: userId,
                         pages: userData.pages,
                         username: userData.username,
                     },
                 };
             },
         }),
-        // addActiveUser: builder.mutation<User, Partial<User>>({
-        //     queryFn: async (user) => {
-        //         // try {
-        //         //     await updateDoc(doc(firestoreDB, 'pages', userId, 'pages', id), {
-        //         //         documentBlocks: newPage.documentBlocks,
-        //         //         parent: null
-        //         //     });
-        //         //     return { data: null };
-        //         // } catch (error: any) {
-        //         //     console.error(error.message);
-        //         //     return { error: error.message };
-        //         // }
-        //     }
-        // })
     }),
 });
 

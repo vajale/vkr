@@ -10,11 +10,7 @@ import { useFirebaseAuth } from "@/components/FireBase";
 const MenuMainButtons: React.FC = () => {
     const { isAuth } = useFirebaseAuth();
 
-    return (
-        <StyledMainButtons>
-            {isAuth ? <AuthProfilePopover/> : <Login/>}
-        </StyledMainButtons>
-    );
+    return <StyledMainButtons>{isAuth ? <AuthProfilePopover /> : <Login />}</StyledMainButtons>;
 };
 
 export default MenuMainButtons;

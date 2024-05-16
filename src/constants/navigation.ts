@@ -3,7 +3,7 @@ export const URL = {
     CALENDAR: "/calendar",
     PAGE: "/page",
     UNAUTHORIZED: "/unauthorized",
-    LANDING: "landing",
+    LANDING: "/landing",
 
     MAIN: "main",
     PRICES: "prices",
@@ -12,6 +12,7 @@ export const URL = {
 };
 
 export const NAVIGATION = {
+    HOME: URL.HOME,
     LANDING: {
         MAIN: `${URL.LANDING}/${URL.MAIN}`,
         PRICES: `${URL.LANDING}/${URL.PRICES}`,
