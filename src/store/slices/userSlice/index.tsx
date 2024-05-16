@@ -3,7 +3,7 @@ import { type IUserSchema } from "@/store/slices/userSlice/types";
 import { type User } from "@/utils/types";
 
 const initialState: IUserSchema = {
-    user: undefined
+    user: "initial",
 };
 
 export const userSlice = createSlice({
@@ -25,8 +25,8 @@ export const userSlice = createSlice({
     },
     selectors: {
         selectUserAuth: (state) => state?.user !== undefined,
-        selectUser: (state) => state?.user
-    }
+        selectUser: (state) => state?.user,
+    },
 });
 
 export const { selectUserAuth } = userSlice.selectors;

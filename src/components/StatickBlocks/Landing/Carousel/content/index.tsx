@@ -21,7 +21,6 @@ export const CarouselContent = ({ lHeader, header, title, imgId, index }: ICarou
     };
 
     const handleAuthorized = () => {
-        console.log("navigate");
         navigate(NAVIGATION.HOME);
     };
 
