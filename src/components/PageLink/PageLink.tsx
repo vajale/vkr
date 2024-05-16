@@ -7,9 +7,13 @@ import { useMouseHover } from "@/components/PageView/model/hooks/useMouseHover";
 import { motion } from "framer-motion";
 import { type MaterialIconName } from "@/assets/icons";
 import { StyledPageLink } from "@/components/PageLink/styled";
+import { useAppDispatch } from "@/store/hooks";
+import { pageActions } from "@/store/slices/pageSlice";
+import { userActions } from "@/store/slices/userSlice";
 
 interface LinkProps {
     href: string,
+    id: string
     label?: string,
     isLoading?: boolean,
     parent?: Page,
@@ -17,10 +21,24 @@ interface LinkProps {
     icon?: MaterialIconName,
     width?: string | number
     height?: string | number
+    onPageDelete?: () => void
 }
 
 const PageLink = (props: LinkProps) => {
-    const { label = 'Страница', href, parent, showOptionsButton, icon, isLoading, width, height } = props;
+    const {
+        label = 'Страница',
+        href,
+        parent,
+        showOptionsButton,
+        icon,
+        isLoading,
+        width,
+        height,
+        id,
+        onPageDelete
+    } = props;
+
+    const dispatch = useAppDispatch();
 
     const [options, setOptions] = useState<{ isOptionsOpen: boolean }>(() => ({ isOptionsOpen: false }));
 
@@ -40,48 +58,63 @@ const PageLink = (props: LinkProps) => {
         );
     }
 
+    const handleDeletePage = () => {
+        if (onPageDelete != null) {
+            onPageDelete();
+        }
+    };
+
     return (
         <StyledPageLink>
-        <motion.div whileHover={{ scale: 1.01 }}
-                    initial={{ scale: 1 }}
-                    style={{
-                        width,
-                        height,
-                        display: "flex",
-                        justifyContent: "space-between",
-                        padding: 7,
-                        borderRadius: 7
-                    }}
-                    ref={docRef} key={href}>
-            <Stack>
-                <Stack flexDirection={'row'} gap={1} justifyContent={"space-between"}>
-                    <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'} width={width}>
-                        <Stack flexDirection={'row'} alignItems={'center'}>
-                            {showOptionsButton &&
-                                <Button onClick={handleButtonOptionsClick} sx={{ minWidth: 20 }}>
-                                    <MaterialIcon name={buttonIconName}/>
-                                </Button>}
-                            {icon && <MaterialIcon name={icon}/>}
-                            <Link sx={{ textDecoration: 'none', ml: 1 }} href={"#/page/" + href}>
-                                {label}
-                            </Link></Stack>
-                        {isMouseHover && showOptionsButton &&
-                            <Button sx={{ minWidth: 20 }}><MaterialIcon name={"MdAdd"}/></Button>}
-                    </Stack>
+            <motion.div whileHover={{ scale: 1.01 }}
+                        initial={{ scale: 1 }}
+                        style={{
+                            width,
+                            height,
+                            display: "flex",
+                            justifyContent: "space-between",
+                            padding: 7,
+                            borderRadius: 7
+                        }}
+                        ref={docRef} key={href}>
+                <Stack>
+                    <Stack flexDirection={'row'} gap={1} justifyContent={"space-between"}>
+                        <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}
+                               width={width}>
+                            <Stack flexDirection={'row'} alignItems={'center'}>
+                                {showOptionsButton &&
+                                    <Button onClick={handleButtonOptionsClick} sx={{ minWidth: 20 }}>
+                                        <MaterialIcon name={buttonIconName}/>
+                                    </Button>}
+                                {icon && <MaterialIcon name={icon}/>}
+                                <Link onClick={() => {
+                                    dispatch(pageActions.removePage());
+                                }} sx={{ textDecoration: 'none', ml: 1 }} href={"#/page/" + href}>
+                                    {label}
+                                </Link></Stack>
+                            {isMouseHover && showOptionsButton && (
+                                <>
+                                    <Button sx={{ minWidth: 20 }}><MaterialIcon name={"MdAdd"}/></Button><Button
+                                    onClick={handleDeletePage} sx={{ minWidth: 20 }}><MaterialIcon
+                                    name={"MdDelete"}/></Button>
+                                </>
+                            )}
+                        </Stack>
 
+                    </Stack>
+                    {options.isOptionsOpen && (
+                        <div style={{ height: 28, marginTop: 7 }}>
+                            {parent
+                                ? <Link href={parent.id}>
+                                    {label}
+                                </Link>
+                                : <Typography ml={4} sx={{ opacity: 0.8 }}>Нет страниц</Typography>}
+                        </div>)}
                 </Stack>
-                {options.isOptionsOpen && (
-                    <div style={{ height: 28, marginTop: 7 }}>
-                        {parent
-                            ? <Link underline href={parent.id}>
-                                {label}
-                            </Link>
-                            : <Typography ml={4} sx={{ opacity: 0.8 }}>Нет страниц</Typography>}
-                    </div>)}
-            </Stack>
-        </motion.div>
+            </motion.div>
         </StyledPageLink>
-    );
+    )
+        ;
 };
 
 export default PageLink;

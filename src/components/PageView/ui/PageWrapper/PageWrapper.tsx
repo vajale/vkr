@@ -15,15 +15,15 @@ const PageWrapper = ({ id }: WrapperProps) => {
     const dispatch = useAppDispatch();
 
     const { data, isLoading, isSuccess } = useFetchPageDataQuery({ pageId: id });
+    const page = useAppSelector(selectPage);
 
     useEffect(() => {
         if (isSuccess) {
-            console.log('success');
             dispatch(pageActions.setPage(data));
         }
-    }, [data, isLoading, isSuccess]);
+    }, [data, isSuccess, id]);
 
-    if (id === '') {
+    if (page === undefined) {
         return (
             <StyledPageView>
                 <DefaultPage/>
@@ -37,7 +37,7 @@ const PageWrapper = ({ id }: WrapperProps) => {
 
     return (
         <StyledPageView>
-            {isSuccess ? <PageView /> : <DefaultPage/>}
+            {isSuccess ? <PageView id={id} page={page} isLoading={isLoading}/> : <DefaultPage/>}
         </StyledPageView>
     );
 };

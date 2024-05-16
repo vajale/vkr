@@ -14,6 +14,7 @@ export const usersService = firebaseApi.injectEndpoints({
         getUser: builder.query<User, { userId: string }>({
             queryFn: async (_arg) => {
                 const { userId } = _arg;
+
                 const blogRef = doc(firestoreDB, "users", userId);
 
                 const queryData = await getDoc(blogRef)

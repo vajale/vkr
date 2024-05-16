@@ -1,9 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type IUserSchema } from "@/store/slices/userSlice/types";
-import { type User } from "@/utils/types";
+import { type User, type IUserSchema } from "@/store/slices/userSlice/types";
+import { type Page } from "@/components/PageView/model/types";
 
 const initialState: IUserSchema = {
-    user: "initial",
+    user: undefined
 };
 
 export const userSlice = createSlice({
@@ -22,15 +22,25 @@ export const userSlice = createSlice({
         logout: (state) => {
             state.user = undefined;
         },
+        // removePage: (state, action: PayloadAction<string>) => {
+        //     state.user.pages.map(page => page.id !== action.payload);
+        // },
+        updatePageName: (state, action: PayloadAction<Page>) => {
+            // state.user.pages = state.user.pages.map((item) => {
+            //     if(action.payload.id === item)
+            //
+            // })
+        }
     },
     selectors: {
         selectUserAuth: (state) => state?.user !== undefined,
         selectUser: (state) => state?.user,
-    },
+        selectUserPages: (state) => state.user?.pages
+    }
 });
 
 export const { selectUserAuth } = userSlice.selectors;
-export const { selectUser } = userSlice.selectors;
+export const { selectUser, selectUserPages } = userSlice.selectors;
 export default userSlice.reducer;
 
 export const { actions: userActions } = userSlice;

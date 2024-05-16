@@ -2,11 +2,11 @@ import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 
 import { useAppDispatch } from "@/store/hooks";
 import { selectUserAuth, userActions } from "store/slices/userSlice";
-import { type User } from "@/utils/types";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { firebaseAuth } from ".";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { User } from "@/store/slices/userSlice/types";
 
 export const useFirebaseAuth = () => {
     const dispatch = useAppDispatch();

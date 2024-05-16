@@ -14,17 +14,15 @@ interface HeaderProps {
 const PageHeader = (props: HeaderProps) => {
     const { text, className, background, onContentChange } = props;
 
-    const [content, setContent] = useState<string>(() => text);
-
     const dispatch = useAppDispatch();
 
-    const handleHeaderContentChange = () => {
+    const handleHeaderContentChange = (e:  React.FocusEvent<HTMLSpanElement, Element>) => {
+        const content = e.currentTarget.textContent!
         dispatch(pageActions.updatePageHeader({ name: content }));
     };
 
     return (
         <div>
-
             <div
                 style={{
                     borderRadius: 7,
@@ -36,9 +34,6 @@ const PageHeader = (props: HeaderProps) => {
             <Typography contentEditable={true} variant={"h4"}
                         sx={{ mt: 7, mb: 7, ml: 11, fontWeight: 700 }}
                         className={"page-title"}
-                        onInput={(e) => {
-                            setContent(e.currentTarget.textContent!);
-                        }}
                         onBlur={handleHeaderContentChange}
             >
                 {text}

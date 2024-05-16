@@ -9,9 +9,7 @@ import { documentObjectHelper } from "@/utils/documentObjectHelper";
 import { mockPage2 } from "@/utils/mock/mockdata";
 
 const initialState: DocumentsPageSchema = {
-    pageData: {
-        id: ''
-    },
+    pageData: undefined,
     isPageEdit: false,
     style: {
         header: false,
@@ -81,13 +79,19 @@ export const pageSlice = createSlice({
         }),
         removeDocumentBlock: create.reducer((state, action: PayloadAction<{ id: string }>) => {
             state.pageData.documentBlocks = state.pageData?.documentBlocks?.filter((item) => item.id !== action.payload.id);
+        }),
+        updatePage: create.reducer((state, action: PayloadAction<Page>) => {
+            state.pageData = { ...state.pageData, ...action.payload };
+        }),
+        removePage: create.reducer((state, action) => {
+            state.pageData = undefined;
         })
     }),
     selectors: {
         selectPage: (state) => state.pageData,
-        selectPageName: (state) => state.pageData.visual?.name ?? "Страница",
-        selectPageBackground: (state) => state.pageData.visual?.background ?? "",
-        selectPageDocuments: (state) => state.pageData.documentBlocks ?? [],
+        selectPageName: (state) => state.pageData?.visual?.name ?? "Страница",
+        selectPageBackground: (state) => state.pageData?.visual?.background ?? "",
+        selectPageDocuments: (state) => state.pageData?.documentBlocks ?? [],
         selectPageIsEdit: (state) => state.isPageEdit,
         selectPageHeaderFlag: (state) => state.style.header,
         selectPageLogo: (state) => state.style.logo,
@@ -98,5 +102,5 @@ export const pageSlice = createSlice({
 export const { actions: pageActions } = pageSlice;
 export const { reducer: pageReducer } = pageSlice;
 export const {
-selectPage, selectPageHeaderFlag, selectEditDocumentId, selectPageDocuments, selectPageName, selectPageBackground
+    selectPage, selectPageHeaderFlag, selectEditDocumentId, selectPageDocuments, selectPageName, selectPageBackground
 } = pageSlice.selectors;

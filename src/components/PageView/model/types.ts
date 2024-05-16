@@ -73,7 +73,7 @@ export interface Page {
         name?: string;
     }
     documentBlocks?: DocumentBlock[];
-    parent?: string | null
+    parent?: string | ''
 }
 
 export interface CalendarPage {
