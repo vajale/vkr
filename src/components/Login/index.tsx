@@ -7,7 +7,7 @@ import { Skeleton } from "@mui/material";
 import ModalComponent from "components/Modal";
 import { ButtonType } from "@/components/Login/enums";
 
-const Login: React.FC = () => {
+const Login: React.FC<{ isLanding?: boolean }> = ({ isLanding }) => {
     const [loginState, setLoginState] = useState<{ isModalOpen: boolean; modalType: ButtonType }>(
         () => ({
             isModalOpen: false,
@@ -47,7 +47,7 @@ const Login: React.FC = () => {
 
     return (
         <div>
-            <NotLoggedUser onClick={handleLoggedButtonClick} />
+            <NotLoggedUser onClick={handleLoggedButtonClick} isLanding={isLanding} />
             <ModalComponent onModalClose={handleModelClose} modalOpen={loginState.isModalOpen}>
                 {loginState.isModalOpen &&
                     (loginState.modalType === ButtonType.login ? (

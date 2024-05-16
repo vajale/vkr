@@ -1,17 +1,15 @@
 import React, { type FC } from "react";
 import { type ISecureRouteProps } from "@/routes/SecureRoute/types";
-import { useAppSelector } from "@/store/hooks";
-import { selectUser } from "@/store/slices/userSlice";
 import { Navigate } from "react-router";
 
 import Constants from "@/constants";
+import { useFirebaseAuth } from "@/components/FireBase";
 
 export const SecureRoute: FC<ISecureRouteProps> = ({ children }): JSX.Element => {
-    const user = useAppSelector(selectUser);
+    const { isAuth } = useFirebaseAuth();
 
-    console.log("temp loggined");
-    if (!true) {
-        return <Navigate to={Constants.URL.UNAUTHORIZED} />;
+    if (!isAuth) {
+        return <Navigate to={Constants.NAVIGATION.LANDING.MAIN} />;
     }
 
     return children;

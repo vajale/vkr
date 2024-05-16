@@ -4,6 +4,6 @@ export const StyledLayoutHeader = styled("div")(() => ({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    height: "10%",
+    minHeight: "10%",
     alignItems: "center",
 }));

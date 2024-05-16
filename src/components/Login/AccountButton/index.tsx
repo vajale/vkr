@@ -7,10 +7,15 @@ import { TITLES } from "@/components/Login/constants";
 import { StyledAccountButton } from "./styled";
 import { Typography } from "../../common/CustomTypography";
 
-export const AccountButton: React.FC<IAccountButton> = ({ image, accountName, svgIcon, onClick }) => {
+export const AccountButton: React.FC<IAccountButton> = ({
+    image,
+    accountName,
+    svgIcon,
+    onClick,
+}) => {
     const IconElement = () => {
         if (svgIcon) return svgIcon;
-        return <img src={image} alt={TITLES.IMAGE_ALT}/>;
+        return <img src={image} alt={TITLES.IMAGE_ALT} />;
     };
 
     const handleButtonClick = (e: React.MouseEvent) => {

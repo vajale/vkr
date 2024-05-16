@@ -4,13 +4,27 @@ import { TITLES } from "../constants";
 
 import { AccountButton } from "../AccountButton";
 
-// @ts-ignore
+// @ts-expect-error
 import NotLoggedSvg from "@/assets/svg/NotLoggedAvatar.svg";
+import { LandingLogin } from "@/components/Login/LandingLogin";
 
 interface Props {
-    onClick: () => void
+    onClick: () => void;
+    isLanding?: boolean;
 }
 
-export const NotLoggedUser: React.FC<Props> = ({onClick}) => {
-    return <AccountButton image={NotLoggedSvg} onClick={() => {onClick()}} accountName={TITLES.LOG_IN} />;
+export const NotLoggedUser: React.FC<Props> = ({ onClick, isLanding }) => {
+    if (isLanding) {
+        return <LandingLogin onClick={onClick} />;
+    }
+
+    return (
+        <AccountButton
+            image={NotLoggedSvg}
+            onClick={() => {
+                onClick();
+            }}
+            accountName={TITLES.LOG_IN}
+        />
+    );
 };

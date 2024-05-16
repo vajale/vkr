@@ -2,8 +2,8 @@ import { styled } from "@mui/material";
 import type { IExtendedThemeProps } from "@/themes/types";
 
 export const StyledCarouselContent = styled("div")(({ theme }: IExtendedThemeProps) => ({
-    padding: "5px 100px",
-    height: "800px",
+    padding: "5px 2vw",
+    height: "700px",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",

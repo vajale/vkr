@@ -21,45 +21,40 @@ export const DesktopRouter = () => {
                 <Route path={`/`} element={<Navigate to={URL.HOME} replace={true} />} />
 				<Route path={`${Constants.URL.PAGE}`} element={<Page/>}/>
 
-	            <Route path={`${Constants.URL.PAGE}/:id`} element={<Page/>}>
-		            <Route index element={<Page/>}/>
-	            </Route>
-                <Route path={`${Constants.URL.HOME}`} element={<HomePage />} />
-                <Route path={`${Constants.URL.CALENDAR}/*`} element={<CalendarPage />} />
+                <Route path={`${Constants.URL.PAGE}/:id`} element={<Page />}>
+                    <Route
+                        index
+                        element={
+                            <SecureRoute>
+                                <Page />
+                            </SecureRoute>
+                        }
+                    />
+                </Route>
+                <Route
+                    path={`${Constants.URL.HOME}`}
+                    element={
+                        <SecureRoute>
+                            <HomePage />
+                        </SecureRoute>
+                    }
+                />
+                <Route
+                    path={`${Constants.URL.CALENDAR}/*`}
+                    element={
+                        <SecureRoute>
+                            <CalendarPage />
+                        </SecureRoute>
+                    }
+                />
                 <Route path={`${Constants.URL.LANDING}/*`} element={<LandingPage />} />
 
-	            <Route
-		            path={`${Constants.URL.LANDING}/*`}
-		            element={
-			            <SecureRoute>
-				            <NestRoute />
-			            </SecureRoute>
-		            }>
-		            <Route
-			            path=""
-			            element={
-				            <SecureRoute>
-					            <LandingPage />
-				            </SecureRoute>
-			            }>
-			            <Route
-				            path={`${Constants.URL.MAIN}/*`}
-				            element={
-					            <SecureRoute>
-						            <LandingCarousel />
-					            </SecureRoute>
-				            }
-			            />
-			            <Route
-				            path={`${URL.PRICES}`}
-				            element={
-					            <SecureRoute>
-						            <p>прайсес</p>
-					            </SecureRoute>
-				            }
-			            />
-		            </Route>
-	            </Route>
+                <Route path={`${Constants.URL.LANDING}/*`} element={<NestRoute />}>
+                    <Route path="" element={<LandingPage />}>
+                        <Route path={`${Constants.URL.MAIN}/*`} element={<LandingCarousel />} />
+                        <Route path={`${URL.PRICES}`} element={<p>прайсес</p>} />
+                    </Route>
+                </Route>
             </Routes>
         </HashRouter>
     );
