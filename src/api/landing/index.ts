@@ -1,6 +1,6 @@
 import { firebaseStorage } from "@/components/FireBase";
 import { firebaseApi } from "@/api";
-import { getDownloadURL, listAll, ref } from "firebase/storage";
+import { getDownloadURL, ref } from "firebase/storage";
 
 export const firebaseLandingAPI = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -11,8 +11,6 @@ export const firebaseLandingAPI = firebaseApi.injectEndpoints({
                 const storageRef = ref(firebaseStorage, `landing/${imageId}`);
 
                 const downloadUrl = await getDownloadURL(storageRef);
-
-                console.log("downloadUrl", downloadUrl);
 
                 return { data: downloadUrl };
             },
