@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type IUserSchema } from "@/store/slices/userSlice/types";
-import { type User } from "@/utils/types";
+import {User, type IUserSchema } from "@/store/slices/userSlice/types";
 
 const initialState: IUserSchema = {
     user: undefined
@@ -25,12 +24,13 @@ export const userSlice = createSlice({
     },
     selectors: {
         selectUserAuth: (state) => state?.user !== undefined,
-        selectUser: (state) => state?.user
+        selectUser: (state) => state?.user,
+        selectUserPages: (state) => state.user?.pages
     }
 });
 
 export const { selectUserAuth } = userSlice.selectors;
-export const { selectUser } = userSlice.selectors;
+export const { selectUser, selectUserPages } = userSlice.selectors;
 export default userSlice.reducer;
 
 export const { actions: userActions } = userSlice;

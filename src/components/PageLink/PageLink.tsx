@@ -62,7 +62,7 @@ const PageLink = (props: LinkProps) => {
                                     <MaterialIcon name={buttonIconName}/>
                                 </Button>}
                             {icon && <MaterialIcon name={icon}/>}
-                            <Link sx={{ textDecoration: 'none', ml: 1 }} href={"#/page/" + href}>
+                            <Link sx={{ textDecoration: 'none', ml: 1 }}  href={"#/page/" + href}>
                                 {label}
                             </Link></Stack>
                         {isMouseHover && showOptionsButton &&
@@ -73,7 +73,7 @@ const PageLink = (props: LinkProps) => {
                 {options.isOptionsOpen && (
                     <div style={{ height: 28, marginTop: 7 }}>
                         {parent
-                            ? <Link underline href={parent.id}>
+                            ? <Link href={parent.id}>
                                 {label}
                             </Link>
                             : <Typography ml={4} sx={{ opacity: 0.8 }}>Нет страниц</Typography>}

@@ -2,8 +2,7 @@ import { firebaseAuth, firebaseDatabase } from "@/components/FireBase";
 
 import { type Page } from "../types";
 import { firebaseApi } from "@/api";
-import { ref, set, get, child, update, push } from "firebase/database";
-
+import { ref, set, get, child, update } from "firebase/database";
 
 function isPage (obj: any): obj is Page {
     return (
@@ -58,10 +57,10 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
 
                         return {
                             data: {
+                                documentBlocks: docBlocksArray,
                                 id: pageId,
-                                parent: null,
-                                visual: snapshotData.page.visual,
-                                documentBlocks: docBlocksArray
+                                parent: '',
+                                visual: snapshotData.page.visual
                             }
                         };
                     } else {
@@ -85,8 +84,10 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
 
                                 return {
                                     id: pageId,
-                                    parent: null,
-                                    name: page.visual?.name
+                                    parent: '',
+                                    visual: {
+                                        name: page.visual?.name
+                                    }
                                 };
                             } else {
                                 console.log("No data available");
@@ -105,7 +106,6 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                 return {
                     data: validResponses
                 };
-
             },
         }),
         updatePageBlocks: builder.mutation<Page, { newPage: Page }>({
@@ -142,7 +142,6 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                         }
                     };
 
-                    console.log(newPage.visual?.name);
 
                     await update(sp, updateData);
 
@@ -178,5 +177,5 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
     }),
 });
 
-export const { useFetchPageDataQuery, useUpdatePageVisualMutation, useUpdatePageBlocksMutation, useLazyUpdatePageRealtimeQuery, useFetchPagesQuery } =
+export const {useLazyFetchPagesQuery , useFetchPageDataQuery, useUpdatePageVisualMutation, useUpdatePageBlocksMutation, useLazyUpdatePageRealtimeQuery } =
     firebaseDocumentsAPI;

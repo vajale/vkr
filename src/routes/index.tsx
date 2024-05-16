@@ -19,6 +19,7 @@ export const DesktopRouter = () => {
         <HashRouter>
             <Routes>
                 <Route path={`/`} element={<Navigate to={URL.HOME} replace={true} />} />
+				<Route path={`${Constants.URL.PAGE}`} element={<Page/>}/>
 
 	            <Route path={`${Constants.URL.PAGE}/:id`} element={<Page/>}>
 		            <Route index element={<Page/>}/>

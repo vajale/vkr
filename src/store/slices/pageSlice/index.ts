@@ -1,17 +1,15 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type DocumentsPageSchema } from "./types";
+import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
+import {type DocumentsPageSchema} from "./types";
 import {
     type DocumentBlock,
     type DocumentBlockType,
     type Page
 } from "@/components/PageView/model/types";
-import { documentObjectHelper } from "@/utils/documentObjectHelper";
-import { mockPage2 } from "@/utils/mock/mockdata";
+import {documentObjectHelper} from "@/utils/documentObjectHelper";
+import {mockPage2} from "@/utils/mock/mockdata";
 
 const initialState: DocumentsPageSchema = {
-    pageData: {
-        id: ''
-    },
+    pageData: undefined,
     isPageEdit: false,
     style: {
         header: false,
@@ -37,7 +35,7 @@ export const pageSlice = createSlice({
         }),
         updateDocumentType: create.reducer(
             (state, action: PayloadAction<{ id: string; type: DocumentBlockType }>) => {
-                const { id, type } = action.payload;
+                const {id, type} = action.payload;
 
                 state.pageData.documentBlocks = state.pageData?.documentBlocks?.map((item) => {
                     const block = item.id === id ? item : undefined;
@@ -81,6 +79,9 @@ export const pageSlice = createSlice({
         }),
         removeDocumentBlock: create.reducer((state, action: PayloadAction<{ id: string }>) => {
             state.pageData.documentBlocks = state.pageData?.documentBlocks?.filter((item) => item.id !== action.payload.id);
+        }),
+        updatePage: create.reducer((state, action: PayloadAction<Page>) => {
+            state.pageData = {...state.pageData, ...action.payload}
         })
     }),
     selectors: {
@@ -95,8 +96,8 @@ export const pageSlice = createSlice({
     }
 });
 
-export const { actions: pageActions } = pageSlice;
-export const { reducer: pageReducer } = pageSlice;
+export const {actions: pageActions} = pageSlice;
+export const {reducer: pageReducer} = pageSlice;
 export const {
-selectPage, selectPageHeaderFlag, selectEditDocumentId, selectPageDocuments, selectPageName, selectPageBackground
+    selectPage, selectPageHeaderFlag, selectEditDocumentId, selectPageDocuments, selectPageName, selectPageBackground
 } = pageSlice.selectors;

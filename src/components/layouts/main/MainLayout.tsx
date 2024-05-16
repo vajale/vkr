@@ -1,16 +1,16 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { StyledMainLayout, StyledContentWrapper } from "./styled";
 import AppHeader from "../../AppHeader";
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Skeleton, Stack, Typography } from "@mui/material";
 import PageLink from "@/components/PageLink/PageLink";
-import { useFetchPagesQuery } from "@/components/PageView/model/services/firebaseDocumentsAPI";
+import { useLazyFetchPagesQuery } from "@/components/PageView/model/services/firebaseDocumentsAPI";
 import { MaterialIcon } from "@/assets/Icon";
 import { useNavigate } from "react-router-dom";
 import Constants from "@/constants";
 import { useGetUserQuery } from "@/features/usersService/usersService";
-import { useAppDispatch } from "@/store/hooks";
-import { userActions } from "@/store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectUserPages, userActions } from "@/store/slices/userSlice";
 
 interface LayoutProps {
     children: React.ReactNode | React.ReactElement
@@ -22,29 +22,41 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const { data, isLoading, isSuccess } = useGetUserQuery({});
-    const { data: pagesData, isLoading: pagesIsLoading, isSuccess: pagesSuccess } = useFetchPagesQuery(['VT8LVZQgp6WTGxScgr7E']);
+    const { data: userData, isLoading, isSuccess } = useGetUserQuery({});
+    const [fetchPages, { data: pagesData, isSuccess: pagesSuccess, isLoading: isPagesLoading }] = useLazyFetchPagesQuery();
 
     useEffect(() => {
-        if (isSuccess) {
-            dispatch(userActions.setAuthData(data));
+        if (isSuccess && userData) {
+            dispatch(userActions.setAuthData(userData));
+
+            if (userData?.pages) {
+                fetchPages(userData?.pages);
+            }
         }
-    }, [data, isLoading]);
+    }, [userData, isLoading]);
 
     const pages = useMemo(() => {
-        if (pagesSuccess) {
+        if (pagesSuccess && isSuccess) {
             return pagesData?.map(page => (
                 <PageLink showOptionsButton
                           href={page.id}
                           key={page.id}
-                          label={page.name}
+                          label={page.visual?.name}
                           width={290}
                           icon={"MdSummarize"}/>
             ));
         }
 
-        return null;
-    }, [pagesData, pagesIsLoading]);
+        if (isPagesLoading) {
+            return (
+                <div>
+                    <Skeleton width={290} height={50}/>
+                    <Skeleton width={290} height={50}/>
+                    <Skeleton width={290} height={50}/>
+                </div>
+            );
+        }
+    }, [pagesSuccess, pagesData, isPagesLoading]);
 
     const handleAddPageClick = () => {
 

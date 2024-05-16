@@ -2,28 +2,34 @@ import React, { useEffect } from "react";
 
 import PageHeader from "../PageHeader/PageHeader";
 import { Paper } from "@mui/material";
+import { isEqual } from 'lodash';
 
 import {
+    pageActions,
     selectPage, selectPageBackground,
-    selectPageHeaderFlag, selectPageName
+    selectPageName
 } from "@/store/slices/pageSlice";
 
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 import {
     useUpdatePageBlocksMutation,
     useUpdatePageVisualMutation
 } from "@/components/PageView/model/services/firebaseDocumentsAPI";
-import { selectUser } from "@/store/slices/userSlice";
-import { type Page } from "../../model/types";
 import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
 import DocumentBlocksList from "@/components/PageView/ui/PageView/DocumentBlocksList";
+import { child, ref, onValue } from "firebase/database";
+import { firebaseDatabase } from "@/components/FireBase";
 
 interface ViewProps {
-    page?: Page
+    isLoading: boolean
 }
 
-const PageView = () => {
+const PageView = (props: ViewProps) => {
+    const { isLoading } = props;
+
+    const dispatch = useAppDispatch();
+
     const [updateDocuments] = useUpdatePageBlocksMutation();
     const [updateVisual] = useUpdatePageVisualMutation();
 
@@ -32,22 +38,34 @@ const PageView = () => {
     const name = useAppSelector(selectPageName);
 
     useEffect(() => {
-        void updateVisual({ newPage: page });
+        if (page !== undefined) {
+            const dbRef = ref(firebaseDatabase);
+            const specificNodeRef = child(dbRef, page.id);
+            const sp = child(specificNodeRef, 'page');
+
+            onValue(sp, snapshot => {
+                if (isEqual(page, snapshot.val()) === false) {
+                    dispatch(pageActions.updatePage(snapshot.val()));
+                }
+            }, {
+                onlyOnce: true
+            });
+        }
+    }, [page]);
+
+    useEffect(() => {
+        if (!isLoading) {
+            void updateVisual({ newPage: page });
+        }
     }, [name]);
 
     useEffect(() => {
-        void updateDocuments({ newPage: page });
+        if (!isLoading) {
+            void updateDocuments({ newPage: page });
+        }
     }, [page]);
 
-    // const handleDocumentChange = () => {
-    //     // void updateDocuments({ newPage: page });
-    // };
-    // const handleHeaderChange = () => {
-    //     // void updateVisual({ newPage: page });
-    // };
-
     if (page.documentBlocks === undefined) {
-        console.log('no blocks');
         return (
             <StyledPageView>
                 <Paper className={"page-view-paper"} sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
@@ -61,7 +79,7 @@ const PageView = () => {
         <StyledPageView>
             <Paper className={"page-view-paper"} sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
                 <PageHeader text={name} background={background}/>
-                  <DocumentBlocksList
+                <DocumentBlocksList
                     canEdit
                     docs={page.documentBlocks}/>
             </Paper>
