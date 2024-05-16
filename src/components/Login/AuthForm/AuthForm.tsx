@@ -23,7 +23,7 @@ interface AuthProps {
 const AuthForm = (props: AuthProps) => {
     const { onRegisterClick, onAuth } = props;
     const { handleSubmit, register, reset, formState: { isValid } } = useForm<IAuthForm>({ mode: "onChange" });
-    const { signInUser } = useFirebaseAuth();
+    const { signInUser, isLoading } = useFirebaseAuth();
 
     const onSubmit: SubmitHandler<IAuthForm> = async (data) => {
         const { password, email } = data;
@@ -41,8 +41,8 @@ const AuthForm = (props: AuthProps) => {
 
     return (
         <StyledAuthPaper>
-            <FormControl variant={'standard'} sx={{ mt: 10 }} onSubmit={() => handleSubmit(onSubmit)}>
-                <Stack gap={1}>
+            <form style={{ marginTop: 10 }} onSubmit={handleSubmit(onSubmit)}>
+                <Stack onSubmit={handleSubmit(onSubmit)} gap={1}>
                     <Typography variant={'h4'}
                                 fontWeight={'700'}
                                 justifyContent={'center'}
@@ -61,6 +61,7 @@ const AuthForm = (props: AuthProps) => {
                                id="outlined-required"
                                fullWidth
                                placeholder="Почта"
+                               disabled={isLoading}
                     />
                     <Input
                         className={"input"}
@@ -68,6 +69,7 @@ const AuthForm = (props: AuthProps) => {
                         {...register("password", { required: "password is required" })}
                         id="outlined-adornment-password"
                         type={showPassword ? 'text' : 'password'}
+                        disabled={isLoading}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
@@ -80,19 +82,19 @@ const AuthForm = (props: AuthProps) => {
                             </InputAdornment>
                         }
                     />
-                    <StyledLoginButton type={'submit'} sx={{ mt: 7 }} onClick={onAuth} fullWidth>
+                    <StyledLoginButton disabled={isLoading} type={'submit'} sx={{ mt: 7 }} fullWidth>
                         <Typography>
                             Войти
                         </Typography>
                     </StyledLoginButton>
                     <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
-                        <Button variant={'outlined'} sx={{ border: 'none' }} sx={{ mt: 7 }} onClick={onRegisterClick}>
+                        <Button disabled={isLoading} variant={'outlined'} sx={{ border: 'none' }} sx={{ mt: 7 }} onClick={onRegisterClick}>
                             <Typography>Зарегистрироваться</Typography>
                         </Button>
                     </Stack>
                     {/* <SwitchButton onClick={onRegisterClick} isValid={isValid} formType={ButtonType.login}/> */}
                 </Stack>
-            </FormControl>
+            </form>
         </StyledAuthPaper>
     );
 };

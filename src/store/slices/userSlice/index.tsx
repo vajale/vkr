@@ -24,8 +24,8 @@ export const userSlice = createSlice({
         },
     },
     selectors: {
-        selectUserAuth: (state) => state?.user || false,
-        selectUser: (state) => state?.user || null
+        selectUserAuth: (state) => state?.user !== undefined,
+        selectUser: (state) => state?.user
     }
 });
 

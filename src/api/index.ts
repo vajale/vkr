@@ -1,11 +1,6 @@
 import { type AppDispatch } from "@/store/store";
 import { axiosInstance } from "@/utils/api/api";
-import {
-    type BaseQueryFn,
-    createApi,
-    fakeBaseQuery,
-    fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
+import { type BaseQueryFn, createApi, fakeBaseQuery, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { type AxiosError, type AxiosRequestConfig } from "axios";
 
 const baseUrl = "http://localhost:4000/";

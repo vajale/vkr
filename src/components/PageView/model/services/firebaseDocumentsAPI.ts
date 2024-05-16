@@ -1,18 +1,11 @@
-import { firebaseAuth, firebaseDatabase, firestoreDB } from "@/components/FireBase";
-import {
-    type DocumentData,
-    type DocumentSnapshot,
-    collection,
-    doc,
-    getDoc,
-    getDocs,
-    updateDoc,
-} from "firebase/firestore";
-import { DocumentBlockType, type Page } from "../types";
-import { firebaseApi } from "@/api";
-import { onValue, ref, set, get, child } from "firebase/database";
+import { firebaseAuth, firebaseDatabase } from "@/components/FireBase";
 
-function isPage(obj: any): obj is Page {
+import { type Page } from "../types";
+import { firebaseApi } from "@/api";
+import { ref, set, get, child, update, push } from "firebase/database";
+
+
+function isPage (obj: any): obj is Page {
     return (
         obj !== undefined &&
         obj !== null &&
@@ -21,74 +14,143 @@ function isPage(obj: any): obj is Page {
     );
 }
 
+interface PageResponse {
+    page: Page,
+    permissions: {
+        creator: string,
+        moder: string
+    }
+}
+
+export function arrayToObject<T> (arr: T[]): Record<number, T> {
+    const obj: Record<number, T> = {};
+    arr.forEach((value, index) => {
+        obj[index] = value;
+    });
+    return obj;
+}
+
 export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
-        fetchPageData: builder.query<Page[], undefined>({
-            // @ts-expect-error
-            async queryFn() {
+        fetchPageData: builder.query<Page, { pageId: string }>({
+            async queryFn ({ pageId }) {
+                // const dispatch = useAppDispatch();
+
+                if (pageId === "") {
+                    return null;
+                }
+
                 const userId = firebaseAuth.currentUser?.uid;
+                const dbRef = ref(firebaseDatabase);
 
-                if (userId != null) {
-                    const dbRef = ref(firebaseDatabase);
-                    // const querySnapshot = await getDocs(blogRef);
+                try {
+                    const snapshot = await get(child(dbRef, pageId));
 
-                    get(child(dbRef, `${userId}`))
+                    if (snapshot.exists()) {
+                        const snapshotData = (snapshot.val() as PageResponse);
+                        const permissions = snapshotData.permissions;
+
+                        // if (permissions.creator === userId || permissions.moder === userId) {
+                        //     return { data: snapshotData.page };
+                        // }
+
+                        const docBlocksArray = Object.values(snapshotData.page.documentBlocks);
+
+                        return {
+                            data: {
+                                id: pageId,
+                                parent: null,
+                                visual: snapshotData.page.visual,
+                                documentBlocks: docBlocksArray
+                            }
+                        };
+                    } else {
+                        console.log("No data available");
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+        }),
+        fetchPages: builder.query<Page[], string[]>({
+            queryFn: async (pageIds) => {
+                const dbRef = ref(firebaseDatabase);
+
+                const promises = pageIds.map(async (pageId) => {
+                    return await get(child(dbRef, pageId))
                         .then((snapshot) => {
                             if (snapshot.exists()) {
-                                console.log(snapshot.val());
+                                const response: PageResponse = (snapshot.val()) as PageResponse;
+                                const { page, permissions } = response;
+
+                                return {
+                                    id: pageId,
+                                    parent: null,
+                                    name: page.visual?.name
+                                };
                             } else {
                                 console.log("No data available");
+                                return null;
                             }
                         })
                         .catch((error) => {
                             console.error(error);
-                        });
-                }
-
-                const queryData = querySnapshot.docs;
-
-                const promises = queryData?.map(async (query) => {
-                    const documentRef = doc(
-                        firestoreDB,
-                        "pages",
-                        "2rLcXc4sd4WD97mu8o8jiyXRMxt1",
-                        "pages",
-                        query.id,
-                    );
-                    return await getDoc(documentRef)
-                        .then((doc) => doc)
-                        .catch((error) => {
-                            console.log(error);
+                            return null;
                         });
                 });
 
-                const pages = await Promise.all(promises);
-                const pagesData = pages.map((data) => {
-                    const documentData = data as DocumentSnapshot<DocumentData, DocumentData>;
+                const pagesResponses = await Promise.all(promises);
+                const validResponses = pagesResponses.filter(response => response !== null);
 
-                    return {
-                        id: documentData.id,
-                        // @ts-expect-error
-                        documentBlocks: documentData.data().documentBlocks,
-                        parent: null,
-                    };
-                });
+                return {
+                    data: validResponses
+                };
 
-                return { data: pagesData };
             },
         }),
-        updatePage: builder.mutation<Page, { id: string; userId: string; newPage: Page }>({
-            // @ts-expect-error
-            queryFn: async ({ userId, id, newPage }) => {
+        updatePageBlocks: builder.mutation<Page, { newPage: Page }>({
+            queryFn: async ({ newPage }) => {
+                const dbRef = ref(firebaseDatabase);
+                const specificNodeRef = child(dbRef, newPage.id);
+                const sp = child(specificNodeRef, 'page');
+
                 try {
-                    await updateDoc(doc(firestoreDB, "pages", userId, "pages", id), {
-                        documentBlocks: newPage.documentBlocks,
-                        parent: null,
-                    });
-                    return { data: null };
-                } catch (error: any) {
-                    console.error(error.message);
-                    return { error: error.message };
+                    const updateData = {
+                        documentBlocks: arrayToObject(newPage.documentBlocks)
+                    };
+
+                    await update(sp, updateData);
+
+                    console.log('Данные успешно обновлены');
+                    return newPage;
+                } catch (error) {
+                    console.error('Ошибка при обновлении данных:', error);
+                    throw new Error('Ошибка при обновлении данных');
+                }
+            },
+        }),
+        updatePageVisual: builder.mutation<Page, { newPage: Page }>({
+            queryFn: async ({ newPage }) => {
+                const dbRef = ref(firebaseDatabase);
+                const specificNodeRef = child(dbRef, newPage.id);
+                const sp = child(specificNodeRef, 'page');
+
+                try {
+                    const updateData = {
+                        visual: {
+                            ...newPage.visual
+                        }
+                    };
+
+                    console.log(newPage.visual?.name);
+
+                    await update(sp, updateData);
+
+                    console.log('Данные успешно обновлены');
+                    return newPage;
+                } catch (error) {
+                    console.error('Ошибка при обновлении данных:', error);
+                    throw new Error('Ошибка при обновлении данных');
                 }
             },
         }),
@@ -116,5 +178,5 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
     }),
 });
 
-export const { useFetchPageDataQuery, useUpdatePageMutation, useLazyUpdatePageRealtimeQuery } =
+export const { useFetchPageDataQuery, useUpdatePageVisualMutation, useUpdatePageBlocksMutation, useLazyUpdatePageRealtimeQuery, useFetchPagesQuery } =
     firebaseDocumentsAPI;

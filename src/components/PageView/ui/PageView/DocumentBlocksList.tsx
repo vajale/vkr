@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { documentPageActions, selectEditDocumentId, selectPage } from "@/store/slices/pageSlice";
+import { pageActions, selectEditDocumentId, selectPage } from "@/store/slices/pageSlice";
 import { Box, Button, Paper, Popover, Stack, Typography } from "@mui/material";
 import { MaterialIcon } from "@/assets/Icon";
 import React, { useEffect, useState } from "react";
@@ -23,7 +23,7 @@ import DocumentBlockToDo from "@/components/PageView/ui/DocumentBlockComponents/
 
 interface BlocksProps {
     docs: DocumentBlock[],
-    onDocumentsChanges: () => void,
+    onDocumentsChanges?: () => void,
     canEdit?: boolean
 }
 
@@ -45,8 +45,11 @@ const DocumentBlocksList = (props: BlocksProps) => {
         const newIndex = docs.findIndex((block) => block.id === over.id);
         const newArray = arrayMove(docs, oldIndex, newIndex);
 
-        dispatch(documentPageActions.updateDocuments(newArray));
-        onDocumentsChanges();
+        dispatch(pageActions.updateDocuments(newArray));
+
+        if (onDocumentsChanges != null) {
+            onDocumentsChanges();
+        }
     };
 
     if (docs.length === 0) {
@@ -74,7 +77,7 @@ const DocumentBlocksList = (props: BlocksProps) => {
 
     const handleEmptySpaceClick = async () => {
         if (docs[docs.length - 1].content !== '') {
-            dispatch(documentPageActions.addDocumentBlock(DocumentBlockType.TEXT));
+            dispatch(pageActions.addDocumentBlock(DocumentBlockType.TEXT));
         };
     };
 
@@ -100,11 +103,15 @@ const DocumentBlocksList = (props: BlocksProps) => {
 
                         const handleDataUpdate = (data: string) => {
                             dispatch(
-                                documentPageActions.updateDocumentBlock({
+                                pageActions.updateDocumentBlock({
                                     ...item,
                                     content: data
                                 })
                             );
+
+                            if (onDocumentsChanges != null) {
+                                onDocumentsChanges();
+                            }
                         };
 
                         const canEditDoc = canEdit;
@@ -167,7 +174,7 @@ const DocumentBlocksList = (props: BlocksProps) => {
                                 break;
                         }
                     })}
-                    {/* <EmptyDocumentBlock onClick={handleEmptySpaceClick}/> */}
+                     {/* <EmptyDocumentBlock onClick={handleEmptySpaceClick}/> */}
                 </SortableContext>
             </DndContext>
         </div>

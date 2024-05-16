@@ -11,4 +11,4 @@ export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseStorage = getStorage(firebaseApp);
 export const firestoreDB = getFirestore(firebaseApp);
 
-export { useFirebaseAuth } from "./useFirebaseAuth";
+export { useFirebaseAuth } from './useFirebaseAuth';

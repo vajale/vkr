@@ -33,6 +33,7 @@ const RegisterForm = (props: FormProps) => {
 
     const onSubmit: SubmitHandler<IRegisterForm> = async (data) => {
         const { password, email } = data;
+        console.log(data);
         await createUser(email, password);
 
         reset();
@@ -40,7 +41,7 @@ const RegisterForm = (props: FormProps) => {
     };
 
     return (
-        <FormControl variant={'standard'} onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Typography variant={'h4'} fontWeight={'700'} justifyContent={'center'} mt={7}>Регистрация</Typography>
             <Box mt={4}>
                 <Stack gap={1}>
@@ -58,7 +59,6 @@ const RegisterForm = (props: FormProps) => {
                         fullWidth
                         variant={'standard'}
                         placeholder="Почта"
-                        helperText={'Неверный вид почты'}
                     />
                     <Input
                         error={!isValid}
@@ -77,28 +77,28 @@ const RegisterForm = (props: FormProps) => {
                                 </IconButton>
                             </InputAdornment>}
                     />
-                    <TextField
-                        fullWidth
-                        variant={'standard'}
-                        label="Имя"
-                        placeholder="Имя"
-                    />
-                    <TextField
-                        fullWidth
-                        variant={'standard'}
-                        label="Фамиля"
-                        placeholder="Фамиля"
-                    />
-                    <TextField
-                        fullWidth
-                        variant={'standard'}
-                        label="Телефон"
-                        placeholder="Телефон"
-                    />
+                    {/* <TextField */}
+                    {/*    fullWidth */}
+                    {/*    variant={'standard'} */}
+                    {/*    label="Имя" */}
+                    {/*    placeholder="Имя" */}
+                    {/* /> */}
+                    {/* <TextField */}
+                    {/*    fullWidth */}
+                    {/*    variant={'standard'} */}
+                    {/*    label="Фамиля" */}
+                    {/*    placeholder="Фамиля" */}
+                    {/* /> */}
+                    {/* <TextField */}
+                    {/*    fullWidth */}
+                    {/*    variant={'standard'} */}
+                    {/*    label="Телефон" */}
+                    {/*    placeholder="Телефон" */}
+                    {/* /> */}
                 </Stack>
             </Box>
             <StyledLoginButton type={'submit'} sx={{ mt: 3 }} fullWidth>
-                <Typography color={'white'}>
+                <Typography>
                     Зарегистрироваться
                 </Typography>
             </StyledLoginButton>
@@ -108,7 +108,7 @@ const RegisterForm = (props: FormProps) => {
                 </Button>
             </Stack>
             {/* <SwitchButton onClick={onAuthClick} isValid={isValid} formType={ButtonType.register}/> */}
-        </FormControl>);
+        </form>);
 };
 
 export default RegisterForm;

@@ -4,7 +4,7 @@ import { type DocumentsPageSchema } from "./slices/pageSlice/types";
 import { type PageSettingsSchema } from "./slices/pageSettingsSlice/types";
 import { type IUserSchema } from "@/store/slices/userSlice/types";
 
-import { documentPageReducer } from "./slices/pageSlice";
+import { pageReducer } from "./slices/pageSlice";
 import { pageSettingsReducer } from "./slices/pageSettingsSlice";
 import appReducer from "./slices/app/index";
 import { userReducer } from "@/store/slices/userSlice";
@@ -21,13 +21,13 @@ export interface StateSchema {
 }
 
 const rootReducer: ReducersMapObject<StateSchema> = {
-    user: userReducer,
-    documentPage: documentPageReducer,
-    app: appReducer,
-    settings: pageSettingsReducer,
-    calendar: calendarReducer,
-    // @ts-expect-error
-    [firebaseDocumentsAPI.reducerPath]: firebaseDocumentsAPI.reducer,
+   user: userReducer,
+   documentPage: pageReducer,
+   app: appReducer,
+   settings: pageSettingsReducer,
+   calendar: calendarReducer,
+   // @ts-expect-error
+   [firebaseDocumentsAPI.reducerPath]: firebaseDocumentsAPI.reducer
 };
 
 export default rootReducer;

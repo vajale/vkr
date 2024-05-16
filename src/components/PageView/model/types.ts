@@ -12,7 +12,6 @@ export interface DocumentBlockBase {
     id: string;
     type: DocumentBlockType;
     content: DocumentContentType;
-    children?: DocumentBlock;
     textType: {
         variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'subtitle1'
         weight?: 'strong' | 'bald' | 'pussy'
@@ -68,8 +67,12 @@ export type DocumentBlock =
     | DocumentCheckboxBlock | DocumentPageLinkBlock | DocumentTodoBlock;
 
 export interface Page {
-    documentBlocks: DocumentBlock[];
     id: string;
+    visual?: {
+        background?: string,
+        name?: string;
+    }
+    documentBlocks?: DocumentBlock[];
     parent?: string | null
 }
 
