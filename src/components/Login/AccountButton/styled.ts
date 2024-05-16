@@ -1,4 +1,4 @@
-import {Button, styled} from "@mui/material";
+import { Button, styled } from "@mui/material";
 
 export const StyledAccountButton = styled(Button)(() => ({
     display: "flex",
@@ -13,6 +13,8 @@ export const StyledAccountButton = styled(Button)(() => ({
     },
 
     img: {
+        borderRadius: "20%",
+        border: "solid 3px black",
         width: "30px",
         height: "30px",
     },
