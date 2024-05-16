@@ -1,8 +1,10 @@
-import { firebaseAuth, firebaseDatabase } from "@/components/FireBase";
+import { firebaseAuth, firebaseDatabase, firebaseStorage, firestoreDB } from "@/components/FireBase";
 
 import { type Page } from "../types";
 import { firebaseApi } from "@/api";
-import { ref, set, get, child, update } from "firebase/database";
+import { v4, v4 as uuidv4 } from 'uuid';
+import { ref, set, get, child, update, push, remove } from "firebase/database";
+import { doc, updateDoc, arrayUnion, deleteDoc, deleteField, getDoc } from "firebase/firestore";
 
 function isPage (obj: any): obj is Page {
     return (
@@ -142,7 +144,6 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                         }
                     };
 
-
                     await update(sp, updateData);
 
                     console.log('Данные успешно обновлены');
@@ -150,6 +151,82 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                 } catch (error) {
                     console.error('Ошибка при обновлении данных:', error);
                     throw new Error('Ошибка при обновлении данных');
+                }
+            },
+        }),
+        createNewPage: builder.mutation<{ id: string }, _>({
+            queryFn: async () => {
+                const userId = firebaseAuth.currentUser?.uid;
+
+                if (!userId) {
+                    console.log('Пользователь не аутентифицирован');
+                    return { error: 'Пользователь не аутентифицирован' };
+                }
+
+                try {
+                    // Создаем ссылку на Realtime Database
+                    const dbRef = ref(firebaseDatabase);
+
+                    // Создаем объект для новой страницы в Realtime Database
+                    const newPageObj = {
+                        page: {
+                            documentBlocks: {},
+                            visual: {
+                                name: 'Новая страница',
+                                background: "whitesmoke"
+                            }
+                        },
+                        permissions: {
+                            creator: userId,
+                            moder: ''
+                        }
+                    };
+
+                    const key = await push(dbRef, newPageObj).then(data => data.key);
+
+                    await updateDoc(doc(firestoreDB, 'users', userId), {
+                        pages: arrayUnion(key)
+                    });
+
+                    console.log('Страница добавлена: ' + key);
+                    return { id: key };
+                } catch (error: any) {
+                    console.error(error.message);
+                    return { error: error.message };
+                }
+            }
+        }),
+        removePage: builder.mutation<Page, { pageId: string }>({
+            queryFn: async ({ pageId }) => {
+                const userId = firebaseAuth.currentUser?.uid;
+
+                if (!userId) {
+                    console.log('Пользователь не аутентифицирован');
+                    return { error: 'Пользователь не аутентифицирован' };
+                }
+
+                const userDocRef = doc(firestoreDB, 'users', userId);
+                const dbRef = ref(firebaseDatabase, pageId);
+
+                try {
+                    await remove(dbRef);
+
+                    const userDocSnapshot = await getDoc(userDocRef);
+                    if (!userDocSnapshot.exists()) {
+                        console.log('Документ пользователя не найден');
+                        return { error: 'Документ пользователя не найден' };
+                    }
+
+                    const currentPageIds = userDocSnapshot.data().pages || [];
+                    const updatedPageIds = currentPageIds.filter(id => id !== pageId);
+
+                    await updateDoc(userDocRef, { pages: updatedPageIds });
+
+                    console.log('Страница удалена');
+                    return null;
+                } catch (error) {
+                    console.error('Ошибка при удалении данных:', error);
+                    throw new Error('Ошибка при удалении данных');
                 }
             },
         }),
@@ -177,5 +254,13 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
     }),
 });
 
-export const {useLazyFetchPagesQuery , useFetchPageDataQuery, useUpdatePageVisualMutation, useUpdatePageBlocksMutation, useLazyUpdatePageRealtimeQuery } =
+export const {
+    useCreateNewPageMutation,
+    useLazyFetchPagesQuery,
+    useFetchPageDataQuery,
+    useUpdatePageVisualMutation,
+    useUpdatePageBlocksMutation,
+    useLazyUpdatePageRealtimeQuery,
+    useRemovePageMutation
+} =
     firebaseDocumentsAPI;

@@ -1,29 +1,39 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 
 import { StyledMainLayout, StyledContentWrapper } from "./styled";
 import AppHeader from "../../AppHeader";
 import { Button, Skeleton, Stack, Typography } from "@mui/material";
 import PageLink from "@/components/PageLink/PageLink";
-import { useLazyFetchPagesQuery } from "@/components/PageView/model/services/firebaseDocumentsAPI";
+import {
+    useCreateNewPageMutation,
+    useLazyFetchPagesQuery,
+    useRemovePageMutation
+} from "@/components/PageView/model/services/firebaseDocumentsAPI";
 import { MaterialIcon } from "@/assets/Icon";
 import { useNavigate } from "react-router-dom";
 import Constants from "@/constants";
 import { useGetUserQuery } from "@/features/usersService/usersService";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectUserPages, userActions } from "@/store/slices/userSlice";
+import { firebaseAuth, useFirebaseAuth } from "@/components/FireBase";
 
 interface LayoutProps {
     children: React.ReactNode | React.ReactElement
 }
 
-export const MainLayout: React.FC<LayoutProps> = (props) => {
+export const MainLayout: React.FC<LayoutProps> = memo((props) => {
     const { children } = props;
 
+    const { firebaseUser } = useFirebaseAuth();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const { data: userData, isLoading, isSuccess } = useGetUserQuery({});
+    // TODO апдейт названия страницы
+
+    const { data: userData, isLoading, isSuccess, refetch: refetchUserPages, isFetching } = useGetUserQuery({ userId: firebaseAuth.currentUser?.uid });
     const [fetchPages, { data: pagesData, isSuccess: pagesSuccess, isLoading: isPagesLoading }] = useLazyFetchPagesQuery();
+    const [createPage] = useCreateNewPageMutation({});
+    const [removePage] = useRemovePageMutation({});
 
     useEffect(() => {
         if (isSuccess && userData) {
@@ -43,11 +53,12 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
                           key={page.id}
                           label={page.visual?.name}
                           width={290}
+                          onPageDelete={() => { handlePageRemove(page.id); }}
                           icon={"MdSummarize"}/>
             ));
         }
 
-        if (isPagesLoading) {
+        if (isPagesLoading || isFetching) {
             return (
                 <div>
                     <Skeleton width={290} height={50}/>
@@ -56,10 +67,17 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
                 </div>
             );
         }
-    }, [pagesSuccess, pagesData, isPagesLoading]);
+    }, [pagesData]);
 
     const handleAddPageClick = () => {
+        createPage({}).then(async (data) => {
+            // navigate(`${Constants.URL.PAGE}/${data}`);
+            await refetchUserPages();
+        });
+    };
 
+    const handlePageRemove = (pageId: string) => {
+        removePage({ pageId }).then(async () => await refetchUserPages());
     };
 
     const handleMainButton = () => {
@@ -79,10 +97,10 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
                                 onClick={handleMainButton}>
                         СЕЙФ +
                     </Typography>
-                    <PageLink href={'/calendar'} label={'Поиск'} icon={"MdSearch"}/>
+                    <PageLink id={''} href={'/calendar'} label={'Поиск'} icon={"MdSearch"}/>
                     <Stack mt={4}>
-                        <PageLink href={'/calendar'} label={'Календарь'} icon={"MdCalendarToday"}/>
-                        <PageLink href={'/calendar'} label={'Участники'} icon={"MdGroup"}/>
+                        <PageLink id={''} href={'/calendar'} label={'Календарь'} icon={"MdCalendarToday"}/>
+                        <PageLink id={''} href={'/calendar'} label={'Участники'} icon={"MdGroup"}/>
                     </Stack>
                     <Stack mt={2} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
                         <Typography>Страницы</Typography>
@@ -99,4 +117,4 @@ export const MainLayout: React.FC<LayoutProps> = (props) => {
             </div>
         </StyledMainLayout>
     );
-};
+});
