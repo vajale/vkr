@@ -2,7 +2,11 @@ export interface User {
     id: string;
     username?: string;
     avatar?: string;
-    pages?: string[]
+    pages?: {
+        id: string,
+        name: string,
+        parent: string | ''
+    }
 }
 
 export interface IUserSchema {

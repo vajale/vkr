@@ -7,6 +7,8 @@ import { useMouseHover } from "@/components/PageView/model/hooks/useMouseHover";
 import { motion } from "framer-motion";
 import { type MaterialIconName } from "@/assets/icons";
 import { StyledPageLink } from "@/components/PageLink/styled";
+import { useAppDispatch } from "@/store/hooks";
+import { pageActions } from "@/store/slices/pageSlice";
 
 interface LinkProps {
     href: string,
@@ -21,6 +23,8 @@ interface LinkProps {
 
 const PageLink = (props: LinkProps) => {
     const { label = 'Страница', href, parent, showOptionsButton, icon, isLoading, width, height } = props;
+
+    const dispatch = useAppDispatch();
 
     const [options, setOptions] = useState<{ isOptionsOpen: boolean }>(() => ({ isOptionsOpen: false }));
 
@@ -62,7 +66,9 @@ const PageLink = (props: LinkProps) => {
                                     <MaterialIcon name={buttonIconName}/>
                                 </Button>}
                             {icon && <MaterialIcon name={icon}/>}
-                            <Link sx={{ textDecoration: 'none', ml: 1 }}  href={"#/page/" + href}>
+                            <Link onClick={() => {
+                                dispatch(pageActions.removePage());
+                            }} sx={{ textDecoration: 'none', ml: 1 }} href={"#/page/" + href}>
                                 {label}
                             </Link></Stack>
                         {isMouseHover && showOptionsButton &&

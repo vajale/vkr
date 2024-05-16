@@ -21,11 +21,7 @@ const PageWrapper = ({ id }: WrapperProps) => {
         if (isSuccess) {
             dispatch(pageActions.setPage(data));
         }
-    }, [data, isLoading, isSuccess, id]);
-
-    if (isLoading) {
-        return <SkeletonPage/>;
-    }
+    }, [data, isSuccess, id]);
 
     if (page === undefined) {
         return (
@@ -35,9 +31,13 @@ const PageWrapper = ({ id }: WrapperProps) => {
         );
     }
 
+    if (isLoading) {
+        return <SkeletonPage/>;
+    }
+
     return (
         <StyledPageView>
-            {isSuccess ? <PageView isLoading={isLoading}/> : <DefaultPage/>}
+            {isSuccess ? <PageView id={id} page={page} isLoading={isLoading}/> : <DefaultPage/>}
         </StyledPageView>
     );
 };
