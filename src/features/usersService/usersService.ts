@@ -1,4 +1,4 @@
-import { firebaseApi } from "@/components/PageView/model/api/api";
+import { firebaseApi } from "@/api";
 import { mockUsersData } from "@/utils/mock/mockdata";
 import { doc, getDoc } from "firebase/firestore";
 import { firestoreDB } from "@/components/FireBase";
@@ -9,20 +9,20 @@ export const usersService = firebaseApi.injectEndpoints({
         getActiveUsers: builder.query<User[], number>({
             queryFn: () => {
                 return { data: mockUsersData };
-            }
+            },
         }),
         getUser: builder.query<User>({
-            async queryFn () {
+            async queryFn() {
                 // const userId = useAppSelector(selectUser);
                 // console.log(userId);
 
-                const blogRef = doc(firestoreDB, "users", 'n8diMEUERjVuQti5qgvwYSDXYmg1');
+                const blogRef = doc(firestoreDB, "users", "n8diMEUERjVuQti5qgvwYSDXYmg1");
 
                 const queryData = await getDoc(blogRef)
-                    .then(doc => {
+                    .then((doc) => {
                         return doc;
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.log(error);
                     });
 
@@ -31,12 +31,12 @@ export const usersService = firebaseApi.injectEndpoints({
 
                 return {
                     data: {
-                        id: 'n8diMEUERjVuQti5qgvwYSDXYmg1',
+                        id: "n8diMEUERjVuQti5qgvwYSDXYmg1",
                         pages: userData.pages,
-                        username: userData.username
-                    }
+                        username: userData.username,
+                    },
                 };
-            }
+            },
         }),
         // addActiveUser: builder.mutation<User, Partial<User>>({
         //     queryFn: async (user) => {
@@ -52,8 +52,7 @@ export const usersService = firebaseApi.injectEndpoints({
         //         // }
         //     }
         // })
-    })
+    }),
 });
 
-export const { useGetActiveUsersQuery, useGetUserQuery } =
-    usersService;
+export const { useGetActiveUsersQuery, useGetUserQuery } = usersService;
