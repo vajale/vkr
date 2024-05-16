@@ -4,23 +4,28 @@ import { matchPath, useLocation, useNavigate } from "react-router-dom";
 
 import { StyledLandingRouteButtons } from "./styled";
 import Constants from "@/constants";
+import { Link } from "@mui/material";
 
 const ROUTE_BUTTONS = [
     {
         title: "главная",
         URL: Constants.NAVIGATION.LANDING.MAIN,
+        shortCut: Constants.URL.MAIN,
     },
     {
         title: "тарифы",
         URL: Constants.NAVIGATION.LANDING.PRICES,
+        shortCut: Constants.URL.PRICES,
     },
     {
         title: "контакты",
         URL: Constants.NAVIGATION.LANDING.CONTACT,
+        shortCut: Constants.URL.CONTACT,
     },
     {
         title: "о нас",
         URL: Constants.NAVIGATION.LANDING.ABOUT,
+        shortCut: Constants.URL.ABOUT,
     },
 ];
 
@@ -30,24 +35,22 @@ const LandingRoute = () => {
     const handleClick = (url: string) => {
         navigate(url, { replace: true });
     };
+
     const checkIsActive = (url: string) => {
-        console.log(matchPath(url, location.pathname) != null);
-        console.log(url, location.pathname);
-        console.log(" ");
         return matchPath(url, location.pathname);
     };
 
     return (
         <StyledLandingRouteButtons>
             {ROUTE_BUTTONS.map((button) => (
-                <div
+                <Link
                     className={checkIsActive(button.URL) != null ? "active" : ""}
                     key={button.title}
                     onClick={() => {
-                        handleClick(button.URL);
+                        handleClick(button.shortCut);
                     }}>
                     <Typography>{button.title}</Typography>
-                </div>
+                </Link>
             ))}
         </StyledLandingRouteButtons>
     );

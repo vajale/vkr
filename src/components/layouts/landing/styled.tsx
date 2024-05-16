@@ -5,4 +5,13 @@ export const StyledLandingLayout = styled("div")(() => ({
         "linear-gradient(00deg, rgba(183,183,183,1) 0%, rgba(225,225,225,1) 10%, rgba(225,225,225,1) 90%, rgba(183,183,183,1) 100%)",
     width: "100vw",
     height: "100vh",
+    flexDirection: "column",
+    display: "flex",
+
+    ".layout-alarm": {
+        position: "fixed",
+        width: "25%",
+        top: "30%",
+        left: "30%",
+    },
 }));

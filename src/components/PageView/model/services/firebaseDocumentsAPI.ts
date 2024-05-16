@@ -1,8 +1,9 @@
 import { firebaseAuth, firebaseDatabase } from "@/components/FireBase";
 
 import { type Page } from "../types";
-import { firebaseApi } from "@/components/PageView/model/api/api";
+import { firebaseApi } from "@/api";
 import { ref, set, get, child, update, push } from "firebase/database";
+
 
 function isPage (obj: any): obj is Page {
     return (
@@ -105,7 +106,6 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                     data: validResponses
                 };
 
-                return null;
             },
         }),
         updatePageBlocks: builder.mutation<Page, { newPage: Page }>({

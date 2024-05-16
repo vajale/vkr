@@ -36,7 +36,9 @@ export interface IExtendedTheme extends ThemeOptions {
         sizeText32: string;
         sizeText36: string;
         sizeText40: string;
+        sizeText48: string;
         sizeText56: string;
+        sizeText64: string;
         sizeText72: string;
         sizeText96: string;
     };
