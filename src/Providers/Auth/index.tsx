@@ -1,12 +1,19 @@
-import React, { useEffect } from "react";
-import { useFirebaseAuth } from "@/components/FireBase";
+import React, { useMemo } from "react";
+import { useAppSelector } from "@/store/hooks";
+import { selectUser } from "@/store/slices/userSlice";
+import { InitialRoute } from "@/routes/InitializingRoute";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { isAuth } = useFirebaseAuth();
+    const user = useAppSelector(selectUser);
 
-    useEffect(() => {
-        console.log("Autorize process: ", isAuth);
-    }, []);
+    const isInitialized = useMemo(() => {
+        return user !== "initial";
+    }, [user]);
 
-    return <div>{children}</div>;
+    return useMemo(() => {
+        if (isInitialized) {
+            return <div>{children}</div>;
+        }
+        return <InitialRoute />;
+    }, [isInitialized]);
 };
