@@ -14,6 +14,9 @@ export const userSlice = createSlice({
         setAuthData: (state, action: PayloadAction<User>) => {
             state.user = action.payload;
         },
+        initializeUser: (state) => {
+            state.user = undefined;
+        },
         logout: (state) => {
             state.user = undefined;
             state._isInitialized = false;
@@ -26,13 +29,13 @@ export const userSlice = createSlice({
             //     if(action.payload.id === item)
             //
             // })
-        }
+        },
     },
     selectors: {
         selectUserAuth: (state) => state?.user !== undefined,
         selectUser: (state) => state?.user,
-        selectUserPages: (state) => state.user?.pages ?? []
-    }
+        selectUserPages: (state) => state.user?.pages,
+    },
 });
 
 export const { selectUserAuth } = userSlice.selectors;
