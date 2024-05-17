@@ -3,7 +3,7 @@ name: react gh-pages workflows ✨
 on:
   push:
     branches:
-      - master
+      - host
 
 jobs:
   build-and-deploy:
