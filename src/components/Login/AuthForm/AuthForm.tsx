@@ -23,14 +23,13 @@ interface AuthProps {
 const AuthForm = (props: AuthProps) => {
     const { onRegisterClick, onAuth } = props;
     const { handleSubmit, register, reset, formState: { isValid } } = useForm<IAuthForm>({ mode: "onChange" });
-    const { signInUser, isLoading } = useFirebaseAuth();
+    const { signInUser } = useFirebaseAuth();
 
     const onSubmit: SubmitHandler<IAuthForm> = async (data) => {
         const { password, email } = data;
         await signInUser(email, password);
-
-        reset();
-        onAuth();
+        // onAuth();
+        // reset();
     };
 
     const [showPassword, setShowPassword] = React.useState(false);
@@ -61,7 +60,6 @@ const AuthForm = (props: AuthProps) => {
                                id="outlined-required"
                                fullWidth
                                placeholder="Почта"
-                               disabled={isLoading}
                     />
                     <Input
                         className={"input"}
@@ -69,7 +67,6 @@ const AuthForm = (props: AuthProps) => {
                         {...register("password", { required: "password is required" })}
                         id="outlined-adornment-password"
                         type={showPassword ? 'text' : 'password'}
-                        disabled={isLoading}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
@@ -82,13 +79,13 @@ const AuthForm = (props: AuthProps) => {
                             </InputAdornment>
                         }
                     />
-                    <StyledLoginButton disabled={isLoading} type={'submit'} sx={{ mt: 7 }} fullWidth>
+                    <StyledLoginButton type={'submit'} sx={{ mt: 7 }} fullWidth>
                         <Typography>
                             Войти
                         </Typography>
                     </StyledLoginButton>
                     <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
-                        <Button disabled={isLoading} variant={'outlined'} sx={{ border: 'none' }} sx={{ mt: 7 }} onClick={onRegisterClick}>
+                        <Button variant={'outlined'} sx={{ border: 'none' }} sx={{ mt: 7 }} onClick={onRegisterClick}>
                             <Typography>Зарегистрироваться</Typography>
                         </Button>
                     </Stack>

@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { selectUser } from "@/store/slices/userSlice";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Button, Popover, Typography } from "@mui/material";
+import { Button, CircularProgress, Popover, Typography } from "@mui/material";
 import { AccountButton } from "@/components/Login/AccountButton";
 
 import { useLazyGetUserProfileDataQuery } from "@/api/userProfile";
@@ -16,13 +16,12 @@ const AuthProfilePopover = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | EventTarget>(null);
     const [fileToUpload, setFileToUpload] = useState<null | File>(null);
     const userState = useAppSelector(selectUser);
-    const [getUserProfile, { data: profilePicture }] = useLazyGetUserProfileDataQuery();
+    const [getUserProfile, { data: profilePicture, isLoading }] = useLazyGetUserProfileDataQuery();
 
     const { signOutUser } = useFirebaseAuth();
     const user = useSelector(selectUser);
 
     const handleChange = (file: File) => {
-        console.log(file);
         setFileToUpload(file);
     };
 
@@ -55,8 +54,11 @@ const AuthProfilePopover = () => {
     }, [profilePicture, fileToUpload]);
 
     const Image = useMemo(() => {
+        if (isLoading) {
+            return <CircularProgress className={"user-progress"} />;
+        }
         return <img src={authProfileUrl} alt={"user-photo"} />;
-    }, [authProfileUrl]);
+    }, [authProfileUrl, isLoading]);
 
     return (
         <div>
