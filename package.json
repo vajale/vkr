@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack serve --open",
     "build": "webpack --config webpack.config.js",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build && gh-pages -d dist -u 'vajale <i1ov-wot@yandex.ru>'"
   },
   "eslintConfig": {
     "extends": "react-app"
