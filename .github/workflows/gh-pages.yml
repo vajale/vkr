@@ -1,21 +1,23 @@
+---
 name: Deploy to GitHub Pages
-
 on:
   push:
     branches:
-      - host  # или ветка, с которой вы хотите деплоить
-
+      - host
 jobs:
   build:
     runs-on: ubuntu-latest
-
   steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v2
     - name: Deploy
-      run: |
+      run: >
         yarn install
+
         git config --global user.email 'i1ov-wot@yandex.ru'
+
         git config --global user.name 'vajale'
+
         git remote set-url origin https://${{ secrets.PAT }}@github.com/vajale/vkr.git
+
         CI=false && yarn deploy
