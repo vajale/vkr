@@ -1,23 +1,35 @@
----
 name: Deploy to GitHub Pages
+
 on:
   push:
     branches:
-      - host
+      - host  # или ветка, с которой вы хотите деплоить
+
 jobs:
   build:
     runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v2
-    - name: Deploy
-      run: >
-        yarn install
 
-        git config --global user.email 'i1ov-wot@yandex.ru'
+    steps:
+      - name: Checkout repository
+      - uses: actions/checkout@v3
 
-        git config --global user.name 'vajale'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
-        git remote set-url origin https://${{ secrets.PAT }}@github.com/vajale/vkr.git
+      - name: Install dependencies
+        run: npm install
 
-        CI=false && yarn deploy
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        run: |
+          yarn install
+          git config --global user.email 'i1ov-wot@yande.ru'
+          git config --global user.name 'vajale'
+          git remote set-url origin https://${{ secrets.PAT }}@github.com/vajale/vkr.git
+          CI=false && yarn deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
