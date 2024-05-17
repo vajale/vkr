@@ -27,7 +27,7 @@ jobs:
       - name: Deploy to GitHub Pages
         run: |
           yarn install
-          git config --global user.email 'i1ov-wot@yande.ru'
+          git config --global user.email 'i1ov-wot@yandex.ru'
           git config --global user.name 'vajale'
           git remote set-url origin https://${{ secrets.PAT }}@github.com/vajale/vkr.git
           CI=false && yarn deploy
