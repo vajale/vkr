@@ -6,5 +6,6 @@ export interface User {
 }
 
 export interface IUserSchema {
-    user?: User | "initial";
+    user?: User;
+    _isInitialized: boolean
 }

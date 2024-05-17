@@ -13,6 +13,7 @@ import { useFirebaseAuth } from "@/components/FireBase";
 import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { StyledLoginButton } from "@/components/Login/AuthForm/styled";
+import { useCreateUserMutation } from "@/features/usersService/usersService";
 
 interface FormProps {
     onAuthFormClick: () => void,
@@ -24,20 +25,20 @@ const RegisterForm = (props: FormProps) => {
 
     const [showPassword, setShowPassword] = React.useState(false);
 
-    const { handleSubmit, register, reset, formState: { isValid } } = useForm<IRegisterForm>({ mode: "onChange" });
-
+    const { handleSubmit, register, reset, formState: { errors, isValid } } = useForm<IRegisterForm>({ mode: "onChange" });
     const { createUser } = useFirebaseAuth();
+
     const handleClickShowPassword = () => {
         setShowPassword((show) => !show);
     };
 
     const onSubmit: SubmitHandler<IRegisterForm> = async (data) => {
         const { password, email } = data;
-        console.log(data);
-        await createUser(email, password);
 
-        reset();
-        onRegisterFormClick();
+        await createUser(email, password, data).then(() => {
+            reset();
+            onRegisterFormClick();
+        });
     };
 
     return (
@@ -46,25 +47,24 @@ const RegisterForm = (props: FormProps) => {
             <Box mt={4}>
                 <Stack gap={1}>
                     <TextField
-                        error={!isValid}
+                        error={!!errors.email}
                         {...register("email", {
-                            required: "email is required",
+                            required: "Email is required",
                             minLength: {
                                 value: 5,
                                 message: "Минимум 5 букв"
                             }
                         })}
                         required
-                        id="outlined-required"
                         fullWidth
                         variant={'standard'}
                         placeholder="Почта"
+                        helperText={errors.email?.message}
                     />
                     <Input
-                        error={!isValid}
+                        error={!!errors.password}
                         fullWidth
-                        {...register("password", { required: "password is required" })}
-                        id="outlined-adornment-password"
+                        {...register("password", { required: "Password is required" })}
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Пароль"
                         endAdornment={
@@ -73,42 +73,50 @@ const RegisterForm = (props: FormProps) => {
                                     aria-label="toggle password visibility"
                                     onClick={handleClickShowPassword}
                                 >
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    {showPassword ? <VisibilityOff/> : <Visibility/>}
                                 </IconButton>
                             </InputAdornment>}
+                        helperText={errors.password?.message}
                     />
-                    {/* <TextField */}
-                    {/*    fullWidth */}
-                    {/*    variant={'standard'} */}
-                    {/*    label="Имя" */}
-                    {/*    placeholder="Имя" */}
-                    {/* /> */}
-                    {/* <TextField */}
-                    {/*    fullWidth */}
-                    {/*    variant={'standard'} */}
-                    {/*    label="Фамиля" */}
-                    {/*    placeholder="Фамиля" */}
-                    {/* /> */}
-                    {/* <TextField */}
-                    {/*    fullWidth */}
-                    {/*    variant={'standard'} */}
-                    {/*    label="Телефон" */}
-                    {/*    placeholder="Телефон" */}
-                    {/* /> */}
+                    <TextField
+                        {...register("firstName", { required: "First name is required" })}
+                        fullWidth
+                        variant={'standard'}
+                        label="Имя"
+                        placeholder="Имя"
+                        error={!!errors.firstName}
+                        helperText={errors.firstName?.message}
+                    />
+                    <TextField
+                        {...register("lastName", { required: "Last name is required" })}
+                        fullWidth
+                        variant={'standard'}
+                        label="Фамиля"
+                        placeholder="Фамиля"
+                        error={!!errors.lastName}
+                        helperText={errors.lastName?.message}
+                    />
+                    <TextField
+                        {...register("phone", { required: "Phone is required" })}
+                        fullWidth
+                        variant={'standard'}
+                        label="Телефон"
+                        placeholder="Телефон"
+                        error={!!errors.phone}
+                        helperText={errors.phone?.message}
+                    />
                 </Stack>
             </Box>
             <StyledLoginButton type={'submit'} sx={{ mt: 3 }} fullWidth>
-                <Typography>
-                    Зарегистрироваться
-                </Typography>
+                <Typography>Зарегистрироваться</Typography>
             </StyledLoginButton>
             <Stack mt={2} flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
                 <Button variant={'outlined'} sx={{ border: 'none' }} onClick={onAuthFormClick}>
                     <Typography>Войти</Typography>
                 </Button>
             </Stack>
-            {/* <SwitchButton onClick={onAuthClick} isValid={isValid} formType={ButtonType.register}/> */}
-        </form>);
+        </form>
+    );
 };
 
 export default RegisterForm;

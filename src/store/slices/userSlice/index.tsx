@@ -3,7 +3,8 @@ import { type User, type IUserSchema } from "@/store/slices/userSlice/types";
 import { type Page } from "@/components/PageView/model/types";
 
 const initialState: IUserSchema = {
-    user: undefined
+    user: undefined,
+    _isInitialized: false
 };
 
 export const userSlice = createSlice({
@@ -13,14 +14,9 @@ export const userSlice = createSlice({
         setAuthData: (state, action: PayloadAction<User>) => {
             state.user = action.payload;
         },
-        initAuthData: (state) => {
-            // const user = localStorage.getItem(USER_LOCALSTORAGE_KEY);
-            // if (user) {
-            //     state.authData = JSON.parse(user);
-            // }
-        },
         logout: (state) => {
             state.user = undefined;
+            state._isInitialized = false;
         },
         // removePage: (state, action: PayloadAction<string>) => {
         //     state.user.pages.map(page => page.id !== action.payload);
@@ -35,7 +31,7 @@ export const userSlice = createSlice({
     selectors: {
         selectUserAuth: (state) => state?.user !== undefined,
         selectUser: (state) => state?.user,
-        selectUserPages: (state) => state.user?.pages
+        selectUserPages: (state) => state.user?.pages ?? []
     }
 });
 

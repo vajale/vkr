@@ -104,6 +104,7 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
 
                 const pagesResponses = await Promise.all(promises);
                 const validResponses = pagesResponses.filter(response => response !== null);
+                console.log(validResponses);
 
                 return {
                     data: validResponses
@@ -255,12 +256,13 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
 });
 
 export const {
-    useCreateNewPageMutation,
     useLazyFetchPagesQuery,
+    useLazyUpdatePageRealtimeQuery,
+    useCreateNewPageMutation,
     useFetchPageDataQuery,
     useUpdatePageVisualMutation,
     useUpdatePageBlocksMutation,
-    useLazyUpdatePageRealtimeQuery,
-    useRemovePageMutation
+    useRemovePageMutation,
+    useFetchPagesQuery
 } =
     firebaseDocumentsAPI;

@@ -1,8 +1,10 @@
 import { firebaseApi } from "@/api";
 import { mockUsersData } from "@/utils/mock/mockdata";
-import { doc, getDoc } from "firebase/firestore";
-import { firestoreDB } from "@/components/FireBase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { firebaseAuth, firestoreDB } from "@/components/FireBase";
 import { type User } from "@/store/slices/userSlice/types";
+import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 export const usersService = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -10,6 +12,52 @@ export const usersService = firebaseApi.injectEndpoints({
             queryFn: () => {
                 return { data: mockUsersData };
             },
+        }),
+        login: builder.mutation<User, { email: string, password: string }>({
+            queryFn: async ({ email, password }) => {
+                try {
+                    const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
+                    const user = userCredential.user;
+
+                    console.log("Вход выполнен");
+
+                    return {
+                        id: user.uid,
+                        username: user.email,
+                    };
+                } catch (error: any) {
+                    console.error("Не удалось войти");
+                    return error.message;
+                }
+            }
+        }),
+        createUser: builder.mutation<User, { email: string, password: string, registerData: IRegisterForm }>({
+            queryFn: async ({ email, password, registerData }) => {
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+                    const user = userCredential.user;
+                    const userId = user.uid;
+
+                    const userDocRef = doc(firestoreDB, 'users', userId);
+                    const userData = {
+                        user: {
+                            firstName: registerData.firstName,
+                            lastName: registerData.lastName,
+                            email: user.email,
+                            phoneNumber: registerData.phone
+                        },
+                        pages: []
+                    };
+
+                    await setDoc(userDocRef, userData);
+
+                    console.log("регистрация выполнена");
+
+                    return { data: userId };
+                } catch (error) {
+                    return { error: { message: error.message } };
+                }
+            }
         }),
         getUser: builder.query<User, { userId: string }>({
             queryFn: async (_arg) => {
@@ -40,4 +88,9 @@ export const usersService = firebaseApi.injectEndpoints({
     }),
 });
 
-export const { useGetActiveUsersQuery, useGetUserQuery } = usersService;
+export const {
+    useGetActiveUsersQuery,
+    useGetUserQuery,
+    useCreateUserMutation,
+    useLoginMutation
+} = usersService;

@@ -94,9 +94,10 @@ const PageLink = (props: LinkProps) => {
                                 </Link></Stack>
                             {isMouseHover && showOptionsButton && (
                                 <>
-                                    <Button sx={{ minWidth: 20 }}><MaterialIcon name={"MdAdd"}/></Button><Button
-                                    onClick={handleDeletePage} sx={{ minWidth: 20 }}><MaterialIcon
-                                    name={"MdDelete"}/></Button>
+                                    <Stack flexDirection={'row'}>
+                                        <Button onClick={handleDeletePage} sx={{ minWidth: 20 }}><MaterialIcon name={"MdDelete"}/></Button>
+                                        <Button sx={{ minWidth: 20 }}><MaterialIcon name={"MdAdd"}/></Button>
+                                    </Stack>
                                 </>
                             )}
                         </Stack>
