@@ -9,6 +9,15 @@ export const StyledPaper = styled("div")(() => ({
     gap: "10px",
     alignItems: "center",
 
+    ".user-progress": {
+        width: "200px !important",
+        height: "200px !important",
+        display: "block",
+        margin: "auto",
+        top: "20px",
+        position: "relative",
+    },
+
     ".user-wrapper": {
         width: "280px",
         display: "flex",
