@@ -1,16 +1,43 @@
 import { styled } from "@mui/material";
 
 export const StyledPaper = styled("div")(() => ({
-    width: "370px",
+    width: "308px",
+    height: "400px",
     padding: "16px",
     display: "flex",
     flexDirection: "column",
-    gap: "20px",
+    gap: "10px",
+    alignItems: "center",
+
+    ".user-wrapper": {
+        width: "280px",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    ".user-photo-wrapper": {
+        width: "280px",
+        height: "280px",
+        border: "1px solid #838383",
+        borderRadius: 8,
+
+        img: {
+            width: "280px",
+            height: "280px",
+            maxWidth: "280px",
+            maxHeight: "280px",
+        },
+    },
+    ".logout": {
+        padding: "0",
+        width: "fit-content",
+    },
 }));
 
 export const StyledFileBtn = styled("div")(() => ({
     display: "flex",
     flexDirection: "row",
+    maxWidth: "278px",
 
     ".upload-icon": {
         width: "fit-content",

@@ -1,12 +1,17 @@
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+} from "firebase/auth";
 
 import { useAppDispatch } from "@/store/hooks";
 import { selectUserAuth, userActions } from "store/slices/userSlice";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { firebaseAuth } from ".";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { User } from "@/store/slices/userSlice/types";
+import { type User } from "@/store/slices/userSlice/types";
 
 export const useFirebaseAuth = () => {
     const dispatch = useAppDispatch();
@@ -22,7 +27,7 @@ export const useFirebaseAuth = () => {
 
             const userData: User = {
                 id: user.uid,
-                username: user.email
+                username: user.email,
             };
 
             firebaseUser = userData;
@@ -35,9 +40,16 @@ export const useFirebaseAuth = () => {
         };
     }, []);
 
-    const handleCreateFirebaseUserWithEmailAndPassword = async (email: string, password: string) => {
-        console.log('happen shit');
-        const { user, providerId } = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+    const handleCreateFirebaseUserWithEmailAndPassword = async (
+        email: string,
+        password: string,
+    ) => {
+        console.log("happen shit");
+        const { user, providerId } = await createUserWithEmailAndPassword(
+            firebaseAuth,
+            email,
+            password,
+        );
     };
 
     const handleFirebaseSignInWithEmailAndPassword = async (email: string, password: string) => {
@@ -52,9 +64,15 @@ export const useFirebaseAuth = () => {
 
     return {
         isAuth,
-        createUser: async (email: string, password: string) => { await handleCreateFirebaseUserWithEmailAndPassword(email, password); },
-        signInUser: async (email: string, password: string) => { await handleFirebaseSignInWithEmailAndPassword(email, password); },
-        signOutUser: async () => { await handleFirebaseSignOut(); },
+        createUser: async (email: string, password: string) => {
+            await handleCreateFirebaseUserWithEmailAndPassword(email, password);
+        },
+        signInUser: async (email: string, password: string) => {
+            await handleFirebaseSignInWithEmailAndPassword(email, password);
+        },
+        signOutUser: async () => {
+            await handleFirebaseSignOut();
+        },
         authState,
         firebaseUser,
     };

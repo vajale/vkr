@@ -4,7 +4,7 @@ import { MaterialIcon } from "@/assets/Icon";
 import { useSetUserProfileDataMutation } from "@/api/userProfile";
 import { firebaseAuth } from "@/components/FireBase";
 
-export const FileUpload = () => {
+export const FileUpload = ({ handleChangeFile }: { handleChangeFile: (file: File) => void }) => {
     const fileInputElement = useRef<null | HTMLInputElement>(null);
     const [fileName, setFileName] = useState("");
     const [fileValue, setFileValue] = useState<null | File>();
@@ -22,6 +22,7 @@ export const FileUpload = () => {
         if (_fileName && _fileValue?.length) {
             setFileName(_fileName ?? "");
             setFileValue(_fileValue[0]);
+            handleChangeFile(_fileValue[0]);
         }
     };
 
