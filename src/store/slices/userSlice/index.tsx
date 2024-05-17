@@ -4,7 +4,7 @@ import { type Page } from "@/components/PageView/model/types";
 
 const initialState: IUserSchema = {
     user: undefined,
-    _isInitialized: false
+    _isInitialized: false,
 };
 
 export const userSlice = createSlice({
@@ -14,12 +14,14 @@ export const userSlice = createSlice({
         setAuthData: (state, action: PayloadAction<User>) => {
             state.user = action.payload;
         },
+        // Это чтобы при первом входе не директило нахуй с сайта, не надо в false кидатьы
+        // Смотри если че AuthProvider
         initializeUser: (state) => {
             state.user = undefined;
+            state._isInitialized = true;
         },
         logout: (state) => {
             state.user = undefined;
-            state._isInitialized = false;
         },
         // removePage: (state, action: PayloadAction<string>) => {
         //     state.user.pages.map(page => page.id !== action.payload);
@@ -35,10 +37,11 @@ export const userSlice = createSlice({
         selectUserAuth: (state) => state?.user !== undefined,
         selectUser: (state) => state?.user,
         selectUserPages: (state) => state.user?.pages,
+        selectIsInitialized: (state) => state._isInitialized,
     },
 });
 
-export const { selectUserAuth } = userSlice.selectors;
+export const { selectUserAuth, selectIsInitialized } = userSlice.selectors;
 export const { selectUser, selectUserPages } = userSlice.selectors;
 export default userSlice.reducer;
 
