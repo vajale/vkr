@@ -3,18 +3,17 @@ import { type DocumentsPageSchema } from "./types";
 import {
     type DocumentBlock,
     type DocumentBlockType,
-    type Page
+    type Page,
 } from "@/components/PageView/model/types";
 import { documentObjectHelper } from "@/utils/documentObjectHelper";
-import { mockPage2 } from "@/utils/mock/mockdata";
 
 const initialState: DocumentsPageSchema = {
     pageData: undefined,
     isPageEdit: false,
     style: {
         header: false,
-        logo: "none"
-    }
+        logo: "none",
+    },
 };
 
 export const pageSlice = createSlice({
@@ -48,7 +47,7 @@ export const pageSlice = createSlice({
 
                     return item;
                 });
-            }
+            },
         ),
         updateDocumentBlock: create.reducer((state, action: PayloadAction<DocumentBlock>) => {
             state.pageData.documentBlocks = state.pageData?.documentBlocks?.map((item) => {
@@ -57,18 +56,20 @@ export const pageSlice = createSlice({
                 if (block) {
                     return {
                         ...item,
-                        ...action.payload
+                        ...action.payload,
                     };
                 }
                 return item;
             });
         }),
-        updatePageHeader: create.reducer((state, action: PayloadAction<typeof state.pageData.visual>) => {
-            state.pageData.visual = {
-                ...state.pageData.visual,
-                ...action.payload,
-            };
-        }),
+        updatePageHeader: create.reducer(
+            (state, action: PayloadAction<typeof state.pageData.visual>) => {
+                state.pageData.visual = {
+                    ...state.pageData.visual,
+                    ...action.payload,
+                };
+            },
+        ),
         addDocumentBlock: create.reducer((state, action: PayloadAction<DocumentBlockType>) => {
             const type = action.payload;
             const document = documentObjectHelper(type);
@@ -78,14 +79,16 @@ export const pageSlice = createSlice({
             state.pageData.documentBlocks = [...state.pageData.documentBlocks, document];
         }),
         removeDocumentBlock: create.reducer((state, action: PayloadAction<{ id: string }>) => {
-            state.pageData.documentBlocks = state.pageData?.documentBlocks?.filter((item) => item.id !== action.payload.id);
+            state.pageData.documentBlocks = state.pageData?.documentBlocks?.filter(
+                (item) => item.id !== action.payload.id,
+            );
         }),
         updatePage: create.reducer((state, action: PayloadAction<Page>) => {
             state.pageData = { ...state.pageData, ...action.payload };
         }),
         removePage: create.reducer((state, action) => {
             state.pageData = undefined;
-        })
+        }),
     }),
     selectors: {
         selectPage: (state) => state.pageData,
@@ -95,12 +98,17 @@ export const pageSlice = createSlice({
         selectPageIsEdit: (state) => state.isPageEdit,
         selectPageHeaderFlag: (state) => state.style.header,
         selectPageLogo: (state) => state.style.logo,
-        selectEditDocumentId: (state) => state.editDocumentId
-    }
+        selectEditDocumentId: (state) => state.editDocumentId,
+    },
 });
 
 export const { actions: pageActions } = pageSlice;
 export const { reducer: pageReducer } = pageSlice;
 export const {
-    selectPage, selectPageHeaderFlag, selectEditDocumentId, selectPageDocuments, selectPageName, selectPageBackground
+    selectPage,
+    selectPageHeaderFlag,
+    selectEditDocumentId,
+    selectPageDocuments,
+    selectPageName,
+    selectPageBackground,
 } = pageSlice.selectors;

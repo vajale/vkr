@@ -2,40 +2,44 @@ import { Button, Skeleton, Stack, Typography } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
 import PageLink from "@/components/PageLink/PageLink";
 import {
-    useCreateNewPageMutation, useFetchPagesQuery,
-    useLazyFetchPagesQuery, useRemovePageMutation
+    useCreateNewPageMutation, useFetchPagesQuery, useRemovePageMutation
 } from "@/components/PageView/model/services/firebaseDocumentsAPI";
 import { MaterialIcon } from "@/assets/Icon";
 import { useAppSelector } from "@/store/hooks";
 import { selectUserPages } from "@/store/slices/userSlice";
+import Constants from "@/constants";
+import { useNavigate } from "react-router-dom";
 
 interface ListProps {
     onPageChanged: () => void,
-    pageIds: string[]
+    pages: string[]
 }
 
 const PagesList = (props: ListProps) => {
-    const { onPageChanged, pageIds } = props;
+    const { onPageChanged, pages } = props;
 
-    const pages = useAppSelector(selectUserPages);
+    const navigate = useNavigate();
+
     const { data: pagesData, isSuccess: pagesSuccess, isLoading: isPagesLoading } = useFetchPagesQuery(pages);
     const [createPage] = useCreateNewPageMutation({});
     const [removePage] = useRemovePageMutation({});
 
-    if (pages === undefined) {
-        return null;
-    }
-
     const handleAddPageClick = () => {
-        void createPage({}).then(() => { onPageChanged(); });
+        void createPage({}).then((data) => {
+            onPageChanged();
+});
     };
 
     const handlePageRemove = (pageId: string) => {
         void removePage({ pageId }).then(() => { onPageChanged(); });
     };
 
+    const handleMainButton = () => {
+        navigate(Constants.URL.HOME);
+    };
+
     const pagesRender = useMemo(() => {
-        if (pages.length == 0) {
+        if (pages.length === 0) {
             return null;
         }
 
@@ -59,10 +63,19 @@ const PagesList = (props: ListProps) => {
                           icon={"MdSummarize"} id={page.id}/>
             ));
         }
-    }, [pagesData, pageIds]);
+    }, [pagesData]);
 
     return (
         <>
+            <Typography className={"main-button"} mb={4} variant={'h5'} fontWeight={900}
+                        onClick={handleMainButton}>
+                СЕЙФ +
+            </Typography>
+            <PageLink id={''} href={'/calendar'} label={'Поиск'} icon={"MdSearch"}/>
+            <Stack mt={4}>
+                <PageLink id={''} href={'/calendar'} label={'Календарь'} icon={"MdCalendarToday"}/>
+                <PageLink id={''} href={'/calendar'} label={'Участники'} icon={"MdGroup"}/>
+            </Stack>
             <Stack mt={2} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
                 <Typography>Страницы</Typography>
                 <Button sx={{ minWidth: 20 }} onClick={handleAddPageClick}><MaterialIcon name={'MdAdd'}/></Button>

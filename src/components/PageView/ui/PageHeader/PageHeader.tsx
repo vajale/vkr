@@ -16,20 +16,20 @@ const PageHeader = (props: HeaderProps) => {
 
     const dispatch = useAppDispatch();
 
-    const handleHeaderContentChange = (e:  React.FocusEvent<HTMLSpanElement, Element>) => {
-        const content = e.currentTarget.textContent!
+    const handleHeaderContentChange = (e: React.FocusEvent<HTMLSpanElement, Element>) => {
+        const content = e.currentTarget.textContent!;
         dispatch(pageActions.updatePageHeader({ name: content }));
     };
 
     return (
         <div>
-            <div
+            {background && <div
                 style={{
                     borderRadius: 7,
                     height: 200,
                     backgroundColor: "orange",
                 }}>
-            </div>
+            </div>}
 
             <Typography contentEditable={true} variant={"h4"}
                         sx={{ mt: 7, mb: 7, ml: 11, fontWeight: 700 }}
