@@ -8,17 +8,17 @@ interface HeaderProps {
     text: string;
     background?: string;
     className?: string;
-    onContentChange?: () => void;
+    onContentChange?: (content: string) => void;
 }
 
 const PageHeader = (props: HeaderProps) => {
     const { text, className, background, onContentChange } = props;
 
-    const dispatch = useAppDispatch();
-
     const handleHeaderContentChange = (e: React.FocusEvent<HTMLSpanElement, Element>) => {
         const content = e.currentTarget.textContent!;
-        dispatch(pageActions.updatePageHeader({ name: content }));
+        if (onContentChange) {
+            onContentChange(content);
+        }
     };
 
     return (
