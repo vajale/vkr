@@ -5,11 +5,11 @@ import { StyledHeaderEnd } from "./styled";
 import Users from "@/components/Users/Users";
 
 export const AppHeaderEnd: React.FunctionComponent = () => {
-   return (
-      <StyledHeaderEnd>
-          <Users/>
-         <MenuMainButtons />
-         <ColorModeButton/>
-      </StyledHeaderEnd>
-   );
+    return (
+        <StyledHeaderEnd>
+            <Users/>
+            <MenuMainButtons/>
+            <ColorModeButton/>
+        </StyledHeaderEnd>
+    );
 };

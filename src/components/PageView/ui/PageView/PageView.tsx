@@ -6,7 +6,7 @@ import { Paper } from "@mui/material";
 import {
     useUpdatePageBlocksMutation,
     useUpdatePageVisualMutation,
-} from "@/components/PageView/model/services/firebaseDocumentsAPI";
+} from "@/api/firebasePageAPI/firebaseDocumentsAPI";
 import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
 import DocumentBlocksList from "@/components/PageView/ui/PageView/DocumentBlocksList";
 import { type Page } from "../../model/types";
@@ -44,18 +44,7 @@ const PageView = (props: ViewProps) => {
     };
 
     const headerText = page.visual?.name ?? 'Новая страница';
-
-    if (page.documentBlocks === undefined) {
-        return (
-            <StyledPageView>
-                <Paper
-                    className={"page-view-paper"}
-                    sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
-                    <PageHeader text={headerText} />
-                </Paper>
-            </StyledPageView>
-        );
-    }
+    const isHaveDocBlocks = page.documentBlocks !== undefined;
 
     return (
         <StyledPageView>
@@ -63,7 +52,7 @@ const PageView = (props: ViewProps) => {
                 className={"page-view-paper"}
                 sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
                 <PageHeader onContentChange={handleHeaderChange} text={headerText} background={page.visual?.background} />
-                <DocumentBlocksList canEdit docs={page.documentBlocks} />
+                {isHaveDocBlocks && <DocumentBlocksList canEdit docs={page.documentBlocks}/>}
             </Paper>
         </StyledPageView>
     );

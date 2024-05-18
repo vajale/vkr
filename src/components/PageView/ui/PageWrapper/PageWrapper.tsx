@@ -1,4 +1,4 @@
-import { useFetchPageDataQuery } from "@/components/PageView/model/services/firebaseDocumentsAPI";
+import { useFetchPageDataQuery } from "@/api/firebasePageAPI/firebaseDocumentsAPI";
 import React, { useEffect } from "react";
 import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -22,6 +22,7 @@ const PageWrapper = ({ pageId }: WrapperProps) => {
 
     useEffect(() => {
         if (isSuccess) {
+            console.log('data');
             dispatch(pageActions.setPage(data));
         }
     }, [data]);
@@ -40,7 +41,7 @@ const PageWrapper = ({ pageId }: WrapperProps) => {
 
     return (
         <StyledPageView>
-            {isSuccess ? <PageView id={pageId} page={page} isLoading={isLoading}/> : <DefaultPage/>}
+            {isSuccess && <PageView id={pageId} page={page} isLoading={isLoading}/>}
         </StyledPageView>
     );
 };
