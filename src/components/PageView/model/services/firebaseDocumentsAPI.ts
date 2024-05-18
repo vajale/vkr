@@ -1,6 +1,6 @@
 import { firebaseAuth, firebaseDatabase, firebaseStorage, firestoreDB } from "@/components/FireBase";
 
-import { type Page } from "../types";
+import { type DocumentBlock, type Page } from "../types";
 import { firebaseApi } from "@/api";
 import { v4, v4 as uuidv4 } from 'uuid';
 import { ref, set, get, child, update, push, remove } from "firebase/database";
@@ -23,7 +23,7 @@ interface PageResponse {
     }
 }
 
-export function arrayToObject<T> (arr: T[]): Record<number, T> {
+export function arrayToObject<T> (arr: DocumentBlock[] | undefined): Record<number, T> {
     const obj: Record<number, T> = {};
     arr.forEach((value, index) => {
         obj[index] = value;

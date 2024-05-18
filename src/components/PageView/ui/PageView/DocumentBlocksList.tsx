@@ -32,8 +32,6 @@ const DocumentBlocksList = (props: BlocksProps) => {
 
     const dispatch = useAppDispatch();
 
-    const docId = useAppSelector(selectEditDocumentId);
-
     const handleDragEnd = async (e: DragEndEvent) => {
         const { active, over } = e;
 

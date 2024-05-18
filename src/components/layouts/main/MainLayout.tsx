@@ -18,6 +18,7 @@ export const MainLayout: React.FC<LayoutProps> = memo((props) => {
 
     const auth = useFirebaseAuth();
     const dispatch = useAppDispatch();
+
     // TODO апдейт названия страницы
 
     const { data: userData, refetch, isLoading, isSuccess } = useGetUserQuery({ userId: firebaseAuth.currentUser?.uid });
@@ -41,7 +42,7 @@ export const MainLayout: React.FC<LayoutProps> = memo((props) => {
                            height: 800,
                            position: "sticky"
                        }}>
-                    <PagesList onPageChanged={handlePageChanged}/>
+                    {isSuccess && <PagesList pages={userData.pages} onPageChanged={handlePageChanged}/>}
                 </Stack>
             </StyledContentWrapper>
             <div className={"side-menu"}>

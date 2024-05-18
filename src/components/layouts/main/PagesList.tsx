@@ -12,25 +12,22 @@ import { useNavigate } from "react-router-dom";
 
 interface ListProps {
     onPageChanged: () => void,
+    pages: string[]
 }
 
 const PagesList = (props: ListProps) => {
-    const { onPageChanged } = props;
+    const { onPageChanged, pages } = props;
 
     const navigate = useNavigate();
-
-    const pages = useAppSelector(selectUserPages);
 
     const { data: pagesData, isSuccess: pagesSuccess, isLoading: isPagesLoading } = useFetchPagesQuery(pages);
     const [createPage] = useCreateNewPageMutation({});
     const [removePage] = useRemovePageMutation({});
 
-    if (pages === undefined) {
-        return null;
-    }
-
     const handleAddPageClick = () => {
-        void createPage({}).then(() => { onPageChanged(); });
+        void createPage({}).then((data) => {
+            onPageChanged();
+});
     };
 
     const handlePageRemove = (pageId: string) => {

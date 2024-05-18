@@ -6,22 +6,25 @@ import PageView from "@/components/PageView/ui/PageView/PageView";
 import { pageActions, selectPage } from "@/store/slices/pageSlice";
 import DefaultPage from "@/components/PageView/ui/DefaultPage/DefaultPage";
 import SkeletonPage from "../PageView/SkeletonPage";
+import { useGetPageRealtimeDataQuery } from "@/api/pageRealtimeUpdate";
 
 interface WrapperProps {
-    id: string
+    pageId: string
 }
 
-const PageWrapper = ({ id }: WrapperProps) => {
+const PageWrapper = ({ pageId }: WrapperProps) => {
     const dispatch = useAppDispatch();
 
-    const { data, isLoading, isSuccess } = useFetchPageDataQuery({ pageId: id });
+    useGetPageRealtimeDataQuery({ pageId: location.id });
+
+    const { data, isLoading, isSuccess } = useFetchPageDataQuery({ pageId });
     const page = useAppSelector(selectPage);
 
     useEffect(() => {
         if (isSuccess) {
             dispatch(pageActions.setPage(data));
         }
-    }, [data, isSuccess, id]);
+    }, [data]);
 
     if (page === undefined) {
         return (
@@ -37,7 +40,7 @@ const PageWrapper = ({ id }: WrapperProps) => {
 
     return (
         <StyledPageView>
-            {isSuccess ? <PageView id={id} page={page} isLoading={isLoading}/> : <DefaultPage/>}
+            {isSuccess ? <PageView id={pageId} page={page} isLoading={isLoading}/> : <DefaultPage/>}
         </StyledPageView>
     );
 };

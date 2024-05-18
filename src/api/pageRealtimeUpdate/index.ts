@@ -1,18 +1,18 @@
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, child } from "firebase/database";
 import { firebaseDatabase } from "@/components/FireBase";
 import { firebaseApi } from "@/api";
 import { type Page } from "@/components/PageView/model/types";
 
 const api = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getPageRealtimeData: builder.query<Page, string>({
-            async queryFn(arg, { dispatch }, extraOptions, baseQuery) {
-                const dbRef = ref(firebaseDatabase, "-Ny6OtWpW-ozhOhJxp0F/page");
-                console.log("arg", arg);
+        getPageRealtimeData: builder.query<Page, { pageId: string }>({
+            async queryFn ({ pageId }, { dispatch }) {
+                const dbRef = ref(firebaseDatabase);
+                const specificNodeRef = child(dbRef, pageId);
+                const pageChild = child(specificNodeRef, "page");
+
                 return await new Promise((resolve) => {
-                    const unsubscribe = onValue(
-                        dbRef,
-                        (snapshot) => {
+                    const unsubscribe = onValue(pageChild, (snapshot) => {
                             if (snapshot.exists()) {
                                 resolve({ data: snapshot.val() });
                             } else {
@@ -32,13 +32,16 @@ const api = firebaseApi.injectEndpoints({
             },
             // Add subscription options
             onCacheEntryAdded: async (
-                arg,
+                { pageId },
                 { updateCachedData, cacheDataLoaded, cacheEntryRemoved },
             ) => {
                 await cacheDataLoaded;
-                const dbRef = ref(firebaseDatabase, "-Ny6OtWpW-ozhOhJxp0F/page");
-                console.log("arg", arg);
-                const unsubscribe = onValue(dbRef, (snapshot) => {
+
+                const dbRef = ref(firebaseDatabase);
+                const specificNodeRef = child(dbRef, pageId);
+                const pageChild = child(specificNodeRef, "page");
+
+                const unsubscribe = onValue(pageChild, (snapshot) => {
                     if (snapshot.exists()) {
                         updateCachedData((draft) => {
                             return snapshot.val();
