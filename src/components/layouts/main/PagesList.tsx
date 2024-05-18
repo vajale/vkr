@@ -12,6 +12,8 @@ import { selectUserPages } from "@/store/slices/userSlice";
 import Constants from "@/constants";
 import { useNavigate } from "react-router-dom";
 import { NAVIGATION } from "@/constants/navigation";
+import { Members } from "@/components/StatickBlocks/Members";
+import { MainButton } from "@/components/buttons/MainButton";
 
 interface ListProps {
     onPageChanged: () => void;
@@ -98,7 +100,7 @@ const PagesList = (props: ListProps) => {
             <PageLink id={""} href={"/calendar"} label={"Поиск"} icon={"MdSearch"} />
             <Stack mt={4}>
                 <PageLink id={""} href={"/calendar"} label={"Календарь"} icon={"MdCalendarToday"} />
-                <PageLink id={""} href={"/calendar"} label={"Участники"} icon={"MdGroup"} />
+                <Members />
             </Stack>
             <Stack
                 mt={2}
