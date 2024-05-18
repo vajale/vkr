@@ -65,17 +65,17 @@ const PagesList = (props: ListProps) => {
         }
     }, [pagesData]);
 
-    return (
-        <>
-            <Typography className={"main-button"} mb={4} variant={'h5'} fontWeight={900}
-                        onClick={handleMainButton}>
-                СЕЙФ +
-            </Typography>
-            <PageLink id={''} href={'/calendar'} label={'Поиск'} icon={"MdSearch"}/>
-            <Stack mt={4}>
-                <PageLink id={''} href={'/calendar'} label={'Календарь'} icon={"MdCalendarToday"}/>
-                <PageLink id={''} href={'/calendar'} label={'Участники'} icon={"MdGroup"}/>
-            </Stack>
+    return (<>
+        <Typography className={"main-button"} mb={4} variant={'h5'} fontWeight={900}
+                    onClick={handleMainButton}>
+            СЕЙФ +
+        </Typography>
+        <PageLink id={''} href={'/calendar'} label={'Поиск'} icon={"MdSearch"}/>
+        <Stack mt={4}>
+            <PageLink id={''} href={'/calendar'} label={'Календарь'} icon={"MdCalendarToday"}/>
+            <PageLink id={''} href={'/calendar'} label={'Участники'} icon={"MdGroup"}/>
+        </Stack>
+
             <Stack mt={2} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
                 <Typography>Страницы</Typography>
                 <Button sx={{ minWidth: 20 }} onClick={handleAddPageClick}><MaterialIcon name={'MdAdd'}/></Button>

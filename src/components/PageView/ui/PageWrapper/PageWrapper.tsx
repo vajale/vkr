@@ -15,7 +15,7 @@ interface WrapperProps {
 const PageWrapper = ({ pageId }: WrapperProps) => {
     const dispatch = useAppDispatch();
 
-    useGetPageRealtimeDataQuery({ pageId: location.id });
+    useGetPageRealtimeDataQuery({ pageId });
 
     const { data, isLoading, isSuccess } = useFetchPageDataQuery({ pageId });
     const page = useAppSelector(selectPage);
@@ -26,16 +26,16 @@ const PageWrapper = ({ pageId }: WrapperProps) => {
         }
     }, [data]);
 
+    if (isLoading) {
+        return <SkeletonPage/>;
+    }
+
     if (page === undefined) {
         return (
             <StyledPageView>
                 <DefaultPage/>
             </StyledPageView>
         );
-    }
-
-    if (isLoading) {
-        return <SkeletonPage/>;
     }
 
     return (

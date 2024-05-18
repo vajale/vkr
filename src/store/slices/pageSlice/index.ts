@@ -83,7 +83,7 @@ export const pageSlice = createSlice({
                 (item) => item.id !== action.payload.id,
             );
         }),
-        updatePage: create.reducer((state, action: PayloadAction<Page>) => {
+        updatePage: create.reducer((state, action: PayloadAction<Partial<Page>>) => {
             state.pageData = { ...state.pageData, ...action.payload };
         }),
         removePage: create.reducer((state, action) => {

@@ -10,6 +10,8 @@ import {
 import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
 import DocumentBlocksList from "@/components/PageView/ui/PageView/DocumentBlocksList";
 import { type Page } from "../../model/types";
+import { pageActions } from "@/store/slices/pageSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 interface ViewProps {
     isLoading: boolean;
@@ -19,6 +21,8 @@ interface ViewProps {
 
 const PageView = (props: ViewProps) => {
     const { isLoading, page } = props;
+
+    const dispatch = useAppDispatch();
 
     const [updateDocuments] = useUpdatePageBlocksMutation();
     const [updateVisual] = useUpdatePageVisualMutation();
@@ -35,13 +39,19 @@ const PageView = (props: ViewProps) => {
         }
     }, [page]);
 
+    const handleHeaderChange = (content: string) => {
+        dispatch(pageActions.updatePageHeader({ name: content }));
+    };
+
+    const headerText = page.visual?.name ?? 'Новая страница';
+
     if (page.documentBlocks === undefined) {
         return (
             <StyledPageView>
                 <Paper
                     className={"page-view-paper"}
                     sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
-                    <PageHeader text={page.visual?.name} />
+                    <PageHeader text={headerText} />
                 </Paper>
             </StyledPageView>
         );
@@ -52,7 +62,7 @@ const PageView = (props: ViewProps) => {
             <Paper
                 className={"page-view-paper"}
                 sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
-                <PageHeader text={page.visual?.name} background={page.visual?.background} />
+                <PageHeader onContentChange={handleHeaderChange} text={headerText} background={page.visual?.background} />
                 <DocumentBlocksList canEdit docs={page.documentBlocks} />
             </Paper>
         </StyledPageView>
