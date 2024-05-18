@@ -13,6 +13,7 @@ export const URL = {
 
 export const NAVIGATION = {
     HOME: URL.HOME,
+    PAGE: `${URL.PAGE}/`,
     LANDING: {
         MAIN: `${URL.LANDING}/${URL.MAIN}`,
         PRICES: `${URL.LANDING}/${URL.PRICES}`,

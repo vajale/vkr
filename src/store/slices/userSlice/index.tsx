@@ -17,7 +17,6 @@ export const userSlice = createSlice({
         // Это чтобы при первом входе не директило нахуй с сайта, не надо в false кидатьы
         // Смотри если че AuthProvider
         initializeUser: (state) => {
-            state.user = undefined;
             state._isInitialized = true;
         },
         logout: (state) => {

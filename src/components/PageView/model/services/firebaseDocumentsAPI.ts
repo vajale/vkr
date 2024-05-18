@@ -1,12 +1,17 @@
-import { firebaseAuth, firebaseDatabase, firebaseStorage, firestoreDB } from "@/components/FireBase";
+import {
+    firebaseAuth,
+    firebaseDatabase,
+    firebaseStorage,
+    firestoreDB,
+} from "@/components/FireBase";
 
 import { type DocumentBlock, type Page } from "../types";
 import { firebaseApi } from "@/api";
-import { v4, v4 as uuidv4 } from 'uuid';
+import { v4, v4 as uuidv4 } from "uuid";
 import { ref, set, get, child, update, push, remove } from "firebase/database";
 import { doc, updateDoc, arrayUnion, deleteDoc, deleteField, getDoc } from "firebase/firestore";
 
-function isPage (obj: any): obj is Page {
+function isPage(obj: any): obj is Page {
     return (
         obj !== undefined &&
         obj !== null &&
@@ -16,14 +21,14 @@ function isPage (obj: any): obj is Page {
 }
 
 interface PageResponse {
-    page: Page,
+    page: Page;
     permissions: {
-        creator: string,
-        moder: string
-    }
+        creator: string;
+        moder: string;
+    };
 }
 
-export function arrayToObject<T> (arr: DocumentBlock[] | undefined): Record<number, T> {
+export function arrayToObject<T>(arr: DocumentBlock[] | undefined): Record<number, T> {
     const obj: Record<number, T> = {};
     arr.forEach((value, index) => {
         obj[index] = value;
@@ -34,7 +39,7 @@ export function arrayToObject<T> (arr: DocumentBlock[] | undefined): Record<numb
 export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
         fetchPageData: builder.query<Page, { pageId: string }>({
-            async queryFn ({ pageId }) {
+            async queryFn({ pageId }) {
                 // const dispatch = useAppDispatch();
 
                 if (pageId === "") {
@@ -48,7 +53,7 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                     const snapshot = await get(child(dbRef, pageId));
 
                     if (snapshot.exists()) {
-                        const snapshotData = (snapshot.val() as PageResponse);
+                        const snapshotData = snapshot.val() as PageResponse;
                         const permissions = snapshotData.permissions;
 
                         // if (permissions.creator === userId || permissions.moder === userId) {
@@ -61,9 +66,9 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                             data: {
                                 documentBlocks: docBlocksArray,
                                 id: pageId,
-                                parent: '',
-                                visual: snapshotData.page.visual
-                            }
+                                parent: "",
+                                visual: snapshotData.page.visual,
+                            },
                         };
                     } else {
                         console.log("No data available");
@@ -81,15 +86,15 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                     return await get(child(dbRef, pageId))
                         .then((snapshot) => {
                             if (snapshot.exists()) {
-                                const response: PageResponse = (snapshot.val()) as PageResponse;
+                                const response: PageResponse = snapshot.val() as PageResponse;
                                 const { page, permissions } = response;
 
                                 return {
                                     id: pageId,
-                                    parent: '',
+                                    parent: "",
                                     visual: {
-                                        name: page.visual?.name
-                                    }
+                                        name: page.visual?.name,
+                                    },
                                 };
                             } else {
                                 console.log("No data available");
@@ -103,11 +108,11 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                 });
 
                 const pagesResponses = await Promise.all(promises);
-                const validResponses = pagesResponses.filter(response => response !== null);
+                const validResponses = pagesResponses.filter((response) => response !== null);
                 console.log(validResponses);
 
                 return {
-                    data: validResponses
+                    data: validResponses,
                 };
             },
         }),
@@ -115,20 +120,20 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
             queryFn: async ({ newPage }) => {
                 const dbRef = ref(firebaseDatabase);
                 const specificNodeRef = child(dbRef, newPage.id);
-                const sp = child(specificNodeRef, 'page');
+                const sp = child(specificNodeRef, "page");
 
                 try {
                     const updateData = {
-                        documentBlocks: arrayToObject(newPage.documentBlocks)
+                        documentBlocks: arrayToObject(newPage.documentBlocks),
                     };
 
                     await update(sp, updateData);
 
-                    console.log('Данные успешно обновлены');
+                    console.log("Данные успешно обновлены");
                     return newPage;
                 } catch (error) {
-                    console.error('Ошибка при обновлении данных:', error);
-                    throw new Error('Ошибка при обновлении данных');
+                    console.error("Ошибка при обновлении данных:", error);
+                    throw new Error("Ошибка при обновлении данных");
                 }
             },
         }),
@@ -136,32 +141,32 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
             queryFn: async ({ newPage }) => {
                 const dbRef = ref(firebaseDatabase);
                 const specificNodeRef = child(dbRef, newPage.id);
-                const sp = child(specificNodeRef, 'page');
+                const sp = child(specificNodeRef, "page");
 
                 try {
                     const updateData = {
                         visual: {
-                            ...newPage.visual
-                        }
+                            ...newPage.visual,
+                        },
                     };
 
                     await update(sp, updateData);
 
-                    console.log('Данные успешно обновлены');
+                    console.log("Данные успешно обновлены");
                     return newPage;
                 } catch (error) {
-                    console.error('Ошибка при обновлении данных:', error);
-                    throw new Error('Ошибка при обновлении данных');
+                    console.error("Ошибка при обновлении данных:", error);
+                    throw new Error("Ошибка при обновлении данных");
                 }
             },
         }),
-        createNewPage: builder.mutation<{ id: string }, _>({
+        createNewPage: builder.mutation<{ id: string }, void>({
             queryFn: async () => {
                 const userId = firebaseAuth.currentUser?.uid;
 
                 if (!userId) {
-                    console.log('Пользователь не аутентифицирован');
-                    return { error: 'Пользователь не аутентифицирован' };
+                    console.log("Пользователь не аутентифицирован");
+                    return { error: "Пользователь не аутентифицирован" };
                 }
 
                 try {
@@ -173,40 +178,40 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                         page: {
                             documentBlocks: {},
                             visual: {
-                                name: 'Новая страница',
-                                background: "whitesmoke"
-                            }
+                                name: "Новая страница",
+                                background: "whitesmoke",
+                            },
                         },
                         permissions: {
                             creator: userId,
-                            moder: ''
-                        }
+                            moder: "",
+                        },
                     };
 
-                    const key = await push(dbRef, newPageObj).then(data => data.key);
+                    const key = await push(dbRef, newPageObj).then((data) => data.key);
 
-                    await updateDoc(doc(firestoreDB, 'users', userId), {
-                        pages: arrayUnion(key)
+                    await updateDoc(doc(firestoreDB, "users", userId), {
+                        pages: arrayUnion(key),
                     });
 
-                    console.log('Страница добавлена: ' + key);
-                    return { id: key };
+                    console.log("Страница добавлена: " + key);
+                    return { data: { id: key } };
                 } catch (error: any) {
                     console.error(error.message);
                     return { error: error.message };
                 }
-            }
+            },
         }),
         removePage: builder.mutation<Page, { pageId: string }>({
             queryFn: async ({ pageId }) => {
                 const userId = firebaseAuth.currentUser?.uid;
 
                 if (!userId) {
-                    console.log('Пользователь не аутентифицирован');
-                    return { error: 'Пользователь не аутентифицирован' };
+                    console.log("Пользователь не аутентифицирован");
+                    return { error: "Пользователь не аутентифицирован" };
                 }
 
-                const userDocRef = doc(firestoreDB, 'users', userId);
+                const userDocRef = doc(firestoreDB, "users", userId);
                 const dbRef = ref(firebaseDatabase, pageId);
 
                 try {
@@ -214,20 +219,20 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
 
                     const userDocSnapshot = await getDoc(userDocRef);
                     if (!userDocSnapshot.exists()) {
-                        console.log('Документ пользователя не найден');
-                        return { error: 'Документ пользователя не найден' };
+                        console.log("Документ пользователя не найден");
+                        return { error: "Документ пользователя не найден" };
                     }
 
                     const currentPageIds = userDocSnapshot.data().pages || [];
-                    const updatedPageIds = currentPageIds.filter(id => id !== pageId);
+                    const updatedPageIds = currentPageIds.filter((id) => id !== pageId);
 
                     await updateDoc(userDocRef, { pages: updatedPageIds });
 
-                    console.log('Страница удалена');
+                    console.log("Страница удалена");
                     return null;
                 } catch (error) {
-                    console.error('Ошибка при удалении данных:', error);
-                    throw new Error('Ошибка при удалении данных');
+                    console.error("Ошибка при удалении данных:", error);
+                    throw new Error("Ошибка при удалении данных");
                 }
             },
         }),
@@ -263,6 +268,5 @@ export const {
     useUpdatePageVisualMutation,
     useUpdatePageBlocksMutation,
     useRemovePageMutation,
-    useFetchPagesQuery
-} =
-    firebaseDocumentsAPI;
+    useFetchPagesQuery,
+} = firebaseDocumentsAPI;

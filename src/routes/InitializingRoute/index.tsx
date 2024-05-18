@@ -8,6 +8,7 @@ export const InitialRoute = () => {
     const { authState } = useFirebaseAuth();
     const dispatch = useAppDispatch();
     const [user, isLoading] = authState;
+
     useEffect(() => {
         if (!isLoading) {
             dispatch(userActions.initializeUser());
