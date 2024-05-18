@@ -1,4 +1,10 @@
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+    getAuth,
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+} from "firebase/auth";
 
 import { useAppDispatch } from "@/store/hooks";
 import { selectUserAuth, userActions } from "store/slices/userSlice";
@@ -26,11 +32,12 @@ export const useFirebaseAuth = () => {
             if (user) {
                 const userData: User = {
                     id: user.uid,
-                    username: user.email ?? '',
+                    username: user.email ?? "",
                 };
 
                 setFirebaseUser(userData);
                 dispatch(userActions.setAuthData(userData));
+                dispatch(userActions.initializeUser());
             } else {
                 setFirebaseUser(null);
                 dispatch(userActions.logout());
@@ -42,7 +49,11 @@ export const useFirebaseAuth = () => {
         };
     }, []);
 
-    const handleCreateFirebaseUserWithEmailAndPassword = async (email: string, password: string, registerData: IRegisterForm) => {
+    const handleCreateFirebaseUserWithEmailAndPassword = async (
+        email: string,
+        password: string,
+        registerData: IRegisterForm,
+    ) => {
         void createFirebaseUser({ email, password, registerData });
     };
 
@@ -61,11 +72,14 @@ export const useFirebaseAuth = () => {
         createUser: async (email: string, password: string, registerData: IRegisterForm) => {
             await handleCreateFirebaseUserWithEmailAndPassword(email, password, registerData);
         },
-        signInUser: async (email: string, password: string) => { await handleFirebaseSignInWithEmailAndPassword(email, password); },
-        signOutUser: async () => { await handleFirebaseSignOut(); },
+        signInUser: async (email: string, password: string) => {
+            await handleFirebaseSignInWithEmailAndPassword(email, password);
+        },
+        signOutUser: async () => {
+            await handleFirebaseSignOut();
+        },
         firebaseUser,
         authState,
-        isLoading: loginLoading ?? registerLoading
-
+        isLoading: loginLoading ?? registerLoading,
     };
 };

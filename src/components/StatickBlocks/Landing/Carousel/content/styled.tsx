@@ -11,18 +11,18 @@ export const StyledCarouselContent = styled("div")(({ theme }: IExtendedThemePro
     ".header-large": {
         fontSize: theme?.textSize.sizeText64,
         fontWeight: theme?.fontWeights.baldHard,
-        fontFamily: "InterBlack",
+        fontFamily: "Inter, sans-serif",
         textShadow: "-6px 5px 10px rgba(0, 0, 0, 0.7)",
     },
 
     ".title": {
         fontSize: theme?.textSize.sizeText18,
-        fontFamily: "InterBlack",
+        fontFamily: "Inter, sans-serif",
     },
 
     ".header": {
         fontSize: theme?.textSize.sizeText32,
-        fontFamily: "InterBlack",
+        fontFamily: "Inter, sans-serif",
     },
 
     ".description-wrapper": {
@@ -45,13 +45,13 @@ export const StyledCarouselContent = styled("div")(({ theme }: IExtendedThemePro
 
             ".counter": {
                 fontWeight: theme?.fontWeights.baldHard,
-                fontFamily: "InterBlack",
+                fontFamily: "Inter, sans-serif",
                 fontSize: theme?.textSize.sizeText32,
             },
 
             ".counter-value": {
                 fontWeight: theme?.fontWeights.baldHard,
-                fontFamily: "InterBlack",
+                fontFamily: "Inter, sans-serif",
                 fontSize: theme?.textSize.sizeText48,
             },
         },
@@ -62,7 +62,7 @@ export const StyledCarouselContent = styled("div")(({ theme }: IExtendedThemePro
         width: "420px",
         height: "80px",
         backgroundColor: "#F8E480",
-        fontFamily: "InterBlack",
+        fontFamily: "Inter, sans-serif",
         fontSize: theme?.textSize.sizeText20,
         fontWeight: theme?.fontWeights.baldHard,
     },
