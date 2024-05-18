@@ -9,6 +9,7 @@ import { matchPath, useLocation, useParams } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";
 import { selectUser } from "@/store/slices/userSlice";
 import { URL } from "@/constants/navigation";
+import UserItem from "@/components/Users/UserItem";
 
 const Users = () => {
     const location = useParams<{ id: string }>();
@@ -47,19 +48,9 @@ const Users = () => {
         return null;
     }
 
-    console.log(data);
-
     return (
         <Stack marginRight={3} gap={2} flexDirection={'row'}>
-              {/* {data?.map(item => { */}
-              {/*  const username = item?.username ? item?.username[0] : ''; */}
-
-              {/*  return (<Avatar sx={{ width: 24, height: 24 }} key={item.id}> */}
-              {/*      <Typography> */}
-              {/*          {username} */}
-              {/*      </Typography> */}
-              {/*  </Avatar>); */}
-              {/* })} */}
+               {/* {data.map(item => <UserItem key={item} userId={item}/>)} */}
         </Stack>
     );
 };

@@ -203,7 +203,7 @@ export const usersService = firebaseApi.injectEndpoints({
                 },
             }
         ),
-        getActiveUsersSubscribe: builder.query<User[], { pageId: string }>({
+        getActiveUsersSubscribe: builder.query<string[], { pageId: string }>({
             async queryFn ({ pageId }, { dispatch }) {
                 const dbRef = ref(firebaseDatabase, pageId);
                 const usersChild = child(dbRef, 'activeUsers');
@@ -215,7 +215,7 @@ export const usersService = firebaseApi.injectEndpoints({
                             if (usersSnapshot.exists()) {
                                 try {
                                     const snapshotData = usersSnapshot.val();
-                                    const userIds: string[] = Object.values(snapshotData);
+                                    const userIds = snapshotData != undefined ? Object.values(snapshotData) : [];
                                     // const promises = userIds.map(async (id: string) => await getUser(id));
                                     // const usersData: User[] = await Promise.all(promises);
                                     resolve(userIds);
@@ -263,7 +263,7 @@ export const usersService = firebaseApi.injectEndpoints({
 });
 
 export const {
-    useLazyGetActiveUsersQuery,
+    useGetActiveUsersQuery,
     useRegisterMutation,
     useLoginMutation,
     useSetUserActivityMutation,

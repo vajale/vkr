@@ -25,3 +25,5 @@ const UserItem = (props: ItemProps) => {
         </Avatar>
     );
 };
+
+export default UserItem;

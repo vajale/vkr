@@ -16,13 +16,11 @@ const PageWrapper = ({ pageId }: WrapperProps) => {
     const dispatch = useAppDispatch();
 
     const { data, isLoading, isSuccess } = useGetPageRealtimeDataQuery({ pageId });
-
-    // const { data, isLoading, isSuccess } = useFetchPageDataQuery({ pageId });
     const page = useAppSelector(selectPage);
 
     useEffect(() => {
         if (isSuccess) {
-            console.log('data');
+            console.log(data);
             dispatch(pageActions.setPage(data));
         }
     }, [data]);

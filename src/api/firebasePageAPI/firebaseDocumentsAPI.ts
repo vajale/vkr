@@ -188,6 +188,7 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                                 name: "Новая страница",
                                 background: "whitesmoke",
                             },
+                            id: ''
                         },
                         permissions: {
                             creator: userId,
@@ -195,14 +196,23 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                         },
                     };
 
-                    const key = await push(dbRef, newPageObj).then((data) => data.key);
+                    const pageFirebaseId = await push(dbRef, newPageObj).then((data) => data.key);
 
-                    await updateDoc(doc(firestoreDB, "users", userId), {
-                        pages: arrayUnion(key),
+                    // добавление id
+                    const newDbRef = ref(firebaseDatabase, pageFirebaseId);
+                    const ssss = child(newDbRef, 'page');
+                    await update(ssss, {
+
+                            id: pageFirebaseId
+
                     });
 
-                    console.log("Страница добавлена: " + key);
-                    return { data: { id: key } };
+                    await updateDoc(doc(firestoreDB, "users", userId), {
+                        pages: arrayUnion(pageFirebaseId),
+                    });
+
+                    console.log("Страница добавлена: " + pageFirebaseId);
+                    return { data: { id: pageFirebaseId } };
                 } catch (error: any) {
                     console.error(error.message);
                     return { error: error.message };
