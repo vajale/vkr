@@ -3,6 +3,16 @@ import { firebaseDatabase } from "@/components/FireBase";
 import { firebaseApi } from "@/api";
 import { type Page } from "@/components/PageView/model/types";
 
+interface PageResponse {
+    page: Page;
+    permissions: {
+        creator: string;
+        moder: string;
+    };
+}
+
+type PageRequestObjectType = PageResponse;
+
 const api = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
         getPageRealtimeData: builder.query<Page, { pageId: string }>({
@@ -14,7 +24,25 @@ const api = firebaseApi.injectEndpoints({
                 return await new Promise((resolve) => {
                     const unsubscribe = onValue(pageChild, (snapshot) => {
                             if (snapshot.exists()) {
-                                resolve({ data: snapshot.val() });
+                                const snapshotData: Page = snapshot.val();
+                                // const permissions = snapshotData.permissions;
+
+                                // if (permissions.creator === userId || permissions.moder === userId) {
+                                //     return { data: snapshotData.page };
+                                // }
+
+                                const docBlocksArray = snapshotData?.documentBlocks ? Object.values(snapshotData?.documentBlocks) : [];
+
+                                const pageData = {
+                                    data: {
+                                        documentBlocks: docBlocksArray,
+                                        id: pageId,
+                                        parent: "",
+                                        visual: snapshotData.visual,
+                                    },
+                                };
+
+                                resolve(pageData);
                             } else {
                                 resolve({ error: "Data not found" });
                             }

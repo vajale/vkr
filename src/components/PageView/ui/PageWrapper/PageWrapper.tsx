@@ -15,9 +15,9 @@ interface WrapperProps {
 const PageWrapper = ({ pageId }: WrapperProps) => {
     const dispatch = useAppDispatch();
 
-    useGetPageRealtimeDataQuery({ pageId });
+    const { data, isLoading, isSuccess } = useGetPageRealtimeDataQuery({ pageId });
 
-    const { data, isLoading, isSuccess } = useFetchPageDataQuery({ pageId });
+    // const { data, isLoading, isSuccess } = useFetchPageDataQuery({ pageId });
     const page = useAppSelector(selectPage);
 
     useEffect(() => {
