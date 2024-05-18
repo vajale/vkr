@@ -1,19 +1,16 @@
-import React, { memo, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import PageHeader from "../PageHeader/PageHeader";
 import { Paper } from "@mui/material";
-import { isEqual } from 'lodash';
+import { isEqual } from "lodash";
 
-import {
-    pageActions, selectPageBackground,
-    selectPageName
-} from "@/store/slices/pageSlice";
+import { pageActions, selectPageBackground, selectPageName } from "@/store/slices/pageSlice";
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 import {
     useUpdatePageBlocksMutation,
-    useUpdatePageVisualMutation
+    useUpdatePageVisualMutation,
 } from "@/components/PageView/model/services/firebaseDocumentsAPI";
 import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
 import DocumentBlocksList from "@/components/PageView/ui/PageView/DocumentBlocksList";
@@ -23,8 +20,8 @@ import { type Page } from "../../model/types";
 import { userActions } from "@/store/slices/userSlice";
 
 interface ViewProps {
-    isLoading: boolean,
-    page: Page,
+    isLoading: boolean;
+    page: Page;
     id: string;
 }
 
@@ -48,15 +45,19 @@ const PageView = (props: ViewProps) => {
 
         const dbRef = ref(firebaseDatabase);
         const specificNodeRef = child(dbRef, id);
-        const sp = child(specificNodeRef, 'page');
+        const sp = child(specificNodeRef, "page");
 
-        onValue(sp, snapshot => {
-            if (!isEqual(page, snapshot.val())) {
-                dispatch(pageActions.updatePage(snapshot.val()));
-            }
-        }, {
-            onlyOnce: true
-        });
+        onValue(
+            sp,
+            (snapshot) => {
+                if (!isEqual(page, snapshot.val())) {
+                    dispatch(pageActions.updatePage(snapshot.val()));
+                }
+            },
+            {
+                onlyOnce: true,
+            },
+        );
 
         idRef.current = id;
 
@@ -80,8 +81,10 @@ const PageView = (props: ViewProps) => {
     if (page.documentBlocks === undefined) {
         return (
             <StyledPageView>
-                <Paper className={"page-view-paper"} sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
-                    <PageHeader text={name}/>
+                <Paper
+                    className={"page-view-paper"}
+                    sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
+                    <PageHeader text={name} />
                 </Paper>
             </StyledPageView>
         );
@@ -89,11 +92,11 @@ const PageView = (props: ViewProps) => {
 
     return (
         <StyledPageView>
-            <Paper className={"page-view-paper"} sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
-                <PageHeader text={name} background={background}/>
-                <DocumentBlocksList
-                    canEdit
-                    docs={page.documentBlocks}/>
+            <Paper
+                className={"page-view-paper"}
+                sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
+                <PageHeader text={name} background={background} />
+                <DocumentBlocksList canEdit docs={page.documentBlocks} />
             </Paper>
         </StyledPageView>
     );
