@@ -25,7 +25,7 @@ const UserElement = () => {
 };
 
 export const Members: React.FC = () => {
-    const [isOpen, setIsOpen] = React.useState(true);
+    const [isOpen, setIsOpen] = React.useState(false);
     const page = useAppSelector(selectPage);
     const handleClose = () => {
         setIsOpen(false);
