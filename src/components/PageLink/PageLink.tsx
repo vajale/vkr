@@ -89,7 +89,7 @@ const PageLink = (props: LinkProps) => {
                                 {icon && <MaterialIcon name={icon}/>}
                                 <Link onClick={() => {
                                     dispatch(pageActions.removePage());
-                                }} sx={{ textDecoration: 'none', ml: 1 }} href={"#/page/" + href}>
+                                }} sx={{ textDecoration: 'none', ml: 1, overflow: 'hidden' }} href={"#/page/" + href}>
                                     {label}
                                 </Link></Stack>
                             {isMouseHover && showOptionsButton && (

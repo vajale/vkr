@@ -5,7 +5,7 @@ import {
     useCreateNewPageMutation,
     useFetchPagesQuery,
     useRemovePageMutation,
-} from "@/components/PageView/model/services/firebaseDocumentsAPI";
+} from "@/api/firebasePageAPI/firebaseDocumentsAPI";
 import { MaterialIcon } from "@/assets/Icon";
 import { useAppSelector } from "@/store/hooks";
 import { selectUserPages } from "@/store/slices/userSlice";

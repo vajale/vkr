@@ -8,7 +8,7 @@ import { pageReducer } from "./slices/pageSlice";
 import { pageSettingsReducer } from "./slices/pageSettingsSlice";
 import appReducer from "./slices/app/index";
 import { userReducer } from "@/store/slices/userSlice";
-import { firebaseDocumentsAPI } from "@/components/PageView/model/services/firebaseDocumentsAPI";
+import { firebaseDocumentsAPI } from "@/api/firebasePageAPI/firebaseDocumentsAPI";
 import { type ICalendarSchema } from "@/store/slices/calendarSlice/types";
 import { calendarReducer } from "@/store/slices/calendarSlice";
 

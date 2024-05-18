@@ -5,13 +5,13 @@ import {
     firestoreDB,
 } from "@/components/FireBase";
 
-import { type DocumentBlock, type Page } from "../types";
+import { type DocumentBlock, type Page } from "../../components/PageView/model/types";
 import { firebaseApi } from "@/api";
 import { v4, v4 as uuidv4 } from "uuid";
 import { ref, set, get, child, update, push, remove } from "firebase/database";
 import { doc, updateDoc, arrayUnion, deleteDoc, deleteField, getDoc } from "firebase/firestore";
 
-function isPage(obj: any): obj is Page {
+function isPage (obj: any): obj is Page {
     return (
         obj !== undefined &&
         obj !== null &&
@@ -28,7 +28,9 @@ interface PageResponse {
     };
 }
 
-export function arrayToObject<T>(arr: DocumentBlock[] | undefined): Record<number, T> {
+type PageRequestObjectType = PageResponse;
+
+export function arrayToObject<T> (arr: DocumentBlock[] | undefined): Record<number, T> {
     const obj: Record<number, T> = {};
     arr.forEach((value, index) => {
         obj[index] = value;
@@ -39,7 +41,7 @@ export function arrayToObject<T>(arr: DocumentBlock[] | undefined): Record<numbe
 export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
         fetchPageData: builder.query<Page, { pageId: string }>({
-            async queryFn({ pageId }) {
+            async queryFn ({ pageId }) {
                 // const dispatch = useAppDispatch();
 
                 if (pageId === "") {
@@ -109,7 +111,6 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
 
                 const pagesResponses = await Promise.all(promises);
                 const validResponses = pagesResponses.filter((response) => response !== null);
-                console.log(validResponses);
 
                 return {
                     data: validResponses,
@@ -174,9 +175,15 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                     const dbRef = ref(firebaseDatabase);
 
                     // Создаем объект для новой страницы в Realtime Database
-                    const newPageObj = {
+                    const newPageObj: PageRequestObjectType = {
                         page: {
-                            documentBlocks: {},
+                            documentBlocks: {
+                                0: {
+                                    id: new Date().toJSON(),
+                                    content: '',
+                                    type: 'TEXT'
+                                }
+                            },
                             visual: {
                                 name: "Новая страница",
                                 background: "whitesmoke",
@@ -212,10 +219,10 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                 }
 
                 const userDocRef = doc(firestoreDB, "users", userId);
-                const dbRef = ref(firebaseDatabase, pageId);
+                const realtimeDataBaseRef = ref(firebaseDatabase, pageId);
 
                 try {
-                    await remove(dbRef);
+                    await remove(realtimeDataBaseRef);
 
                     const userDocSnapshot = await getDoc(userDocRef);
                     if (!userDocSnapshot.exists()) {

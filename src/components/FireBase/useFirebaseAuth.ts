@@ -13,14 +13,14 @@ import { useEffect, useState } from "react";
 import { firebaseAuth } from ".";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { type User } from "@/store/slices/userSlice/types";
-import { useCreateUserMutation, useLoginMutation } from "@/features/usersService/usersService";
+import { useLoginMutation, useRegisterMutation } from "@/api/usersApi/usersService";
 import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 
 export const useFirebaseAuth = () => {
     const dispatch = useAppDispatch();
     const authState = useAuthState(firebaseAuth);
 
-    const [createFirebaseUser, { data: registerLoading }] = useCreateUserMutation();
+    const [createFirebaseUser, { data: registerLoading }] = useRegisterMutation();
     const [loginUser, { data: loginLoading }] = useLoginMutation();
 
     const isAuth = useSelector(selectUserAuth);
