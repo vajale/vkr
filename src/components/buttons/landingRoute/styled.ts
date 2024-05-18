@@ -5,7 +5,7 @@ export const StyledLandingRouteButtons = styled("div")(({ theme }: IExtendedThem
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    fontFamily: "Inter",
+    fontFamily: "Inter, sans-serif",
     width: "30%",
 
     p: {

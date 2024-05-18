@@ -8,5 +8,5 @@ export const StyledLandingLogin = styled(Button)(({ theme }: IExtendedThemeProps
     color: "white",
     fontSize: theme?.textSize.sizeText16,
     borderRadius: 10,
-    fontFamily: "Inter",
+    fontFamily: "Inter, sans-serif",
 }));

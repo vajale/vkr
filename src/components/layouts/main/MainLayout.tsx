@@ -10,7 +10,7 @@ import { firebaseAuth, useFirebaseAuth } from "@/components/FireBase";
 import PagesList from "@/components/layouts/main/PagesList";
 
 interface LayoutProps {
-    children: React.ReactNode | React.ReactElement
+    children: React.ReactNode | React.ReactElement;
 }
 
 export const MainLayout: React.FC<LayoutProps> = memo((props) => {
@@ -21,7 +21,12 @@ export const MainLayout: React.FC<LayoutProps> = memo((props) => {
 
     // TODO апдейт названия страницы
 
-    const { data: userData, refetch, isLoading, isSuccess } = useGetUserQuery({ userId: firebaseAuth.currentUser?.uid });
+    const {
+        data: userData,
+        refetch,
+        isLoading,
+        isSuccess,
+    } = useGetUserQuery({ userId: firebaseAuth.currentUser?.uid });
 
     useEffect(() => {
         if (isSuccess) {
@@ -36,18 +41,22 @@ export const MainLayout: React.FC<LayoutProps> = memo((props) => {
     return (
         <StyledMainLayout>
             <StyledContentWrapper>
-                <Stack padding={3} gap={1}
-                       style={{
-                           width: 300,
-                           height: 800,
-                           position: "sticky"
-                       }}>
-                    {isSuccess && <PagesList pages={userData.pages} onPageChanged={handlePageChanged}/>}
+                <Stack
+                    padding={3}
+                    gap={1}
+                    style={{
+                        width: 300,
+                        height: 800,
+                        position: "sticky",
+                    }}>
+                    {isSuccess && (
+                        <PagesList pages={userData.pages} onPageChanged={handlePageChanged} />
+                    )}
                 </Stack>
             </StyledContentWrapper>
             <div className={"side-menu"}>
-                <AppHeader/>
-                {isLoading ? <Suspense fallback={<CircularProgress/>}/> : children}
+                <AppHeader />
+                {isLoading ? <Suspense fallback={<CircularProgress />} /> : children}
             </div>
         </StyledMainLayout>
     );
