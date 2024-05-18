@@ -26,7 +26,7 @@ export const useFirebaseAuth = () => {
             if (user) {
                 const userData: User = {
                     id: user.uid,
-                    username: user.email ?? ''
+                    username: user.email ?? '',
                 };
 
                 setFirebaseUser(userData);
