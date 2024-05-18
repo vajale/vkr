@@ -4,10 +4,10 @@
   "description": "vkr by shakals",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run dev",
-    "dev": "webpack serve --config webpack.config.js",
-    "start:dev:server": "json-server  -p 4000 ./json-server/db.json"
+    "start": "webpack serve --open",
+    "build": "webpack --config webpack.config.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -15,6 +15,11 @@
   "browser": {
     "fs": false,
     "path": false
+  },
+  "homepage": "https://vajale.github.io/vkr",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vajale/vkr.git"
   },
   "keywords": [],
   "author": "",
@@ -78,6 +83,7 @@
     "eslint-webpack-plugin": "^4.0.1",
     "firebase": "^10.10.0",
     "framer-motion": "^11.1.7",
+    "gh-pages": "^6.1.1",
     "json-server": "^1.0.0-alpha.23",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",
