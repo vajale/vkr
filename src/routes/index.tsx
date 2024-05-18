@@ -11,6 +11,7 @@ import { SecureRoute } from "@/routes/SecureRoute";
 import { NestRoute } from "@/routes/NestRoute";
 import LandingCarousel from "@/components/StatickBlocks/Landing/Carousel";
 import { Page } from "@/pages/Page";
+import { InvitePage } from "@/pages/InvitePage";
 
 const { URL } = Constants;
 
@@ -19,7 +20,9 @@ export const DesktopRouter = () => {
         <HashRouter>
             <Routes>
                 <Route path={`/`} element={<Navigate to={URL.HOME} replace={true} />} />
-				<Route path={`${Constants.URL.PAGE}`} element={<Page/>}/>
+                <Route path={`${Constants.URL.PAGE}`} element={<Page />} />
+
+                <Route path={`${Constants.URL.INVITE}`} element={<InvitePage />} />
 
                 <Route path={`${Constants.URL.PAGE}/:id`} element={<Page />}>
                     <Route

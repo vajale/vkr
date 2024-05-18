@@ -32,18 +32,21 @@ export const Members: React.FC = () => {
     };
 
     const handleOpen = () => {
+        if (!page) return;
         setIsOpen(true);
     };
 
     const link = useMemo(() => {
-        return `hui hui ${page?.id}`;
+        return `https://vajale.github.io/vkr/#/invite/${page?.id}`;
     }, [page]);
 
     const handleCopy = () => {
-        return link;
+        if (!page?.id) {
+            alert("Ошибка! Отсутствует id страницы.");
+            return;
+        }
+        navigator.clipboard.writeText(link);
     };
-
-    console.log(page);
 
     return (
         <div>

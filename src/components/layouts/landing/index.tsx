@@ -4,10 +4,10 @@ import { StyledLandingLayout } from "@/components/layouts/landing/styled";
 import { type ILandingLayout } from "@/components/layouts/landing/types";
 import Alarm from "@/assets/svg/Alarm.svg";
 
-export const LandingLayout: React.FC<ILandingLayout> = ({ children }) => {
+export const LandingLayout: React.FC<ILandingLayout> = ({ children, disableAlarm }) => {
     return (
         <StyledLandingLayout>
-            <img className={"layout-alarm"} src={Alarm} alt={""} />
+            {!disableAlarm ? <img className={"layout-alarm"} src={Alarm} alt={""} /> : null}
             {children}
         </StyledLandingLayout>
     );
