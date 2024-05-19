@@ -1,31 +1,49 @@
 import React, { useMemo } from "react";
 import ModalComponent from "@/components/Modal";
 import { MainButton } from "@/components/buttons/MainButton";
-import { StyledMembers, StyledUser } from "@/components/StatickBlocks/Members/styled";
+import { StyledMembers, StyledUser, StyledUserSkeleton } from "@/components/StatickBlocks/Members/styled";
 import { Typography } from "@/components/common/CustomTypography";
 import { Button, TextField } from "@mui/material";
 import { useAppSelector } from "@/store/hooks";
-import { selectPage } from "@/store/slices/pageSlice";
-import {
-    PermissionSelect,
-    UserPermission,
-} from "@/components/StatickBlocks/Members/PermissionSelect";
+import { selectPage, selectPageId } from "@/store/slices/pageSlice";
+import { PermissionSelect, UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
 import { type IPermissionSelect } from "@/components/StatickBlocks/Members/PermissionSelect/types";
 import { useParams } from "react-router-dom";
+import { useGetUsersWithPermissionsQuery } from "@/api/firebasePageAPI/pagesService";
+import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
+import { useSelector } from "react-redux";
+import { selectUser, selectUserId } from "@/store/slices/userSlice";
 
-const UserElement: React.FC<IPermissionSelect> = ({ userId, userPermission }) => {
+const permissionName = {
+    [UserPermission.CREATOR]: "Создатель",
+    [UserPermission.READER]: "Читатель",
+    [UserPermission.MODERATOR]: "Модератор",
+};
+
+const UserElement: React.FC<IPermissionSelect> = ({ userId, userPermission, pageId }) => {
+    const clientUserId = useAppSelector(selectUserId);
+
+    const { data, isLoading } = useGetUserByIdQuery({ userId });
+
+    if (isLoading || !data) {
+        return <StyledUserSkeleton/>;
+    }
+
+    const isClientUser = clientUserId === userId;
+
     return (
-        <StyledUser>
+        <StyledUser outlined={isClientUser}>
             <div className={"user-profile"}>
-                <img alt={"s"} />
+                <img alt={"s"}/>
                 <div className={"user"}>
                     <div className={"main-data"}>
-                        Hueglot Pizsyanuhaev {/* <div className={"role"}>Гость</div> */}
+                        {data.username}
+                        <div className={"role"}>{permissionName[userPermission]}</div>
                     </div>
-                    <Typography className={"mail"}>huesos@gmail.com</Typography>
+                    <Typography className={"mail"}>{data.data.phoneNumber}</Typography>
                 </div>
             </div>
-            <PermissionSelect userId={userId} userPermission={userPermission} />
+            <PermissionSelect pageId={pageId} userId={userId} userPermission={userPermission}/>
         </StyledUser>
     );
 };
@@ -33,6 +51,10 @@ const UserElement: React.FC<IPermissionSelect> = ({ userId, userPermission }) =>
 export const Members: React.FC = () => {
     const [isOpen, setIsOpen] = React.useState(false);
     const page = useAppSelector(selectPage);
+    const id = useAppSelector(selectPageId);
+
+    const { data, isLoading, isSuccess } = useGetUsersWithPermissionsQuery({ pageId: id });
+
     const handleClose = () => {
         setIsOpen(false);
     };
@@ -55,9 +77,31 @@ export const Members: React.FC = () => {
         await navigator.clipboard.writeText(link);
     };
 
+    const usersRender = useMemo(() => {
+        return data !== undefined && (
+            <div className={'users'}>
+                <div className={'creator'}>{
+                    data.creators.map((user) => <UserElement pageId={id} key={user}
+                                                             userPermission={UserPermission.CREATOR}
+                                                             userId={user}/>)}
+                </div>
+                <div className={'moders'}>{
+                    data.moderators.map((user) => <UserElement pageId={id} key={user}
+                                                               userPermission={UserPermission.MODERATOR}
+                                                               userId={user}/>)}
+                </div>
+                <div className={'reader'}>{
+                    data.readers.map((user) => <UserElement pageId={id} key={user}
+                                                               userPermission={UserPermission.READER}
+                                                               userId={user}/>)}
+                </div>
+            </div>
+        );
+    }, [isSuccess, isLoading]);
+
     return (
         <div>
-            <MainButton onClick={handleOpen} />
+            <MainButton onClick={handleOpen}/>
             <ModalComponent modalOpen={isOpen} onModalClose={handleClose}>
                 <StyledMembers>
                     <div className={"header"}>
@@ -80,26 +124,27 @@ export const Members: React.FC = () => {
                         <div className={"mem-list"}>
                             <div className={"maintainer"}></div>
                             <div className={"users"}>
-                                <UserElement
-                                    userPermission={UserPermission.MODERATOR}
-                                    userId={"hui"}
-                                />
-                                <UserElement
-                                    userPermission={UserPermission.READER}
-                                    userId={"hui"}
-                                />
-                                <UserElement
-                                    userPermission={UserPermission.READER}
-                                    userId={"hui"}
-                                />
-                                <UserElement
-                                    userPermission={UserPermission.READER}
-                                    userId={"hui"}
-                                />
-                                <UserElement
-                                    userPermission={UserPermission.READER}
-                                    userId={"hui"}
-                                />
+                                {usersRender}
+                                {/* <UserElement */}
+                                {/*    userPermission={UserPermission.MODERATOR} */}
+                                {/*    userId={"hui"} */}
+                                {/* /> */}
+                                {/* <UserElement */}
+                                {/*    userPermission={UserPermission.READER} */}
+                                {/*    userId={"hui"} */}
+                                {/* /> */}
+                                {/* <UserElement */}
+                                {/*    userPermission={UserPermission.READER} */}
+                                {/*    userId={"hui"} */}
+                                {/* /> */}
+                                {/* <UserElement */}
+                                {/*    userPermission={UserPermission.READER} */}
+                                {/*    userId={"hui"} */}
+                                {/* /> */}
+                                {/* <UserElement */}
+                                {/*    userPermission={UserPermission.READER} */}
+                                {/*    userId={"hui"} */}
+                                {/* /> */}
                             </div>
                         </div>
                     </div>

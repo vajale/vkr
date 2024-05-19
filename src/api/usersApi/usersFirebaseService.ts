@@ -6,14 +6,16 @@ import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { child, get, onValue, ref, remove, update } from "firebase/database";
 
-type UserFirebaseRequest = UserFirebase & {
+interface UserFirebaseRequest {
     user: {
         firstName?: string,
         lastname?: string,
         email?: string,
         phoneNumber?: string
-    }
-};
+    },
+    username?: string
+    pages?: string[]
+}
 
 async function getUser (id: string): Promise<User> {
     try {
@@ -29,7 +31,7 @@ async function getUser (id: string): Promise<User> {
 
         return {
             id,
-            username: `${userRequest.data.lastname} ${userRequest.data.firstName}`,
+            username: `${userRequest.user.lastname} ${userRequest.user.firstName}`,
             pages: userRequest.pages,
         };
     } catch (error) {
@@ -99,14 +101,21 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
                     });
 
                 const userData: UserFirebaseRequest = queryData as UserFirebaseRequest;
+
                 const customUsername = `${userData.user.firstName} ${userData.user.lastname}`;
+                const user: UserFirebase = {
+                    data: {
+                        email: userData.user.email,
+                        firstName: userData.user.firstName,
+                        lastname: userData.user.lastname,
+                        phoneNumber: userData.user.phoneNumber
+                    },
+                    pages: userData.pages,
+                    username: customUsername
+                };
 
                 return {
-                    data: {
-                        id: userId,
-                        pages: userData.pages,
-                        username: customUsername,
-                    },
+                    data: user
                 };
             },
         }),

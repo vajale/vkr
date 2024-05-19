@@ -21,6 +21,7 @@ const themeOptions: IExtendedTheme = {
         },
         borderColors: {
             primary: "#262626",
+            secondary: "#d7d7d7"
         },
     },
 };

@@ -19,6 +19,7 @@ export interface IExtendedTheme extends ThemeOptions {
         };
         borderColors: {
             primary: string;
+            secondary?: string;
         };
     };
 

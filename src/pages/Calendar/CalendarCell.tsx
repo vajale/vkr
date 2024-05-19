@@ -17,7 +17,7 @@ const CalendarCell = (props: CellProps) => {
             whileHover={{ scale: 1.05, backgroundColor: 'whitesmoke' }}
             onClick={() => {
                 if (onClick != null) {
-                    onClick(cell);
+                    if (cell.view?.type !== "next" || cell.view?.type !== 'past') { onClick(cell); }
                 }
             }}
             style={{

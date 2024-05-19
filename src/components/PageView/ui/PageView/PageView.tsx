@@ -6,7 +6,7 @@ import { Paper } from "@mui/material";
 import {
     useUpdatePageBlocksMutation,
     useUpdatePageVisualMutation,
-} from "@/api/firebasePageAPI/firebaseDocumentsAPI";
+} from "@/api/firebasePageAPI/pagesService";
 import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
 import DocumentBlocksList from "@/components/PageView/ui/PageView/DocumentBlocksList";
 import { type Page } from "../../model/types";

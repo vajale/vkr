@@ -8,7 +8,7 @@ import { pageReducer } from "./slices/pageSlice";
 import { pageSettingsReducer } from "./slices/pageSettingsSlice";
 import appReducer from "./slices/app/index";
 import { userReducer } from "@/store/slices/userSlice";
-import { firebaseDocumentsAPI } from "@/api/firebasePageAPI/firebaseDocumentsAPI";
+import { pagesService } from "@/api/firebasePageAPI/pagesService";
 import { type ICalendarSchema } from "@/store/slices/calendarSlice/types";
 import { calendarReducer } from "@/store/slices/calendarSlice";
 
@@ -27,7 +27,7 @@ const rootReducer: ReducersMapObject<StateSchema> = {
    settings: pageSettingsReducer,
    calendar: calendarReducer,
    // @ts-expect-error
-   [firebaseDocumentsAPI.reducerPath]: firebaseDocumentsAPI.reducer
+   [pagesService.reducerPath]: pagesService.reducer
 };
 
 export default rootReducer;
