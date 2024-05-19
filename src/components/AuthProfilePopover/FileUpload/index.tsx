@@ -52,25 +52,26 @@ export const FileUpload = ({ handleChangeFile }: { handleChangeFile: (file: File
 
     const handleStatusChange = (status: STATUS) => {
         setUploadStatus(status);
+
+        setTimeout(() => {
+            setUploadStatus(STATUS.upload);
+        }, 3000);
     };
 
     useEffect(() => {
         if (isLoading) {
-            setUploadStatus(STATUS.loading);
+            handleStatusChange(STATUS.loading);
             return;
         }
 
         if (isSuccess) {
-            setUploadStatus(STATUS.success);
+            handleStatusChange(STATUS.success);
             return;
         }
 
         if (isError) {
-            setUploadStatus(STATUS.error);
-            return;
+            handleStatusChange(STATUS.error);
         }
-
-        setUploadStatus(STATUS.upload);
     }, [isLoading, isError, isSuccess]);
 
     const [uploadStatus, setUploadStatus] = useState<STATUS>(STATUS.upload);
