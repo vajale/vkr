@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { firebaseAuth } from ".";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { type User } from "@/store/slices/userSlice/types";
+import { type User, UserFirebase } from "@/store/slices/userSlice/types";
 import { useGetUserByIdQuery, useLazyGetUserByIdQuery, useLoginMutation, useRegisterMutation } from "@/api/usersApi/usersFirebaseService";
 import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 
@@ -50,6 +50,16 @@ export const useFirebaseAuth = () => {
         };
     }, []);
 
+    const refetchUserData = () => {
+        const firebaseUser = fetchUserFirebaseData({ userId: firebaseAuth.currentUser?.uid });
+
+        void firebaseUser.then(req => {
+            if (req.data) {
+                dispatch(userActions.setFirebaseData(req.data));
+            }
+        });
+    };
+
     const handleCreateFirebaseUserWithEmailAndPassword = async (
         email: string,
         password: string,
@@ -82,5 +92,6 @@ export const useFirebaseAuth = () => {
         firebaseUser,
         authState,
         isLoading: loginLoading ?? registerLoading,
+        refetchUserData
     };
 };

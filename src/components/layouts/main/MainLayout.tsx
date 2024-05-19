@@ -17,21 +17,13 @@ export const MainLayout: React.FC<LayoutProps> = memo((props) => {
     const { children } = props;
 
     // не убирать, нихуя ничего не работает
-    const auth = useFirebaseAuth();
+    const { refetchUserData } = useFirebaseAuth();
     const dispatch = useAppDispatch();
 
     // TODO апдейт названия страницы
 
-    // const { data, refetch, isLoading, isSuccess } = useGetUserByIdQuery({ userId: firebaseAuth.currentUser?.uid });
-    //
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         dispatch(userActions.setFirebaseData(data));
-    //     }
-    // }, [data]);
-
     const handlePageChanged = () => {
-        // void refetch();
+        refetchUserData();
     };
 
     return (
