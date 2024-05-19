@@ -82,6 +82,9 @@ export const StyledMembers = styled("div")(({ theme }: IProps) => ({
     },
 
     ".members": {
+        maxHeight: "60%",
+        overflow: "auto",
+
         ".title": {
             color: "#8e8e8e",
         },
