@@ -8,13 +8,21 @@ interface ModalProps {
     onModalClose: () => void;
     modalOpen: boolean;
     children: React.ReactNode;
+    width?: string;
+    height?: string;
+    minHeight?: string;
 }
 
 const ModalComponent = (props: ModalProps) => {
     const { onModalClose, modalOpen, children } = props;
     return (
         <Modal open={modalOpen} onClose={onModalClose}>
-            <StyledLoginWrapper>{children}</StyledLoginWrapper>
+            <StyledLoginWrapper
+                width={props.width}
+                height={props.height}
+                minHeight={props.minHeight}>
+                {children}
+            </StyledLoginWrapper>
         </Modal>
     );
 };

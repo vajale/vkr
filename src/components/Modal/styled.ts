@@ -1,18 +1,30 @@
 import { Box, styled } from "@mui/material";
 import type { IExtendedThemeProps } from "@/themes/types";
 
-export const StyledLoginWrapper = styled(Box)(({ theme }: IExtendedThemeProps) => {
+interface IModalProps extends IExtendedThemeProps {
+    width?: string;
+    minWidth?: string;
+    height?: string;
+    minHeight?: string;
+}
+
+export const StyledLoginWrapper = styled(Box)(({
+    minHeight,
+    theme,
+    width,
+    height,
+}: IModalProps) => {
     return {
-        height: "600px",
-        minWidth: "400px",
-        minHeight: "280px",
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
+        height: height ?? "600px",
+        minWidth: width ?? "400px",
+        minHeight: minHeight ?? "280px",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
         backgroundColor: theme?.menuBackground.primary,
         borderRadius: "14px",
-        display: 'flex',
+        display: "flex",
         flexDirection: "column",
         alignItems: "center",
 
@@ -22,8 +34,7 @@ export const StyledLoginWrapper = styled(Box)(({ theme }: IExtendedThemeProps) =
 
         ".login-title": {
             fontSize: 20,
-            margin: '20px 0',
+            margin: "20px 0",
         },
-
     };
 });

@@ -22,7 +22,7 @@ export const DesktopRouter = () => {
                 <Route path={`/`} element={<Navigate to={URL.HOME} replace={true} />} />
                 <Route path={`${Constants.URL.PAGE}`} element={<Page />} />
 
-                <Route path={`${Constants.URL.INVITE}`} element={<InvitePage />} />
+                <Route path={`${Constants.URL.INVITE}/:id`} element={<InvitePage />} />
 
                 <Route path={`${Constants.URL.PAGE}/:id`} element={<Page />}>
                     <Route
@@ -34,6 +34,7 @@ export const DesktopRouter = () => {
                         }
                     />
                 </Route>
+
                 <Route
                     path={`${Constants.URL.HOME}`}
                     element={

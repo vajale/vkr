@@ -17,12 +17,12 @@ export const firebaseUserDataAPI = firebaseApi.injectEndpoints({
             },
         }),
         setUserProfileData: builder.mutation({
-            query: async ({ file, userId }: { file: File; userId: string }) => {
+            queryFn: async ({ file, userId }: { file: File; userId: string }) => {
                 const storageRef = ref(firebaseStorage, `users/${userId}/icon.png`);
 
                 const result = await uploadBytes(storageRef, file);
 
-                return Boolean(result);
+                return { data: result, status: "success" };
             },
         }),
     }),

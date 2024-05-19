@@ -3,7 +3,7 @@ import React from "react";
 import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
 
 interface ItemProps {
-    userId: string
+    userId: string;
 }
 
 const UserItem = (props: ItemProps) => {
@@ -15,13 +15,11 @@ const UserItem = (props: ItemProps) => {
         return null;
     }
 
-    const username = data?.username ? data?.username[0] : '';
+    const username = data?.username ? data?.username[0] : "";
 
     return (
         <Avatar sx={{ width: 24, height: 24 }}>
-            <Typography>
-                {username}
-            </Typography>
+            <Typography>{username}</Typography>
         </Avatar>
     );
 };
