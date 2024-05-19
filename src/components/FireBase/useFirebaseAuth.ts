@@ -1,11 +1,4 @@
-import {
-    getAuth,
-    onAuthStateChanged,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-} from "firebase/auth";
-
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useAppDispatch } from "@/store/hooks";
 import { selectUserAuth, userActions } from "store/slices/userSlice";
 import { useSelector } from "react-redux";
@@ -13,7 +6,7 @@ import { useEffect, useState } from "react";
 import { firebaseAuth } from ".";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { type User } from "@/store/slices/userSlice/types";
-import { useLoginMutation, useRegisterMutation } from "@/api/usersApi/usersService";
+import { useGetUserByIdQuery, useLazyGetUserByIdQuery, useLoginMutation, useRegisterMutation } from "@/api/usersApi/usersFirebaseService";
 import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 
 export const useFirebaseAuth = () => {
@@ -23,6 +16,7 @@ export const useFirebaseAuth = () => {
     const [createFirebaseUser, { data: registerLoading }] = useRegisterMutation();
     const [loginUser, { data: loginLoading }] = useLoginMutation();
 
+    const [fetchUserFirebaseData] = useLazyGetUserByIdQuery({ userId: firebaseAuth.currentUser?.uid });
     const isAuth = useSelector(selectUserAuth);
 
     const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
@@ -30,14 +24,21 @@ export const useFirebaseAuth = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
             if (user) {
-                const userData: User = {
+                const userAuthData: User = {
                     id: user.uid,
-                    username: user.email ?? "",
                 };
 
-                setFirebaseUser(userData);
-                dispatch(userActions.setAuthData(userData));
+                setFirebaseUser(userAuthData);
+                dispatch(userActions.setAuthData(userAuthData));
                 dispatch(userActions.initializeUser());
+
+                const firebaseUser = fetchUserFirebaseData({ userId: user.uid });
+
+                void firebaseUser.then(req => {
+                    if (req.data) {
+                        dispatch(userActions.setFirebaseData(req.data));
+                    }
+});
             } else {
                 setFirebaseUser(null);
                 dispatch(userActions.logout());

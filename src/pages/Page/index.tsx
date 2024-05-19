@@ -3,7 +3,7 @@ import { MainLayout } from "@/components/layouts/main/MainLayout";
 
 import PageWrapper from "@/components/PageView/ui/PageWrapper/PageWrapper";
 import { useParams } from "react-router-dom";
-import { useRemoveUserActivityMutation, useSetUserActivityMutation } from "@/api/usersApi/usersService";
+import { useRemoveUserActivityMutation, useSetUserActivityMutation } from "@/api/usersApi/usersFirebaseService";
 
 export const Page = memo(() => {
 	const location = useParams<{ id: string }>();
@@ -14,11 +14,11 @@ export const Page = memo(() => {
 	const [removeUserActivity] = useRemoveUserActivityMutation();
 
 	useEffect(() => {
-		updateUserActivity({ pageId });
+		void updateUserActivity({ pageId });
 
 		return () => {
 			window.addEventListener("beforeunload", e => {
-				removeUserActivity({ pageId });
+				void removeUserActivity({ pageId });
 			});
 		};
 	}, [pageId]);

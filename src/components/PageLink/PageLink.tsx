@@ -47,7 +47,6 @@ const PageLink = (props: LinkProps) => {
 
     const handleButtonOptionsClick = () => {
         setOptions(prevState => ({ isOptionsOpen: !prevState.isOptionsOpen }));
-        console.log(options.isOptionsOpen);
     };
 
     const buttonIconName = options.isOptionsOpen ? "MdArrowForwardIos" : "MdArrowForwardIos";

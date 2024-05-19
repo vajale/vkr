@@ -1,22 +1,20 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
-    useGetActiveUsersSubscribeQuery,
-    useLazyGetActiveUsersQuery,
     useLazyGetActiveUsersSubscribeQuery
-} from "@/api/usersApi/usersService";
+} from "@/api/usersApi/usersFirebaseService";
 import { Avatar, Skeleton, Stack, Typography } from "@mui/material";
-import { matchPath, useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";
 import { selectUser } from "@/store/slices/userSlice";
-import { URL } from "@/constants/navigation";
 import UserItem from "@/components/Users/UserItem";
 
 const Users = () => {
     const location = useParams<{ id: string }>();
     const pageId = location.id ?? "";
-    const browserLocation = useLocation();
-
+    const [users, setUsers] = useState<[]>([]);
     const user = useAppSelector(selectUser);
+
+    // const browserLocation = useLocation();
     // const isPage = useMemo(() => matchPath(URL.PAGE, { path: browserLocation.pathname, end: false }), []);
     // console.log(isPage);
 
@@ -24,7 +22,11 @@ const Users = () => {
 
     useEffect(() => {
         if (user != null) {
-            getUsers({ pageId });
+            void getUsers({ pageId });
+        }
+
+        if (data) {
+            setUsers(data);
         }
     }, [pageId, user]);
 
@@ -32,25 +34,13 @@ const Users = () => {
         return <Skeleton width={140} height={24}/>;
     }
 
-    if (isError && user != undefined) {
-        const username = user?.username ? user?.username[0] : '';
-
-        return <Stack marginRight={3} gap={2} flexDirection={'row'}>
-            <Avatar sx={{ width: 24, height: 24 }}>
-                <Typography>
-                {username}
-            </Typography>
-            </Avatar>
-        </Stack>;
-    }
-
-    if (data === undefined) {
+    if (users.length === 0) {
         return null;
     }
 
     return (
         <Stack marginRight={3} gap={2} flexDirection={'row'}>
-               {/* {data.map(item => <UserItem key={item} userId={item}/>)} */}
+            {/* {users?.map(item => <UserItem key={item} userId={item}/>)} */}
         </Stack>
     );
 };

@@ -7,7 +7,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { userActions } from "@/store/slices/userSlice";
 import { firebaseAuth, useFirebaseAuth } from "@/components/FireBase";
 import PagesList from "@/components/layouts/main/PagesList";
-import { useGetUserByIdQuery } from "@/api/usersApi/usersService";
+import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
 
 interface LayoutProps {
     children: React.ReactNode | React.ReactElement;
@@ -16,26 +16,22 @@ interface LayoutProps {
 export const MainLayout: React.FC<LayoutProps> = memo((props) => {
     const { children } = props;
 
+    // не убирать, нихуя ничего не работает
     const auth = useFirebaseAuth();
     const dispatch = useAppDispatch();
 
     // TODO апдейт названия страницы
 
-    const {
-        data: userData,
-        refetch,
-        isLoading,
-        isSuccess,
-    } = useGetUserByIdQuery({ userId: firebaseAuth.currentUser?.uid });
-
-    useEffect(() => {
-        if (isSuccess) {
-            dispatch(userActions.setAuthData(userData));
-        }
-    }, [isSuccess, isLoading, userData]);
+    // const { data, refetch, isLoading, isSuccess } = useGetUserByIdQuery({ userId: firebaseAuth.currentUser?.uid });
+    //
+    // useEffect(() => {
+    //     if (isSuccess) {
+    //         dispatch(userActions.setFirebaseData(data));
+    //     }
+    // }, [data]);
 
     const handlePageChanged = () => {
-        void refetch();
+        // void refetch();
     };
 
     return (
@@ -44,19 +40,13 @@ export const MainLayout: React.FC<LayoutProps> = memo((props) => {
                 <Stack
                     padding={3}
                     gap={1}
-                    style={{
-                        width: 300,
-                        height: 800,
-                        position: "sticky",
-                    }}>
-                    {isSuccess && (
-                        <PagesList pages={userData.pages} onPageChanged={handlePageChanged} />
-                    )}
+                    style={{ width: 300, height: 800, position: "sticky" }}>
+                    <PagesList onPageChanged={handlePageChanged} />
                 </Stack>
             </StyledContentWrapper>
             <div className={"side-menu"}>
                 <AppHeader />
-                {isLoading ? <Suspense fallback={<CircularProgress />} /> : children}
+                {children}
             </div>
         </StyledMainLayout>
     );
