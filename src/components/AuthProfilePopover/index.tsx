@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectUser } from "@/store/slices/userSlice";
+import { selectUser, selectUserData, selectUsername, userActions } from "@/store/slices/userSlice";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Button, CircularProgress, Popover, Typography } from "@mui/material";
 import { AccountButton } from "@/components/Login/AccountButton";
@@ -7,29 +7,33 @@ import { AccountButton } from "@/components/Login/AccountButton";
 import { useLazyGetUserProfileDataQuery } from "@/api/userProfile";
 import { StyledPaper } from "@/components/AuthProfilePopover/styled";
 import { FileUpload } from "@/components/AuthProfilePopover/FileUpload";
-import { useAppSelector } from "@/store/hooks";
-import { useFirebaseAuth } from "@/components/FireBase";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { firebaseAuth, useFirebaseAuth } from "@/components/FireBase";
 import DefaultProfile from "@/assets/png/ProfileImage.png";
 import NotLoggedSvg from "@/assets/svg/NotLoggedAvatar.svg";
+import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
 
 const AuthProfilePopover = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | EventTarget>(null);
     const [fileToUpload, setFileToUpload] = useState<null | File>(null);
-    const userState = useAppSelector(selectUser);
+
     const [getUserProfile, { data: profilePicture, isLoading }] = useLazyGetUserProfileDataQuery();
 
+    const authData = useAppSelector(selectUser);
+    const username = useSelector(selectUsername);
+    const userData = useSelector(selectUserData);
+
     const { signOutUser } = useFirebaseAuth();
-    const user = useSelector(selectUser);
 
     const handleChange = (file: File) => {
         setFileToUpload(file);
     };
 
     useEffect(() => {
-        if (userState) {
-            getUserProfile({ userId: userState?.id });
+        if (authData) {
+            void getUserProfile({ userId: authData?.id });
         }
-    }, [userState?.id]);
+    }, [authData?.id]);
 
     // @ts-expect-error
     const handleClick = (eventTarget: EventTarget) => {
@@ -55,9 +59,9 @@ const AuthProfilePopover = () => {
 
     const Image = useMemo(() => {
         if (isLoading) {
-            return <CircularProgress className={"user-progress"} />;
+            return <CircularProgress className={"user-progress"}/>;
         }
-        return <img src={authProfileUrl} alt={"user-photo"} />;
+        return <img src={authProfileUrl} alt={"user-photo"}/>;
     }, [authProfileUrl, isLoading]);
 
     return (
@@ -65,7 +69,7 @@ const AuthProfilePopover = () => {
             <AccountButton
                 onClick={handleClick}
                 image={profilePicture ?? NotLoggedSvg}
-                accountName={user?.username}
+                accountName={username}
             />
             <Popover
                 id={id}
@@ -78,18 +82,18 @@ const AuthProfilePopover = () => {
                 }}>
                 <StyledPaper>
                     <div className={"user-wrapper"}>
-                        <Typography variant={"h6"}>{user?.username ?? "Имя Фамильев"}</Typography>
+                        <Typography variant={"h6"}>{userData?.username ?? "Имя Фамильев"}</Typography>
                         <Button
                             className={"logout"}
                             sx={{ width: 140 }}
-                            onClick={async () => {
+                            onClick={ async () => {
                                 await signOutUser();
                             }}>
                             Выйти
                         </Button>
                     </div>
                     <div className={"user-photo-wrapper"}>{Image}</div>
-                    <FileUpload handleChangeFile={handleChange} />
+                    <FileUpload handleChangeFile={handleChange}/>
                 </StyledPaper>
             </Popover>
         </div>

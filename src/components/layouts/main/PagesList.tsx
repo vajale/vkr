@@ -17,20 +17,16 @@ import { MainButton } from "@/components/buttons/MainButton";
 
 interface ListProps {
     onPageChanged: () => void;
-    pages: string[];
 }
 
 const PagesList = (props: ListProps) => {
-    const { onPageChanged, pages } = props;
+    const { onPageChanged } = props;
     const navigate = useNavigate();
 
-    const {
-        data: pagesData,
-        isSuccess: pagesSuccess,
-        isLoading: isPagesLoading,
-    } = useFetchPagesQuery(pages);
-    const [createPage, { isLoading: isLoadingCreatingNewPage, data: newPageId }] =
-        useCreateNewPageMutation();
+    const userPagesId = useAppSelector(selectUserPages);
+
+    const { data: pagesData, isSuccess: pagesSuccess, isLoading: isPagesLoading } = useFetchPagesQuery(userPagesId);
+    const [createPage, { isLoading: isLoadingCreatingNewPage, data: newPageId }] = useCreateNewPageMutation();
     const [removePage] = useRemovePageMutation({});
 
     useEffect(() => {
@@ -55,11 +51,11 @@ const PagesList = (props: ListProps) => {
         navigate(Constants.URL.HOME);
     };
 
-    const pagesRender = useMemo(() => {
-        if (pages.length === 0) {
-            return null;
-        }
+    if (!userPagesId) {
+        return null;
+    }
 
+    const pagesRender = useMemo(() => {
         if (isPagesLoading) {
             return (
                 <div>
@@ -69,7 +65,7 @@ const PagesList = (props: ListProps) => {
                 </div>
             );
         }
-        if (pagesSuccess && pagesSuccess) {
+        if (pagesSuccess) {
             return pagesData?.map((page) => (
                 <PageLink
                     showOptionsButton

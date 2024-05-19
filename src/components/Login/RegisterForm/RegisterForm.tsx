@@ -13,7 +13,7 @@ import { useFirebaseAuth } from "@/components/FireBase";
 import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { StyledLoginButton } from "@/components/Login/AuthForm/styled";
-import { useCreateUserMutation } from "@/api/usersApi/usersService";
+import { useCreateUserMutation } from "@/api/usersApi/usersFirebaseService";
 
 interface FormProps {
     onAuthFormClick: () => void,

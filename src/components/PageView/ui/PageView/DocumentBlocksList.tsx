@@ -172,7 +172,7 @@ const DocumentBlocksList = (props: BlocksProps) => {
                                 break;
                         }
                     })}
-                     {/* <EmptyDocumentBlock onClick={handleEmptySpaceClick}/> */}
+                      <EmptyDocumentBlock onClick={handleEmptySpaceClick}/>
                 </SortableContext>
             </DndContext>
         </div>

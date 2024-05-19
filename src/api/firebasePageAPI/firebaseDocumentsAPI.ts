@@ -82,14 +82,19 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
         }),
         fetchPages: builder.query<Page[], string[]>({
             queryFn: async (pageIds) => {
+                if (!Array.isArray(pageIds) || pageIds.length === 0) {
+                    throw new Error("Invalid input: pageIds must be a non-empty array.");
+                }
+
                 const dbRef = ref(firebaseDatabase);
 
-                const promises = pageIds.map(async (pageId) => {
-                    return await get(child(dbRef, pageId))
-                        .then((snapshot) => {
+                try {
+                    const promises = pageIds.map(async (pageId) => {
+                        try {
+                            const snapshot = await get(child(dbRef, pageId));
                             if (snapshot.exists()) {
                                 const response: PageResponse = snapshot.val() as PageResponse;
-                                const { page, permissions } = response;
+                                const { page } = response;
 
                                 return {
                                     id: pageId,
@@ -99,22 +104,25 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                                     },
                                 };
                             } else {
-                                console.log("No data available");
+                                console.log(`No data available for pageId: ${pageId}`);
                                 return null;
                             }
-                        })
-                        .catch((error) => {
-                            console.error(error);
+                        } catch (error) {
+                            console.error(`Error fetching data for pageId: ${pageId}`, error);
                             return null;
-                        });
-                });
+                        }
+                    });
 
-                const pagesResponses = await Promise.all(promises);
-                const validResponses = pagesResponses.filter((response) => response !== null);
+                    const pagesResponses = await Promise.all(promises);
+                    const validResponses = pagesResponses.filter((response) => response !== null);
 
-                return {
-                    data: validResponses,
-                };
+                    return {
+                        data: validResponses,
+                    };
+                } catch (error: any) {
+                    console.error("Error processing page data:", error.message);
+                    return { error: error.message };
+                }
             },
         }),
         updatePageBlocks: builder.mutation<Page, { newPage: Page }>({
@@ -188,6 +196,7 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                                 name: "Новая страница",
                                 background: "whitesmoke",
                             },
+                            id: ''
                         },
                         permissions: {
                             creator: userId,
@@ -195,14 +204,23 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                         },
                     };
 
-                    const key = await push(dbRef, newPageObj).then((data) => data.key);
+                    const pageFirebaseId = await push(dbRef, newPageObj).then((data) => data.key);
 
-                    await updateDoc(doc(firestoreDB, "users", userId), {
-                        pages: arrayUnion(key),
+                    // добавление id
+                    const newDbRef = ref(firebaseDatabase, pageFirebaseId);
+                    const ssss = child(newDbRef, 'page');
+                    await update(ssss, {
+
+                            id: pageFirebaseId
+
                     });
 
-                    console.log("Страница добавлена: " + key);
-                    return { data: { id: key } };
+                    await updateDoc(doc(firestoreDB, "users", userId), {
+                        pages: arrayUnion(pageFirebaseId),
+                    });
+
+                    console.log("Страница добавлена: " + pageFirebaseId);
+                    return { data: { id: pageFirebaseId } };
                 } catch (error: any) {
                     console.error(error.message);
                     return { error: error.message };

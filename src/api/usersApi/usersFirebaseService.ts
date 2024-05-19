@@ -1,22 +1,19 @@
 import { firebaseApi } from "@/api";
-import { mockUsersData } from "@/utils/mock/mockdata";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { firebaseAuth, firebaseDatabase, firestoreDB } from "@/components/FireBase";
-import { type User } from "@/store/slices/userSlice/types";
+import { type User, type UserFirebase } from "@/store/slices/userSlice/types";
 import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import type { Page } from "@/components/PageView/model/types";
 import { child, get, onValue, ref, remove, update } from "firebase/database";
 
-interface UserFirebaseRequest {
+type UserFirebaseRequest = UserFirebase & {
     user: {
-        firstName: string,
-        lastname: string,
-        email: string,
-        phoneNumber: string
-    },
-    pages?: string[]
-}
+        firstName?: string,
+        lastname?: string,
+        email?: string,
+        phoneNumber?: string
+    }
+};
 
 async function getUser (id: string): Promise<User> {
     try {
@@ -28,11 +25,11 @@ async function getUser (id: string): Promise<User> {
             return { id, username: "", pages: [], error: "No such user" };
         }
 
-        const userRequest = userDoc.data() as UserFirebaseRequest;
+        const userRequest: UserFirebaseRequest = userDoc.data() as UserFirebaseRequest;
 
         return {
             id,
-            username: `${userRequest.user.lastname} ${userRequest.user.firstName}`,
+            username: `${userRequest.data.lastname} ${userRequest.data.firstName}`,
             pages: userRequest.pages,
         };
     } catch (error) {
@@ -41,43 +38,8 @@ async function getUser (id: string): Promise<User> {
     }
 }
 
-export const usersService = firebaseApi.injectEndpoints({
+export const usersFirebaseService = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getActiveUsers: builder.query<User[], { pageId: string }>({
-            queryFn: async ({ pageId }) => {
-                const userId = firebaseAuth.currentUser?.uid;
-
-                if (!userId) {
-                    console.log("Пользователь не аутентифицирован");
-                    return { error: "Пользователь не аутентифицирован" };
-                }
-
-                try {
-                    const pageRef = ref(firebaseDatabase, pageId);
-                    const activeUsersChild = child(pageRef, 'activeUsers');
-
-                    const usersSnapshot = await get(activeUsersChild);
-
-                    if (usersSnapshot.exists()) {
-                        const snapshotData = usersSnapshot.val();
-                        const userIds = Object.values(snapshotData);
-
-                        const usersData = await Promise.all(userIds.map(async id => await getUser(id)));
-
-                        return {
-                            data: usersData,
-                        };
-                    } else {
-                        console.log("No data available");
-                    }
-
-                    return await getUser(userId);
-                } catch (error) {
-                    console.error("Ошибка при обновлении данных:", error);
-                    throw new Error("Ошибка при обновлении данных");
-                }
-            },
-        }),
         login: builder.mutation<User, { email: string, password: string }>({
             queryFn: async ({ email, password }) => {
                 try {
@@ -124,30 +86,63 @@ export const usersService = firebaseApi.injectEndpoints({
                 }
             }
         }),
-        getUserById: builder.query<User, { userId: string }>({
+        getUserById: builder.query<UserFirebase, { userId: string }>({
             queryFn: async (_arg) => {
                 const { userId } = _arg;
 
                 const blogRef = doc(firestoreDB, "users", userId);
 
                 const queryData = await getDoc(blogRef)
-                    .then((doc) => {
-                        return doc;
-                    })
+                    .then((doc) => doc.data())
                     .catch((error) => {
                         console.log(error);
                     });
 
-                // @ts-expect-error
-                const userData = queryData.data() as User;
+                const userData: UserFirebaseRequest = queryData as UserFirebaseRequest;
+                const customUsername = `${userData.user.firstName} ${userData.user.lastname}`;
 
                 return {
                     data: {
                         id: userId,
                         pages: userData.pages,
-                        username: userData.username,
+                        username: customUsername,
                     },
                 };
+            },
+        }),
+        getActiveUsers: builder.query<User[], { pageId: string }>({
+            queryFn: async ({ pageId }) => {
+                const userId = firebaseAuth.currentUser?.uid;
+
+                if (!userId) {
+                    console.log("Пользователь не аутентифицирован");
+                    return { error: "Пользователь не аутентифицирован" };
+                }
+
+                try {
+                    const pageRef = ref(firebaseDatabase, pageId);
+                    const activeUsersChild = child(pageRef, 'activeUsers');
+
+                    const usersSnapshot = await get(activeUsersChild);
+
+                    if (usersSnapshot.exists()) {
+                        const snapshotData = usersSnapshot.val();
+                        const userIds = Object.values(snapshotData);
+
+                        const usersData = await Promise.all(userIds.map(async id => await getUser(id)));
+
+                        return {
+                            data: usersData,
+                        };
+                    } else {
+                        console.log("No data available");
+                    }
+
+                    return await getUser(userId);
+                } catch (error) {
+                    console.error("Ошибка при обновлении данных:", error);
+                    throw new Error("Ошибка при обновлении данных");
+                }
             },
         }),
         setUserActivity: builder.mutation<User, { pageId: string }>({
@@ -203,7 +198,7 @@ export const usersService = firebaseApi.injectEndpoints({
                 },
             }
         ),
-        getActiveUsersSubscribe: builder.query<User[], { pageId: string }>({
+        getActiveUsersSubscribe: builder.query<string[], { pageId: string }>({
             async queryFn ({ pageId }, { dispatch }) {
                 const dbRef = ref(firebaseDatabase, pageId);
                 const usersChild = child(dbRef, 'activeUsers');
@@ -215,7 +210,7 @@ export const usersService = firebaseApi.injectEndpoints({
                             if (usersSnapshot.exists()) {
                                 try {
                                     const snapshotData = usersSnapshot.val();
-                                    const userIds: string[] = Object.values(snapshotData);
+                                    const userIds = snapshotData != undefined ? Object.values(snapshotData) : [];
                                     // const promises = userIds.map(async (id: string) => await getUser(id));
                                     // const usersData: User[] = await Promise.all(promises);
                                     resolve(userIds);
@@ -263,11 +258,11 @@ export const usersService = firebaseApi.injectEndpoints({
 });
 
 export const {
-    useLazyGetActiveUsersQuery,
     useRegisterMutation,
     useLoginMutation,
     useSetUserActivityMutation,
     useRemoveUserActivityMutation,
     useLazyGetActiveUsersSubscribeQuery,
-    useGetUserByIdQuery
-} = usersService;
+    useGetUserByIdQuery,
+    useLazyGetUserByIdQuery
+} = usersFirebaseService;
