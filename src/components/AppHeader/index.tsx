@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 
 import { CommonBar } from "./CommonBar";
 
@@ -7,7 +7,7 @@ interface IBaseLayoutProps {
 }
 
 const AppHeader: React.FC<IBaseLayoutProps> = ({}) => {
-   return <CommonBar></CommonBar>;
+   return <CommonBar/>;
 };
 
 export default AppHeader;

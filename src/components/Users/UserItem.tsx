@@ -1,6 +1,6 @@
 import { Avatar, Typography } from "@mui/material";
 import React from "react";
-import { useGetUserByIdQuery } from "@/api/usersApi/usersService";
+import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
 
 interface ItemProps {
     userId: string;
@@ -23,3 +23,5 @@ const UserItem = (props: ItemProps) => {
         </Avatar>
     );
 };
+
+export default UserItem;

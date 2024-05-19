@@ -1,11 +1,22 @@
 export interface User {
     id: string;
-    username?: string;
+    email?: string;
     avatar?: string;
-    pages?: string[];
+}
+
+export interface UserFirebase {
+    data: {
+        firstName?: string,
+        lastname?: string,
+        email?: string,
+        phoneNumber?: string
+    },
+    username?: string
+    pages?: string[]
 }
 
 export interface IUserSchema {
-    user?: User;
+    user?: UserFirebase;
+    authData?: User;
     _isInitialized: boolean
 }
