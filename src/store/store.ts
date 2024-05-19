@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./rootReducer";
-import { firebaseDocumentsAPI } from "@/api/firebasePageAPI/firebaseDocumentsAPI";
+import { pagesService } from "@/api/firebasePageAPI/pagesService";
 
 const store = configureStore({
     reducer: rootReducer,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(firebaseDocumentsAPI.middleware),
+        getDefaultMiddleware().concat(pagesService.middleware),
     devTools: true
 });
 

@@ -92,6 +92,7 @@ export const pageSlice = createSlice({
     }),
     selectors: {
         selectPage: (state) => state.pageData,
+        selectPageId: (state) => state.pageData !== undefined ? state.pageData.id : '',
         selectPageName: (state) => state.pageData?.visual?.name ?? "Страница",
         selectPageBackground: (state) => state.pageData?.visual?.background ?? "",
         selectPageDocuments: (state) => state.pageData?.documentBlocks ?? [],
@@ -111,4 +112,5 @@ export const {
     selectPageDocuments,
     selectPageName,
     selectPageBackground,
+    selectPageId
 } = pageSlice.selectors;

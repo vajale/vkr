@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { Skeleton, styled } from "@mui/material";
 import { type IExtendedThemeProps } from "@/themes/types";
 
 interface IProps {
@@ -6,15 +6,29 @@ interface IProps {
     clicked?: boolean;
 }
 
-export const StyledUser = styled("div")(() => ({
+export const StyledUserSkeleton = styled(Skeleton)(() => ({
+    width: "100%",
+    height: "80px"
+}));
+
+interface IStyledUserProps extends IExtendedThemeProps {
+    outlined: boolean
+}
+
+export const StyledUser = styled("div")(({ outlined, theme }: IStyledUserProps) => ({
     display: "flex",
     flexDirection: "row",
-    width: "100%",
+    alignContent: 'center',
+    alignItems: 'center',
+    width: "95%",
     justifyContent: "space-between",
     height: "80px",
+    border: outlined ? `solid 2px ${theme?.palette.borderColors.secondary}` : 'none',
+    borderRadius: '7px',
     ".user-profile": {
         display: "flex",
         gap: 5,
+        marginLeft: '7px',
 
         ".user": {
             display: "flex",

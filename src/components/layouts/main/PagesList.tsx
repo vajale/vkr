@@ -1,11 +1,11 @@
-import { Button, Skeleton, Stack, Typography } from "@mui/material";
+import { Button, Link, Skeleton, Stack, Typography } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
 import PageLink from "@/components/PageLink/PageLink";
 import {
     useCreateNewPageMutation,
     useFetchPagesQuery,
     useRemovePageMutation,
-} from "@/api/firebasePageAPI/firebaseDocumentsAPI";
+} from "@/api/firebasePageAPI/pagesService";
 import { MaterialIcon } from "@/assets/Icon";
 import { useAppSelector } from "@/store/hooks";
 import { selectUserPages } from "@/store/slices/userSlice";
@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { NAVIGATION } from "@/constants/navigation";
 import { Members } from "@/components/StatickBlocks/Members";
 import { MainButton } from "@/components/buttons/MainButton";
+import AppLink from "@/components/AppLink/AppLink";
 
 interface ListProps {
     onPageChanged: () => void;
@@ -93,9 +94,9 @@ const PagesList = (props: ListProps) => {
                 onClick={handleMainButton}>
                 СЕЙФ +
             </Typography>
-            <PageLink id={""} href={"/calendar"} label={"Поиск"} icon={"MdSearch"} />
+            <PageLink id={""} href={"calendar"} label={"Поиск"} icon={"MdSearch"} />
             <Stack mt={4}>
-                <PageLink id={""} href={"/calendar"} label={"Календарь"} icon={"MdCalendarToday"} />
+                <AppLink icon={"MdCalendarMonth"} href={'/calendar'} label={'Календарь'}/>
                 <Members />
             </Stack>
             <Stack

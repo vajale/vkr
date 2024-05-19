@@ -10,7 +10,7 @@ import { StyledColorMode } from "./styled";
 import { MaterialIcon } from "@/assets/Icon";
 import {
    useLazyUpdatePageRealtimeQuery,
-} from "@/api/firebasePageAPI/firebaseDocumentsAPI";
+} from "@/api/firebasePageAPI/pagesService";
 import { selectPage } from "@/store/slices/pageSlice";
 
 const ColorModeButton = () => {

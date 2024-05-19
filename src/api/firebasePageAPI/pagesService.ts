@@ -1,15 +1,12 @@
-import {
-    firebaseAuth,
-    firebaseDatabase,
-    firebaseStorage,
-    firestoreDB,
-} from "@/components/FireBase";
+import { firebaseAuth, firebaseDatabase, firestoreDB } from "@/components/FireBase";
 
 import { type DocumentBlock, type Page } from "../../components/PageView/model/types";
 import { firebaseApi } from "@/api";
-import { v4, v4 as uuidv4 } from "uuid";
-import { ref, set, get, child, update, push, remove } from "firebase/database";
-import { doc, updateDoc, arrayUnion, deleteDoc, deleteField, getDoc } from "firebase/firestore";
+import { child, get, push, ref, remove, set, update } from "firebase/database";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { PermissionSelect, UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
+import { useAppSelector } from "@/store/hooks";
+import { selectPageId } from "@/store/slices/pageSlice";
 
 function isPage (obj: any): obj is Page {
     return (
@@ -20,15 +17,14 @@ function isPage (obj: any): obj is Page {
     );
 }
 
-interface PageResponse {
+export interface PageResponse {
     page: Page;
-    permissions: {
-        creator: string;
-        moder: string;
-    };
+    permissions: Record<string, UserPermission>;
 }
 
-type PageRequestObjectType = PageResponse;
+export type PageRequestObjectType = PageResponse & {
+    permissions: Record<string, UserPermission>
+};
 
 export function arrayToObject<T> (arr: DocumentBlock[] | undefined): Record<number, T> {
     const obj: Record<number, T> = {};
@@ -38,7 +34,23 @@ export function arrayToObject<T> (arr: DocumentBlock[] | undefined): Record<numb
     return obj;
 }
 
-export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
+interface PermissionsResult {
+    readers: string[];
+    creators: string[];
+    moderators: string[];
+}
+
+// const userList = Object.keys(permissions).map(user => {
+//     return {
+//         creators: permissions[user] === UserPermission.CREATOR && user,
+//         moderators: permissions[user] === UserPermission.MODERATOR && user,
+//         readers: permissions[user] === UserPermission.READER && user,
+//     };
+// });
+//
+// console.log(userList);
+
+export const pagesService = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
         fetchPageData: builder.query<Page, { pageId: string }>({
             async queryFn ({ pageId }) {
@@ -57,10 +69,6 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                     if (snapshot.exists()) {
                         const snapshotData = snapshot.val() as PageResponse;
                         const permissions = snapshotData.permissions;
-
-                        // if (permissions.creator === userId || permissions.moder === userId) {
-                        //     return { data: snapshotData.page };
-                        // }
 
                         const docBlocksArray = Object.values(snapshotData.page.documentBlocks);
 
@@ -183,7 +191,7 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                     const dbRef = ref(firebaseDatabase);
 
                     // Создаем объект для новой страницы в Realtime Database
-                    const newPageObj: PageRequestObjectType = {
+                    const newPageObj = {
                         page: {
                             documentBlocks: {
                                 0: {
@@ -199,8 +207,7 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                             id: ''
                         },
                         permissions: {
-                            creator: userId,
-                            moder: "",
+                            [userId]: UserPermission.CREATOR,
                         },
                     };
 
@@ -209,11 +216,7 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                     // добавление id
                     const newDbRef = ref(firebaseDatabase, pageFirebaseId);
                     const ssss = child(newDbRef, 'page');
-                    await update(ssss, {
-
-                            id: pageFirebaseId
-
-                    });
+                    await update(ssss, { id: pageFirebaseId });
 
                     await updateDoc(doc(firestoreDB, "users", userId), {
                         pages: arrayUnion(pageFirebaseId),
@@ -282,11 +285,67 @@ export const firebaseDocumentsAPI = firebaseApi.injectEndpoints({
                 }
             },
         }),
+        getUsersWithPermissions: builder.query<PermissionsResult, { pageId: string }>({
+            queryFn: async ({ pageId }) => {
+                const dbRef = ref(firebaseDatabase);
+
+                try {
+                    const pageChild = child(dbRef, pageId);
+                    const permissionChild = child(pageChild, 'permissions');
+                    const snapshot = await get(permissionChild);
+
+                    if (snapshot.exists()) {
+                        const permissions = snapshot.val() as Record<string, UserPermission>;
+
+                        const result = Object.keys(permissions).reduce((acc: PermissionsResult, user: string) => {
+                            if (permissions[user] === UserPermission.READER) {
+                                acc.readers.push(user);
+                            }
+                            if (permissions[user] === UserPermission.CREATOR) {
+                                acc.creators.push(user);
+                            }
+                            if (permissions[user] === UserPermission.MODERATOR) {
+                                acc.moderators.push(user);
+                            }
+                            return acc;
+                        }, { readers: [], creators: [], moderators: [] });
+
+                        return {
+                            data: result
+                        };
+                    } else {
+                        console.log("No data available");
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+        }),
+        updateUserPermission: builder.mutation<string, { pageId: string, userId: string, newPermission: UserPermission }>({
+            queryFn: async ({ userId, newPermission, pageId }) => {
+                const dbRef = ref(firebaseDatabase);
+                const pageRef = child(dbRef, pageId);
+                const permissionsRef = child(pageRef, "permissions");
+
+                try {
+                    const updateData = {
+                        [userId]: newPermission,
+                    };
+
+                    await update(permissionsRef, updateData);
+
+                    console.log("Права успешно обновлены");
+                    return newPermission;
+                } catch (error) {
+                    console.error("Ошибка при обновлении прав:", error);
+                    throw new Error("Ошибка при обновлении прав");
+                }
+            },
+        }),
     }),
 });
 
 export const {
-    useLazyFetchPagesQuery,
     useLazyUpdatePageRealtimeQuery,
     useCreateNewPageMutation,
     useFetchPageDataQuery,
@@ -294,4 +353,6 @@ export const {
     useUpdatePageBlocksMutation,
     useRemovePageMutation,
     useFetchPagesQuery,
-} = firebaseDocumentsAPI;
+    useGetUsersWithPermissionsQuery,
+    useUpdateUserPermissionMutation
+} = pagesService;

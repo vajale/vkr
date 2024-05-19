@@ -2,6 +2,7 @@ import { ref, onValue, child } from "firebase/database";
 import { firebaseDatabase } from "@/components/FireBase";
 import { firebaseApi } from "@/api";
 import { type Page } from "@/components/PageView/model/types";
+import { UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
 
 interface PageResponse {
     page: Page;
@@ -25,12 +26,6 @@ const api = firebaseApi.injectEndpoints({
                     const unsubscribe = onValue(pageChild, (snapshot) => {
                             if (snapshot.exists()) {
                                 const snapshotData: Page = snapshot.val();
-                                // const permissions = snapshotData.permissions;
-
-                                // if (permissions.creator === userId || permissions.moder === userId) {
-                                //     return { data: snapshotData.page };
-                                // }
-
                                 const docBlocksArray = snapshotData?.documentBlocks ? Object.values(snapshotData?.documentBlocks) : [];
 
                                 const pageData = {
