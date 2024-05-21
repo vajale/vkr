@@ -17,16 +17,12 @@ const ROUTE_BUTTONS = [
         URL: Constants.NAVIGATION.LANDING.PRICES,
         shortCut: Constants.URL.PRICES,
     },
-    {
-        title: "контакты",
-        URL: Constants.NAVIGATION.LANDING.CONTACT,
-        shortCut: Constants.URL.CONTACT,
-    },
+    /*
     {
         title: "о нас",
         URL: Constants.NAVIGATION.LANDING.ABOUT,
         shortCut: Constants.URL.ABOUT,
-    },
+    }, */
 ];
 
 const LandingRoute = () => {
@@ -44,12 +40,13 @@ const LandingRoute = () => {
         <StyledLandingRouteButtons>
             {ROUTE_BUTTONS.map((button) => (
                 <Link
-                    className={checkIsActive(button.URL) != null ? "active" : ""}
                     key={button.title}
                     onClick={() => {
                         handleClick(button.shortCut);
                     }}>
-                    <Typography>{button.title}</Typography>
+                    <Typography className={checkIsActive(button.URL) != null ? "active" : ""}>
+                        {button.title}
+                    </Typography>
                 </Link>
             ))}
         </StyledLandingRouteButtons>

@@ -12,6 +12,7 @@ import { NestRoute } from "@/routes/NestRoute";
 import LandingCarousel from "@/components/StatickBlocks/Landing/Carousel";
 import { Page } from "@/pages/Page";
 import { InvitePage } from "@/pages/InvitePage";
+import { Prices } from "@/components/StatickBlocks/Landing/Prices";
 
 const { URL } = Constants;
 
@@ -56,7 +57,7 @@ export const DesktopRouter = () => {
                 <Route path={`${Constants.URL.LANDING}/*`} element={<NestRoute />}>
                     <Route path="" element={<LandingPage />}>
                         <Route path={`${Constants.URL.MAIN}/*`} element={<LandingCarousel />} />
-                        <Route path={`${URL.PRICES}`} element={<p>прайсес</p>} />
+                        <Route path={`${URL.PRICES}`} element={<Prices />} />
                     </Route>
                 </Route>
             </Routes>
