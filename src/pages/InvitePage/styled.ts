@@ -20,9 +20,14 @@ export const StyledInvitePage = styled("div")(({ theme }: IExtendedThemeProps) =
         borderRadius: 8,
         width: "200px",
         height: "40px",
+        transition: "background 1.4s ease-in-out",
     },
 
-    ".button .accept": {
+    ".accept-active": {
+        backgroundColor: "#BDECB6",
+    },
+
+    ".reject": {
         backgroundColor: "#F5E1A4",
     },
 
