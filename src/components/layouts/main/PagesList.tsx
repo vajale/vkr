@@ -87,7 +87,7 @@ const PagesList = (props: ListProps) => {
                 />
             ));
         }
-    }, [pagesData]);
+    }, [pagesData, isPagesLoading]);
 
     return (
         <>

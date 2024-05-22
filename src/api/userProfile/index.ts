@@ -28,5 +28,8 @@ export const firebaseUserDataAPI = firebaseApi.injectEndpoints({
     }),
 });
 
-export const { useLazyGetUserProfileDataQuery, useSetUserProfileDataMutation } =
-    firebaseUserDataAPI;
+export const {
+    useLazyGetUserProfileDataQuery,
+    useGetUserProfileDataQuery,
+    useSetUserProfileDataMutation,
+} = firebaseUserDataAPI;

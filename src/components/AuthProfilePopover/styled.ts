@@ -29,6 +29,7 @@ export const StyledPaper = styled("div")(() => ({
         height: "280px",
         border: "1px solid #838383",
         borderRadius: 8,
+        backgroundColor: "black",
 
         img: {
             width: "280px",

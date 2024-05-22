@@ -1,18 +1,27 @@
 import React, { useMemo } from "react";
 import ModalComponent from "@/components/Modal";
 import { MainButton } from "@/components/buttons/MainButton";
-import { StyledMembers, StyledUser, StyledUserSkeleton } from "@/components/StatickBlocks/Members/styled";
+import {
+    StyledMembers,
+    StyledUser,
+    StyledUserSkeleton,
+} from "@/components/StatickBlocks/Members/styled";
 import { Typography } from "@/components/common/CustomTypography";
-import { Button, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField } from "@mui/material";
 import { useAppSelector } from "@/store/hooks";
 import { selectPage, selectPageId } from "@/store/slices/pageSlice";
-import { PermissionSelect, UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
+import {
+    PermissionSelect,
+    UserPermission,
+} from "@/components/StatickBlocks/Members/PermissionSelect";
 import { type IPermissionSelect } from "@/components/StatickBlocks/Members/PermissionSelect/types";
 import { useParams } from "react-router-dom";
 import { useGetUsersWithPermissionsQuery } from "@/api/firebasePageAPI/pagesService";
 import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
-import { useSelector } from "react-redux";
-import { selectUser, selectUserId } from "@/store/slices/userSlice";
+import { selectUserId } from "@/store/slices/userSlice";
+import { useGetUserProfileDataQuery } from "@/api/userProfile";
+import { useFirebaseAuth } from "@/components/FireBase";
+import NotLoggedSvg from "@/assets/svg/NotLoggedAvatar.svg";
 
 const permissionName = {
     [UserPermission.CREATOR]: "Создатель",
@@ -22,19 +31,34 @@ const permissionName = {
 
 const UserElement: React.FC<IPermissionSelect> = ({ userId, userPermission, pageId }) => {
     const clientUserId = useAppSelector(selectUserId);
-
-    const { data, isLoading } = useGetUserByIdQuery({ userId });
+    const { firebaseUser } = useFirebaseAuth();
+    const { data, isLoading, isError } = useGetUserByIdQuery({ userId });
+    const { data: profilePicture, isLoading: isLoadingPicture } = useGetUserProfileDataQuery({
+        userId: firebaseUser?.id ?? "",
+    });
 
     if (isLoading || !data) {
-        return <StyledUserSkeleton/>;
+        return <StyledUserSkeleton />;
     }
 
     const isClientUser = clientUserId === userId;
 
+    const getPicture = () => {
+        if (isLoadingPicture) {
+            return <CircularProgress />;
+        }
+
+        if (isError || !profilePicture) {
+            return <img src={NotLoggedSvg} alt={"s"} />;
+        }
+
+        return <img src={profilePicture} alt={"s"} />;
+    };
+
     return (
         <StyledUser outlined={isClientUser}>
             <div className={"user-profile"}>
-                <img alt={"s"}/>
+                {getPicture()}
                 <div className={"user"}>
                     <div className={"main-data"}>
                         {data.username}
@@ -43,7 +67,7 @@ const UserElement: React.FC<IPermissionSelect> = ({ userId, userPermission, page
                     <Typography className={"mail"}>{data.data.phoneNumber}</Typography>
                 </div>
             </div>
-            <PermissionSelect pageId={pageId} userId={userId} userPermission={userPermission}/>
+            <PermissionSelect pageId={pageId} userId={userId} userPermission={userPermission} />
         </StyledUser>
     );
 };
@@ -78,30 +102,47 @@ export const Members: React.FC = () => {
     };
 
     const usersRender = useMemo(() => {
-        return data !== undefined && (
-            <div className={'users'}>
-                <div className={'creator'}>{
-                    data.creators.map((user) => <UserElement pageId={id} key={user}
-                                                             userPermission={UserPermission.CREATOR}
-                                                             userId={user}/>)}
+        return (
+            data !== undefined && (
+                <div className={"users"}>
+                    <div className={"creator"}>
+                        {data.creators.map((user) => (
+                            <UserElement
+                                pageId={id}
+                                key={user}
+                                userPermission={UserPermission.CREATOR}
+                                userId={user}
+                            />
+                        ))}
+                    </div>
+                    <div className={"moders"}>
+                        {data.moderators.map((user) => (
+                            <UserElement
+                                pageId={id}
+                                key={user}
+                                userPermission={UserPermission.MODERATOR}
+                                userId={user}
+                            />
+                        ))}
+                    </div>
+                    <div className={"reader"}>
+                        {data.readers.map((user) => (
+                            <UserElement
+                                pageId={id}
+                                key={user}
+                                userPermission={UserPermission.READER}
+                                userId={user}
+                            />
+                        ))}
+                    </div>
                 </div>
-                <div className={'moders'}>{
-                    data.moderators.map((user) => <UserElement pageId={id} key={user}
-                                                               userPermission={UserPermission.MODERATOR}
-                                                               userId={user}/>)}
-                </div>
-                <div className={'reader'}>{
-                    data.readers.map((user) => <UserElement pageId={id} key={user}
-                                                               userPermission={UserPermission.READER}
-                                                               userId={user}/>)}
-                </div>
-            </div>
+            )
         );
     }, [isSuccess, isLoading]);
 
     return (
         <div>
-            <MainButton onClick={handleOpen}/>
+            <MainButton onClick={handleOpen} />
             <ModalComponent modalOpen={isOpen} onModalClose={handleClose}>
                 <StyledMembers>
                     <div className={"header"}>
@@ -123,29 +164,7 @@ export const Members: React.FC = () => {
                         <Typography className={"title"}>Участники страницы:</Typography>
                         <div className={"mem-list"}>
                             <div className={"maintainer"}></div>
-                            <div className={"users"}>
-                                {usersRender}
-                                {/* <UserElement */}
-                                {/*    userPermission={UserPermission.MODERATOR} */}
-                                {/*    userId={"hui"} */}
-                                {/* /> */}
-                                {/* <UserElement */}
-                                {/*    userPermission={UserPermission.READER} */}
-                                {/*    userId={"hui"} */}
-                                {/* /> */}
-                                {/* <UserElement */}
-                                {/*    userPermission={UserPermission.READER} */}
-                                {/*    userId={"hui"} */}
-                                {/* /> */}
-                                {/* <UserElement */}
-                                {/*    userPermission={UserPermission.READER} */}
-                                {/*    userId={"hui"} */}
-                                {/* /> */}
-                                {/* <UserElement */}
-                                {/*    userPermission={UserPermission.READER} */}
-                                {/*    userId={"hui"} */}
-                                {/* /> */}
-                            </div>
+                            <div className={"users"}>{usersRender}</div>
                         </div>
                     </div>
                 </StyledMembers>
