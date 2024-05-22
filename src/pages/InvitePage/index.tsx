@@ -4,19 +4,26 @@ import ModalComponent from "@/components/Modal";
 import { StyledInvitePage } from "@/pages/InvitePage/styled";
 import { Typography } from "@/components/common/CustomTypography";
 import { useFirebaseAuth } from "@/components/FireBase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { NAVIGATION } from "@/constants/navigation";
+import { useUpdateUserPermissionMutation } from "@/api/firebasePageAPI/pagesService";
+import { UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
 
 export const InvitePage = () => {
-    const { isAuth } = useFirebaseAuth();
+    const { isAuth, authState: [user] } = useFirebaseAuth();
+    const id = useParams();
     const navigate = useNavigate();
+
+    const [updatePermissions] = useUpdateUserPermissionMutation();
 
     const onClose = () => {
         console.log("onClose");
     };
 
     const handleAccept = () => {
-        console.log("handleAccept");
+        console.log(id.id);
+        void updatePermissions({ pageId: id.id, userId: user?.uid, newPermission: UserPermission.MODERATOR });
+        console.log("handleAccepte");
     };
 
     const navigateToLandig = () => {

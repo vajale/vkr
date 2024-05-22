@@ -1,4 +1,4 @@
-import { firebaseAuth, firebaseDatabase, firestoreDB } from "@/components/FireBase";
+import { firebaseAuth, firebaseRealtimeDatabase, firestoreDB } from "@/components/FireBase";
 
 import { type DocumentBlock, type Page } from "../../components/PageView/model/types";
 import { firebaseApi } from "@/api";
@@ -61,7 +61,7 @@ export const pagesService = firebaseApi.injectEndpoints({
                 }
 
                 const userId = firebaseAuth.currentUser?.uid;
-                const dbRef = ref(firebaseDatabase);
+                const dbRef = ref(firebaseRealtimeDatabase);
 
                 try {
                     const snapshot = await get(child(dbRef, pageId));
@@ -94,7 +94,7 @@ export const pagesService = firebaseApi.injectEndpoints({
                     throw new Error("Invalid input: pageIds must be a non-empty array.");
                 }
 
-                const dbRef = ref(firebaseDatabase);
+                const dbRef = ref(firebaseRealtimeDatabase);
 
                 try {
                     const promises = pageIds.map(async (pageId) => {
@@ -135,7 +135,7 @@ export const pagesService = firebaseApi.injectEndpoints({
         }),
         updatePageBlocks: builder.mutation<Page, { newPage: Page }>({
             queryFn: async ({ newPage }) => {
-                const dbRef = ref(firebaseDatabase);
+                const dbRef = ref(firebaseRealtimeDatabase);
                 const specificNodeRef = child(dbRef, newPage.id);
                 const sp = child(specificNodeRef, "page");
 
@@ -158,7 +158,7 @@ export const pagesService = firebaseApi.injectEndpoints({
         }),
         updatePageVisual: builder.mutation<Page, { newPage: Page }>({
             queryFn: async ({ newPage }) => {
-                const dbRef = ref(firebaseDatabase);
+                const dbRef = ref(firebaseRealtimeDatabase);
                 const specificNodeRef = child(dbRef, newPage.id);
                 const sp = child(specificNodeRef, "page");
 
@@ -190,7 +190,7 @@ export const pagesService = firebaseApi.injectEndpoints({
 
                 try {
                     // Создаем ссылку на Realtime Database
-                    const dbRef = ref(firebaseDatabase);
+                    const dbRef = ref(firebaseRealtimeDatabase);
 
                     // Создаем объект для новой страницы в Realtime Database
                     const newPageObj = {
@@ -216,7 +216,7 @@ export const pagesService = firebaseApi.injectEndpoints({
                     const pageFirebaseId = await push(dbRef, newPageObj).then((data) => data.key);
 
                     // добавление id
-                    const newDbRef = ref(firebaseDatabase, pageFirebaseId);
+                    const newDbRef = ref(firebaseRealtimeDatabase, pageFirebaseId);
                     const ssss = child(newDbRef, 'page');
                     await update(ssss, { id: pageFirebaseId });
 
@@ -242,7 +242,7 @@ export const pagesService = firebaseApi.injectEndpoints({
                 }
 
                 const userDocRef = doc(firestoreDB, "users", userId);
-                const realtimeDataBaseRef = ref(firebaseDatabase, pageId);
+                const realtimeDataBaseRef = ref(firebaseRealtimeDatabase, pageId);
 
                 try {
                     await remove(realtimeDataBaseRef);
@@ -273,7 +273,7 @@ export const pagesService = firebaseApi.injectEndpoints({
 
                 const addData = async () => {
                     if (currentUserId != null) {
-                        const reference = ref(firebaseDatabase, `/${currentUserId}/` + page.id);
+                        const reference = ref(firebaseRealtimeDatabase, `/${currentUserId}/` + page.id);
                         await set(reference, page);
                     }
 
@@ -289,7 +289,7 @@ export const pagesService = firebaseApi.injectEndpoints({
         }),
         getUsersWithPermissions: builder.query<PermissionsResult, { pageId: string }>({
             queryFn: async ({ pageId }) => {
-                const dbRef = ref(firebaseDatabase);
+                const dbRef = ref(firebaseRealtimeDatabase);
 
                 try {
                     const pageChild = child(dbRef, pageId);
@@ -325,7 +325,7 @@ export const pagesService = firebaseApi.injectEndpoints({
         }),
         updateUserPermission: builder.mutation<string, { pageId: string, userId: string, newPermission: UserPermission }>({
             queryFn: async ({ userId, newPermission, pageId }) => {
-                const dbRef = ref(firebaseDatabase);
+                const dbRef = ref(firebaseRealtimeDatabase);
                 const pageRef = child(dbRef, pageId);
                 const permissionsRef = child(pageRef, "permissions");
 
