@@ -1,11 +1,16 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type User, type IUserSchema, type UserFirebase } from "@/store/slices/userSlice/types";
-import { type Page } from "@/components/PageView/model/types";
+import {
+    type IUserSchema,
+    SIGN_STATS,
+    type User,
+    type UserFirebase,
+} from "@/store/slices/userSlice/types";
 
 const initialState: IUserSchema = {
     user: undefined,
     authData: undefined,
     _isInitialized: false,
+    signStatus: SIGN_STATS.pending,
 };
 
 export const userSlice = createSlice({
@@ -27,20 +32,25 @@ export const userSlice = createSlice({
             state.authData = undefined;
             state.user = undefined;
         },
+        setSignStatus: (state, action: PayloadAction<SIGN_STATS>) => {
+            state.signStatus = action.payload;
+        },
     },
     selectors: {
         selectUserAuth: (state) => state?.authData !== undefined,
         selectUser: (state) => state?.authData,
         selectUserData: (state) => state?.user,
-        selectUserId: (state) => state.authData !== undefined ? state.authData.id : '',
-        selectUsername: (state) => state.user !== undefined ? (state.user?.username ?? "") : '',
-        selectUserPages: (state) => state.user !== undefined ? state.user.pages ?? [] : [],
+        selectUserId: (state) => (state.authData !== undefined ? state.authData.id : ""),
+        selectUsername: (state) => (state.user !== undefined ? state.user?.username ?? "" : ""),
+        selectUserPages: (state) => (state.user !== undefined ? state.user.pages ?? [] : []),
         selectIsInitialized: (state) => state._isInitialized,
+        selectSignStatus: (state) => state.signStatus,
     },
 });
 
-export const { selectUserAuth, selectIsInitialized } = userSlice.selectors;
-export const { selectUser, selectUserPages, selectUserData, selectUsername, selectUserId } = userSlice.selectors;
+export const { selectUserAuth, selectIsInitialized, selectSignStatus } = userSlice.selectors;
+export const { selectUser, selectUserPages, selectUserData, selectUsername, selectUserId } =
+    userSlice.selectors;
 export default userSlice.reducer;
 
 export const { actions: userActions } = userSlice;

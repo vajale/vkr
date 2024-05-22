@@ -6,7 +6,12 @@ import { useEffect, useState } from "react";
 import { firebaseAuth } from ".";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { type User, UserFirebase } from "@/store/slices/userSlice/types";
-import { useGetUserByIdQuery, useLazyGetUserByIdQuery, useLoginMutation, useRegisterMutation } from "@/api/usersApi/usersFirebaseService";
+import {
+    useGetUserByIdQuery,
+    useLazyGetUserByIdQuery,
+    useLoginMutation,
+    useRegisterMutation,
+} from "@/api/usersApi/usersFirebaseService";
 import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 
 export const useFirebaseAuth = () => {
@@ -16,7 +21,9 @@ export const useFirebaseAuth = () => {
     const [createFirebaseUser, { data: registerLoading }] = useRegisterMutation();
     const [loginUser, { data: loginLoading }] = useLoginMutation();
 
-    const [fetchUserFirebaseData] = useLazyGetUserByIdQuery({ userId: firebaseAuth.currentUser?.uid });
+    const [fetchUserFirebaseData] = useLazyGetUserByIdQuery({
+        userId: firebaseAuth.currentUser?.uid,
+    });
     const isAuth = useSelector(selectUserAuth);
 
     const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
@@ -34,11 +41,11 @@ export const useFirebaseAuth = () => {
 
                 const firebaseUser = fetchUserFirebaseData({ userId: user.uid });
 
-                void firebaseUser.then(req => {
+                void firebaseUser.then((req) => {
                     if (req.data) {
                         dispatch(userActions.setFirebaseData(req.data));
                     }
-});
+                });
             } else {
                 setFirebaseUser(null);
                 dispatch(userActions.logout());
@@ -53,7 +60,7 @@ export const useFirebaseAuth = () => {
     const refetchUserData = () => {
         const firebaseUser = fetchUserFirebaseData({ userId: firebaseAuth.currentUser?.uid });
 
-        void firebaseUser.then(req => {
+        void firebaseUser.then((req) => {
             if (req.data) {
                 dispatch(userActions.setFirebaseData(req.data));
             }
@@ -92,6 +99,6 @@ export const useFirebaseAuth = () => {
         firebaseUser,
         authState,
         isLoading: loginLoading ?? registerLoading,
-        refetchUserData
+        refetchUserData,
     };
 };

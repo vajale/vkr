@@ -7,6 +7,7 @@ import { Skeleton } from "@mui/material";
 import ModalComponent from "components/Modal";
 import { ButtonType } from "@/components/Login/enums";
 import { StyledLogin } from "@/components/Login/styled";
+import { useSignStatus } from "@/hooks/useSignStatus";
 
 const Login: React.FC<{ isLanding?: boolean }> = ({ isLanding }) => {
     const [loginState, setLoginState] = useState<{ isModalOpen: boolean; modalType: ButtonType }>(
@@ -15,6 +16,8 @@ const Login: React.FC<{ isLanding?: boolean }> = ({ isLanding }) => {
             modalType: ButtonType.login,
         }),
     );
+
+    useSignStatus();
 
     const {
         authState: [user, loading, error],
