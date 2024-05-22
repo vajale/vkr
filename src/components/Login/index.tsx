@@ -6,6 +6,7 @@ import RegisterForm from "@/components/Login/RegisterForm/RegisterForm";
 import { Skeleton } from "@mui/material";
 import ModalComponent from "components/Modal";
 import { ButtonType } from "@/components/Login/enums";
+import { StyledLogin } from "@/components/Login/styled";
 
 const Login: React.FC<{ isLanding?: boolean }> = ({ isLanding }) => {
     const [loginState, setLoginState] = useState<{ isModalOpen: boolean; modalType: ButtonType }>(
@@ -46,7 +47,7 @@ const Login: React.FC<{ isLanding?: boolean }> = ({ isLanding }) => {
     }
 
     return (
-        <div>
+        <StyledLogin>
             <NotLoggedUser onClick={handleLoggedButtonClick} isLanding={isLanding} />
             <ModalComponent onModalClose={handleModelClose} modalOpen={loginState.isModalOpen}>
                 {loginState.isModalOpen &&
@@ -59,7 +60,7 @@ const Login: React.FC<{ isLanding?: boolean }> = ({ isLanding }) => {
                         />
                     ))}
             </ModalComponent>
-        </div>
+        </StyledLogin>
     );
 };
 

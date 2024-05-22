@@ -46,6 +46,7 @@ export const FileUpload = ({ handleChangeFile }: { handleChangeFile: (file: File
         if (_fileName && _fileValue?.length) {
             setFileName(_fileName ?? "");
             setFileValue(_fileValue[0]);
+            console.log(_fileValue[0]);
             handleChangeFile(_fileValue[0]);
         }
     };
@@ -78,7 +79,7 @@ export const FileUpload = ({ handleChangeFile }: { handleChangeFile: (file: File
 
     const handleUpload = () => {
         const userId = firebaseAuth?.currentUser?.uid;
-        if (userId) {
+        if (userId && fileValue) {
             setUploadStatus(STATUS.loading);
             uploadFile({ file: fileValue, userId });
         }

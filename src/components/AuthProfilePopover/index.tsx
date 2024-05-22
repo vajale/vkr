@@ -1,17 +1,15 @@
 import { useSelector } from "react-redux";
-import { selectUser, selectUserData, selectUsername, userActions } from "@/store/slices/userSlice";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { selectUser, selectUserData, selectUsername } from "@/store/slices/userSlice";
+import React, { useEffect, useMemo, useState } from "react";
 import { Button, CircularProgress, Popover, Typography } from "@mui/material";
 import { AccountButton } from "@/components/Login/AccountButton";
 
 import { useLazyGetUserProfileDataQuery } from "@/api/userProfile";
 import { StyledPaper } from "@/components/AuthProfilePopover/styled";
 import { FileUpload } from "@/components/AuthProfilePopover/FileUpload";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { firebaseAuth, useFirebaseAuth } from "@/components/FireBase";
-import DefaultProfile from "@/assets/png/ProfileImage.png";
+import { useAppSelector } from "@/store/hooks";
+import { useFirebaseAuth } from "@/components/FireBase";
 import NotLoggedSvg from "@/assets/svg/NotLoggedAvatar.svg";
-import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
 
 const AuthProfilePopover = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | EventTarget>(null);
@@ -26,7 +24,9 @@ const AuthProfilePopover = () => {
     const { signOutUser } = useFirebaseAuth();
 
     const handleChange = (file: File) => {
-        setFileToUpload(file);
+        if (file) {
+            setFileToUpload(file);
+        }
     };
 
     useEffect(() => {
@@ -54,14 +54,15 @@ const AuthProfilePopover = () => {
         if (fileToUpload) {
             return URL.createObjectURL(fileToUpload);
         }
-        return DefaultProfile;
+
+        return NotLoggedSvg;
     }, [profilePicture, fileToUpload]);
 
     const Image = useMemo(() => {
         if (isLoading) {
-            return <CircularProgress className={"user-progress"}/>;
+            return <CircularProgress className={"user-progress"} />;
         }
-        return <img src={authProfileUrl} alt={"user-photo"}/>;
+        return <img src={authProfileUrl} alt={"user-photo"} />;
     }, [authProfileUrl, isLoading]);
 
     return (
@@ -82,18 +83,20 @@ const AuthProfilePopover = () => {
                 }}>
                 <StyledPaper>
                     <div className={"user-wrapper"}>
-                        <Typography variant={"h6"}>{userData?.username ?? "Имя Фамильев"}</Typography>
+                        <Typography variant={"h6"}>
+                            {userData?.username ?? "Имя Фамильев"}
+                        </Typography>
                         <Button
                             className={"logout"}
                             sx={{ width: 140 }}
-                            onClick={ async () => {
+                            onClick={async () => {
                                 await signOutUser();
                             }}>
                             Выйти
                         </Button>
                     </div>
                     <div className={"user-photo-wrapper"}>{Image}</div>
-                    <FileUpload handleChangeFile={handleChange}/>
+                    <FileUpload handleChangeFile={handleChange} />
                 </StyledPaper>
             </Popover>
         </div>
