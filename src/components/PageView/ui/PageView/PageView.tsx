@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
 import PageHeader from "../PageHeader/PageHeader";
-import { Paper } from "@mui/material";
 
 import {
     useUpdatePageBlocksMutation,
@@ -11,7 +10,8 @@ import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
 import DocumentBlocksList from "@/components/PageView/ui/PageView/DocumentBlocksList";
 import { type Page } from "../../model/types";
 import { pageActions } from "@/store/slices/pageSlice";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectUserAuth } from "@/store/slices/userSlice";
 
 interface ViewProps {
     isLoading: boolean;
@@ -23,6 +23,7 @@ const PageView = (props: ViewProps) => {
     const { isLoading, page } = props;
 
     const dispatch = useAppDispatch();
+    const isAuth = useAppSelector(selectUserAuth);
 
     const [updateDocuments] = useUpdatePageBlocksMutation();
     const [updateVisual] = useUpdatePageVisualMutation();
@@ -31,29 +32,30 @@ const PageView = (props: ViewProps) => {
         if (!isLoading) {
             void updateVisual({ newPage: page });
         }
-    }, [page]);
+    }, [page.visual]);
 
     useEffect(() => {
         if (!isLoading) {
             void updateDocuments({ newPage: page });
         }
-    }, [page]);
+    }, [page.documentBlocks]);
 
     const handleHeaderChange = (content: string) => {
-        dispatch(pageActions.updatePageHeader({ name: content }));
+        dispatch(pageActions.updateHeader({ name: content }));
     };
 
     const headerText = page.visual?.name ?? 'Новая страница';
     const isHaveDocBlocks = page.documentBlocks !== undefined;
+    const blocks = page.documentBlocks ?? [];
 
     return (
         <StyledPageView>
-            <Paper
-                className={"page-view-paper"}
-                sx={{ width: 1200, height: 800, borderRadius: 3, ml: 7 }}>
-                <PageHeader onContentChange={handleHeaderChange} text={headerText} background={page.visual?.background} />
-                {isHaveDocBlocks && <DocumentBlocksList canEdit docs={page.documentBlocks}/>}
-            </Paper>
+            <PageHeader onContentChange={handleHeaderChange}
+                        text={headerText}
+                        background={page.visual?.background}
+                        canEdit={isAuth}
+            />
+            {isHaveDocBlocks && <DocumentBlocksList canEdit={isAuth} docs={blocks}/>}
         </StyledPageView>
     );
 };

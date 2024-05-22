@@ -4,7 +4,8 @@ import {
     type DocumentPageLinkBlock,
     type DocumentTextBlock, type DocumentTodoBlock
 } from "@/components/PageView/model/types";
-import type DocumentBlockToDo from "@/components/PageView/ui/DocumentBlockComponents/DocumentBlockToDo/DocumentBlockToDo";
+import type DocumentBlockToDo
+    from "@/components/PageView/ui/DocumentBlockComponents/DocumentBlockToDo/DocumentBlockToDo";
 
 export const documentObjectHelper = (type: DocumentBlockType) => {
     const id = new Date().toJSON();
@@ -67,11 +68,17 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
         const newBlock: DocumentTodoBlock = {
             id,
             type,
-            content: defaultContent,
+            content: 'Задачи',
             textType: {
                 variant: "subtitle1"
             },
-            todos: []
+            todos: [
+                {
+                    id: 'TODO' + id,
+                    completed: false,
+                    title: "Новая задача"
+                }
+            ]
         };
 
         return newBlock;

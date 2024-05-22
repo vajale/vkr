@@ -1,54 +1,34 @@
 import React, { useMemo, useState } from "react";
 
-import { DocumentBlockType, type DocumentBlock, type DocumentBlockBase } from "../../model/types";
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack } from "@mui/material";
+import { DocumentBlockType, type DocumentBlock } from "../../model/types";
+import { Button, FormControl, MenuItem, Popover, Select, Stack } from "@mui/material";
 import { useAppDispatch } from "@/store/hooks";
 import { pageActions } from "@/store/slices/pageSlice";
 import { motion } from "framer-motion";
 import { MaterialIcon } from "@/assets/Icon";
 import { StyledBox, StyledList } from "@/components/PageView/ui/EditList/styled";
+import EditTextSelect from "@/components/PageView/ui/EditList/EditTextSelect";
+import EditColorSelect from "@/components/PageView/ui/EditList/EditColorSelect";
 
 interface EditListProps {
-    block: DocumentBlock
+    block: DocumentBlock,
+    onEdit: () => void
 }
 
-const EditList = ({ block }: EditListProps) => {
-    const [settingsList, setSettingsListOpen] = useState<boolean>(false);
-
+const EditList = ({ block, onEdit }: EditListProps) => {
     const dispatch = useAppDispatch();
 
-    // @ts-expect-error
-    const handleChange = (event) => {
-        const type = event.target.value as string;
-
-        dispatch(pageActions.updateDocumentBlock({
-            ...block,
-            textType: {
-                ...block.textType,
-                variant: type
-            }
-        }));
+    const handleDeleteButtonClick = () => {
+        dispatch(pageActions.removeBlock({ id: block.id }));
+        onEdit();
     };
 
-    const blockTypeSettings = useMemo(() => {
-        if (block.type === DocumentBlockType.TEXT) {
-            return ['h1', 'h2', 'h3', 'h4', 'h5', 'subtitle1'];
-        }
-
-        if (block.type === DocumentBlockType.CHECKBOX) {
-            return ['h1', 'h2', 'h3', 'h4', 'h5', 'subtitle1'];
-        }
-
-        if (block.type === DocumentBlockType.TODO) {
-            return ['h1', 'h2', 'h3', 'h4', 'h5', 'subtitle1'];
-        }
-
-        return null;
-    }, [block]);
-
-    const handleDeleteButtonClick = () => {
-        dispatch(pageActions.removeDocumentBlock({ id: block.id }));
-        dispatch(pageActions.setEditDocumentId(''));
+    const handleDuplicateBlock = () => {
+        dispatch(pageActions.duplicateBlock({
+            ...block,
+            id: new Date().toJSON()
+        }));
+        onEdit();
     };
 
     return (
@@ -63,34 +43,17 @@ const EditList = ({ block }: EditListProps) => {
                 </motion.div>
                 <motion.div>
                     <Button fullWidth sx={{ maxHeight: 40 }}
-                            onClick={handleDeleteButtonClick}>
+                            onClick={handleDuplicateBlock}>
                         <MaterialIcon name={"MdOutlineNoteAlt"}/>
                         Дублировать
                     </Button>
                 </motion.div>
-                <motion.div>
-                    <Button fullWidth sx={{ maxHeight: 40 }}
-                            onClick={handleDeleteButtonClick}>
-                        <MaterialIcon name={"MdPallet"}/>
-                        Поменять цвет
-                    </Button>
-                </motion.div>
-                <motion.div>
-                    <FormControl variant={'standard'} fullWidth>
-                        <Select
-                            sx={{ maxHeight: 30 }}
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={block.textType?.variant}
-                            onChange={handleChange}
-                        >
-                            {blockTypeSettings && blockTypeSettings.map((value, index) => (
-                                <MenuItem key={index} value={value}>
-                                    <MaterialIcon name={"MdNotes"}/>{value}
-                                </MenuItem>))}
-                        </Select>
-                    </FormControl>
-                </motion.div>
+                {/* <motion.div> */}
+                {/*    <Stack gap={2}> */}
+                {/*        <EditTextSelect block={block} onSelect={handleSelectChange}/> */}
+                {/*        <EditColorSelect block={block} onSelect={handleSelectChange}/> */}
+                {/*    </Stack> */}
+                {/* </motion.div> */}
             </StyledList>
         </StyledBox>
     );

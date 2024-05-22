@@ -7,5 +7,4 @@ export interface DocumentsPageSchema {
       header: boolean;
       logo: string | "none";
    };
-   editDocumentId?: string
 }

@@ -14,9 +14,6 @@ module.exports = {
       template: "src/index.html",
     }),
   ],
-  devServer: {
-    port: 3001,
-  },
   resolve: {
     fallback: {
       fs: false,
@@ -60,5 +57,8 @@ module.exports = {
         ],
       },
     ],
+  },
+  devServer: {
+    port: 3001,
   },
 };

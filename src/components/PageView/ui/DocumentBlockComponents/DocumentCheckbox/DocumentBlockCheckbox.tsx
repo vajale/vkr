@@ -52,7 +52,7 @@ const DocumentBlockCheckbox = ({ block, onContentChange, canEdit = true, onHotKe
     const marginStyle = block.content.length > 52 ? 7 : 0;
 
     const handleCheckboxChange = () => {
-        dispatch(pageActions.updateDocumentBlock({ ...block, flag: !block.flag }));
+        dispatch(pageActions.updateBlock({ ...block, flag: !block.flag }));
     };
 
     return (

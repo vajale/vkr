@@ -1,11 +1,10 @@
-import React, { useMemo, useState } from "react";
-import { DocumentBlockType, type DocumentContentType, type DocumentTextBlock } from "../../../model/types";
-import { Typography } from "@mui/material";
-import Dropable from "@/components/DnDComponents/Dropable/Dropable";
-import DocumentBlockBase from "@/components/PageView/ui/DocumentBlockComponents/DocumentBlockBase/DocumentBlockBase";
-
-import { makeStyles } from '@mui/styles';
+import React, { useState } from "react";
+import { type DocumentContentType, type DocumentTextBlock } from "../../../model/types";
 import { motion } from "framer-motion";
+import { useAppDispatch } from "@/store/hooks";
+import { pageActions } from "@/store/slices/pageSlice";
+import TextEditor, { TextEditorProvider } from "@/components/TextEditor/TextEditor";
+import ToolPanel from "@/components/TextEditor/ToolPanel";
 
 interface TextBlockProps {
     block: DocumentTextBlock;
@@ -14,64 +13,40 @@ interface TextBlockProps {
     onHotKeyInput?: (id: string, input: string) => void;
 }
 
-const defaultStyle = {
-    padding: 7,
-    borderRadius: 7,
-    color: "none",
-    marginBottom: 7,
-    display: "flex",
-    alignItems: "center",
-    border: "none",
-    outline: "none",
-    resize: "none",
-
-};
-
 const DocumentBlockText = (props: TextBlockProps) => {
     const { block, onContentChange, canEdit } = props;
+    const [toolPanelOpen, setToolPanelOpen] = useState(false);
 
-    const [content, setContent] = useState<string>(() => block.content);
+    const dispatch = useAppDispatch();
 
-    const getFontPadding = useMemo(() => {
-        const { textType } = block;
+    const handleTextChange = (json: string) => {
+        if (onContentChange) {
+            onContentChange(json);
 
-        switch (textType?.variant) {
-            case "h1":
-                return 5;
-            case "h2":
-                return 4;
-            case "h3":
-                return 3;
-            case "h4":
-                return 2;
-            case "h5":
-                return 1;
-            case "subtitle1":
-                return 0;
-            default:
-                return 'subtitle1';
+            dispatch(
+                pageActions.updateBlock({ ...block, content: json })
+            );
         }
-    }, []);
+    };
+
+    const handleBlur = () => {
+        setToolPanelOpen(false);
+    };
+
+    const handleFocus = () => {
+        setToolPanelOpen(true);
+    };
 
     return (
-        <motion.div>
-            <Typography sx={{ opacity: block.content.length == 0 ? 0.5 : 1 }}
-                        width={"900px"} p={getFontPadding}
-                        component={'div'}
-                        data-placeholder={'asffas'}
-                        variant={block.textType?.variant}
-                        fontWeight={block.textType?.weight}
-                        contentEditable={canEdit}
-                        onInput={(e) => {
-                            setContent(e.currentTarget.textContent!);
-                        }}
-                        onBlur={() => {
-                            if (onContentChange != null) {
-                                onContentChange(content);
-                            }
-                        }}>
-                {block.content.length == 0 ? 'Напишите что-нибудь' : block.content}
-            </Typography>
+        <motion.div style={{ border: toolPanelOpen ? '1px solid #d7d7d7' : 'none', borderRadius: 7, padding: 7 }}>
+            <TextEditorProvider json={block.content}>
+                {toolPanelOpen && <ToolPanel/>}
+                <TextEditor onFocus={handleFocus}
+                            onBlur={handleBlur}
+                            canEdit={canEdit}
+                            onChange={handleTextChange}
+                />
+            </TextEditorProvider>
         </motion.div>
     );
 };

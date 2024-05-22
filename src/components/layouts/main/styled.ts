@@ -9,6 +9,8 @@ const StyledMainLayout = styled("div")(({ theme }: IExtendedThemeProps) => ({
     height: "70vh",
     minHeight: "100vh",
     maxWidth: "100%",
+    overflowY: 'hidden',
+    overflowX: 'hidden',
     "&:hover": {},
 
     ".side-menu": {

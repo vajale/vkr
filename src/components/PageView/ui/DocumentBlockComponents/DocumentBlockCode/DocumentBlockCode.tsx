@@ -1,66 +1,53 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-   type DocumentCheckboxBlock,
-   type DocumentCodeBlock,
-   type DocumentContentType,
+    type DocumentCodeBlock,
+    type DocumentContentType,
 } from "../../../model/types";
-import { usePageSettings } from "../../../model/hooks/usePageSettings";
+import TextEditor, { TextEditorProvider } from "@/components/TextEditor/TextEditor";
+import ToolPanel from "@/components/TextEditor/ToolPanel";
+import { pageActions } from "@/store/slices/pageSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 const codeStyle = {
-   background: "#ececec",
-   borderRadius: 7,
-   border: "none",
-   padding: 7,
-   color: "none",
-   height: "auto",
-   marginBottom: 7,
-   display: "flex",
-   alignItems: "center",
-   width: 700,
-   outline: "none",
+    background: "#ececec",
+    borderRadius: 7,
+    border: "none",
+    padding: 7,
+    color: "none",
+    height: "auto",
+    marginBottom: 7,
+    display: "flex",
+    alignItems: "center",
+    width: 700,
+    outline: "none",
 };
 
 interface CodeBlockProps {
-   block: DocumentCodeBlock;
-   canEdit?: boolean;
-   onContentChange?: (data: DocumentContentType) => void;
-   onHotKeyInput?: () => void;
+    block: DocumentCodeBlock;
+    canEdit?: boolean;
+    onContentChange?: (data: DocumentContentType) => void;
+    onHotKeyInput?: () => void;
 }
 
-const DocumentBlockCode = ({
-   block,
-   canEdit,
-   onContentChange,
-   onHotKeyInput,
-}: CodeBlockProps) => {
-   const [content, setContent] = useState<string>(() => block.content);
+const DocumentBlockCode = ({ block, onContentChange, canEdit = true }: CodeBlockProps) => {
+    const dispatch = useAppDispatch();
 
-   const handleContentInput = (textContent: string | null) => {
-      if (onContentChange == null || textContent == null) return;
+    const handleTextChange = (json: string) => {
+        if (onContentChange) {
+            onContentChange(json);
 
-      setContent(textContent);
-   };
-   const handleContentBlur = () => {
-      if (onContentChange != null) {
-         onContentChange(content);
-      }
-   };
+            dispatch(
+                pageActions.updateBlock({ ...block, content: json })
+            );
+        }
+    };
 
-   return (
-      <textarea
-         style={{ ...codeStyle, resize: "none" }}
-         onInput={(e) => {
-            handleContentInput(e.currentTarget.textContent);
-         }}
-         disabled={!canEdit}
-         spellCheck={true}
-         contentEditable={true}
-         onBlur={handleContentBlur}
-         placeholder="Type / or something..."
-         suppressContentEditableWarning={true}>
-         {block.content}
-      </textarea>
-   );
+    return (
+        <TextEditorProvider json={block.content}>
+            <ToolPanel/>
+            <TextEditor canEdit={canEdit} onChange={handleTextChange}/>
+        </TextEditorProvider>
+    );
 };
 
 export default DocumentBlockCode;

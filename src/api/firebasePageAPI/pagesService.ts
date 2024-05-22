@@ -140,8 +140,10 @@ export const pagesService = firebaseApi.injectEndpoints({
                 const sp = child(specificNodeRef, "page");
 
                 try {
+                    const newData = arrayToObject(newPage.documentBlocks);
+
                     const updateData = {
-                        documentBlocks: arrayToObject(newPage.documentBlocks),
+                        documentBlocks: newData,
                     };
 
                     await update(sp, updateData);
