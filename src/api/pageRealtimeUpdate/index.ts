@@ -1,5 +1,5 @@
 import { ref, onValue, child } from "firebase/database";
-import { firebaseDatabase } from "@/components/FireBase";
+import { firebaseRealtimeDatabase } from "@/components/FireBase";
 import { firebaseApi } from "@/api";
 import { type Page } from "@/components/PageView/model/types";
 import { UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
@@ -18,7 +18,7 @@ const api = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
         getPageRealtimeData: builder.query<Page, { pageId: string }>({
             async queryFn ({ pageId }, { dispatch }) {
-                const dbRef = ref(firebaseDatabase);
+                const dbRef = ref(firebaseRealtimeDatabase);
                 const specificNodeRef = child(dbRef, pageId);
                 const pageChild = child(specificNodeRef, "page");
 
@@ -60,7 +60,7 @@ const api = firebaseApi.injectEndpoints({
             ) => {
                 await cacheDataLoaded;
 
-                const dbRef = ref(firebaseDatabase);
+                const dbRef = ref(firebaseRealtimeDatabase);
                 const specificNodeRef = child(dbRef, pageId);
                 const pageChild = child(specificNodeRef, "page");
 

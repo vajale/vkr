@@ -6,7 +6,7 @@ import { getStorage } from "firebase/storage";
 import { firebaseConfig } from "@/utils/api/configs/firebaseConfig";
 
 export const firebaseApp = initializeApp(firebaseConfig);
-export const firebaseDatabase = getDatabase(firebaseApp);
+export const firebaseRealtimeDatabase = getDatabase(firebaseApp);
 export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseStorage = getStorage(firebaseApp);
 export const firestoreDB = getFirestore(firebaseApp);

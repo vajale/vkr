@@ -1,10 +1,11 @@
 import { firebaseApi } from "@/api";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { firebaseAuth, firebaseDatabase, firestoreDB } from "@/components/FireBase";
+import { firebaseAuth, firebaseRealtimeDatabase, firestoreDB } from "@/components/FireBase";
 import { type User, type UserFirebase } from "@/store/slices/userSlice/types";
 import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { child, get, onValue, ref, remove, update } from "firebase/database";
+import { UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
 
 interface UserFirebaseRequest {
     user: {
@@ -134,7 +135,7 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
                 }
 
                 try {
-                    const pageRef = ref(firebaseDatabase, pageId);
+                    const pageRef = ref(firebaseRealtimeDatabase, pageId);
                     const activeUsersChild = child(pageRef, 'activeUsers');
 
                     const usersSnapshot = await get(activeUsersChild);
@@ -168,7 +169,7 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
                         return { error: "Пользователь не аутентифицирован" };
                     }
 
-                    const dbRef = ref(firebaseDatabase);
+                    const dbRef = ref(firebaseRealtimeDatabase);
                     const specificNodeRef = child(dbRef, pageId);
 
                     try {
@@ -199,7 +200,7 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
                     }
 
                     try {
-                        const dbRef = ref(firebaseDatabase, pageId);
+                        const dbRef = ref(firebaseRealtimeDatabase, pageId);
                         const usersChild = child(dbRef, 'activeUsers');
 
                         await remove(usersChild);
@@ -214,7 +215,7 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
         ),
         getActiveUsersSubscribe: builder.query<string[], { pageId: string }>({
             async queryFn ({ pageId }, { dispatch }) {
-                const dbRef = ref(firebaseDatabase, pageId);
+                const dbRef = ref(firebaseRealtimeDatabase, pageId);
                 const usersChild = child(dbRef, 'activeUsers');
 
                 return await new Promise<User[]>((resolve, reject) => {
@@ -253,7 +254,7 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
             ) => {
                 await cacheDataLoaded;
 
-                const dbRef = ref(firebaseDatabase, pageId);
+                const dbRef = ref(firebaseRealtimeDatabase, pageId);
                 const usersChild = child(dbRef, 'activeUsers');
 
                 const unsubscribe = onValue(usersChild, (snapshot) => {
@@ -278,5 +279,5 @@ export const {
     useRemoveUserActivityMutation,
     useLazyGetActiveUsersSubscribeQuery,
     useGetUserByIdQuery,
-    useLazyGetUserByIdQuery
+    useLazyGetUserByIdQuery,
 } = usersFirebaseService;
