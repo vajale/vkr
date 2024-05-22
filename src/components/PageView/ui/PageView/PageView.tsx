@@ -9,9 +9,10 @@ import {
 import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
 import DocumentBlocksList from "@/components/PageView/ui/PageView/DocumentBlocksList";
 import { type Page } from "../../model/types";
-import { pageActions } from "@/store/slices/pageSlice";
+import { pageActions, selectPagePermission } from "@/store/slices/pageSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { selectUserAuth } from "@/store/slices/userSlice";
+import { selectUserAuth, selectUserId } from "@/store/slices/userSlice";
+import { UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
 
 interface ViewProps {
     isLoading: boolean;
@@ -24,6 +25,8 @@ const PageView = (props: ViewProps) => {
 
     const dispatch = useAppDispatch();
     const isAuth = useAppSelector(selectUserAuth);
+    const userId = useAppSelector(selectUserId);
+    const usersPermission = useAppSelector(selectPagePermission);
 
     const [updateDocuments] = useUpdatePageBlocksMutation();
     const [updateVisual] = useUpdatePageVisualMutation();
@@ -48,14 +51,18 @@ const PageView = (props: ViewProps) => {
     const isHaveDocBlocks = page.documentBlocks !== undefined;
     const blocks = page.documentBlocks ?? [];
 
+    console.log(usersPermission[userId]);
+
+    const canEditPage = isAuth && usersPermission[userId] !== UserPermission.READER;
+
     return (
         <StyledPageView>
             <PageHeader onContentChange={handleHeaderChange}
                         text={headerText}
                         background={page.visual?.background}
-                        canEdit={isAuth}
+                        canEdit={canEditPage}
             />
-            {isHaveDocBlocks && <DocumentBlocksList canEdit={isAuth} docs={blocks}/>}
+            {isHaveDocBlocks && <DocumentBlocksList canEdit={canEditPage} docs={blocks}/>}
         </StyledPageView>
     );
 };

@@ -1,3 +1,5 @@
+import { type UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
+
 export enum DocumentBlockType {
     TEXT = "TEXT",
     CHECKBOX = "CHECKBOX",
@@ -74,7 +76,7 @@ export interface Page {
         name?: string;
     }
     documentBlocks?: DocumentBlock[];
-    parent?: string | ''
+    parent?: string | '',
 }
 
 export interface CalendarPage {

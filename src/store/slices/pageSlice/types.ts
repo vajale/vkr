@@ -7,4 +7,5 @@ export interface DocumentsPageSchema {
       header: boolean;
       logo: string | "none";
    };
+   permissions?: string[]
 }
