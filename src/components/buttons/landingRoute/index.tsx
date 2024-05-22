@@ -17,12 +17,12 @@ const ROUTE_BUTTONS = [
         URL: Constants.NAVIGATION.LANDING.PRICES,
         shortCut: Constants.URL.PRICES,
     },
-    /*
+
     {
         title: "о нас",
         URL: Constants.NAVIGATION.LANDING.ABOUT,
         shortCut: Constants.URL.ABOUT,
-    }, */
+    },
 ];
 
 const LandingRoute = () => {

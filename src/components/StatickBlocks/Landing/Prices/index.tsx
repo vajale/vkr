@@ -46,14 +46,14 @@ const CardContentValues: { start: Props; base: Props; pro: Props } = {
 };
 
 export const Prices = () => {
-    const cardContent = ({ info, price, img }: Props) => {
+    const cardContent = ({ info, price, img, position }: Props) => {
         return (
             <div className="card-content">
                 <div className="background" />
                 <div className={"icon"}>
                     <img src={img} alt="start-icon" />
                 </div>
-                <div className={"title"}>Стартовый</div>
+                <div className={"title"}>{position}</div>
                 <div className={"info"}>
                     <div className={"count"}>
                         <div className={"normal"}>Кол. участников</div>

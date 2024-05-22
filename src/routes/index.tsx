@@ -13,6 +13,7 @@ import LandingCarousel from "@/components/StatickBlocks/Landing/Carousel";
 import { Page } from "@/pages/Page";
 import { InvitePage } from "@/pages/InvitePage";
 import { Prices } from "@/components/StatickBlocks/Landing/Prices";
+import { About } from "@/components/StatickBlocks/Landing/About";
 
 const { URL } = Constants;
 
@@ -64,6 +65,7 @@ export const DesktopRouter = () => {
                     <Route path="" element={<LandingPage />}>
                         <Route path={`${Constants.URL.MAIN}/*`} element={<LandingCarousel />} />
                         <Route path={`${URL.PRICES}`} element={<Prices />} />
+                        <Route path={`${URL.ABOUT}`} element={<About />} />
                     </Route>
                 </Route>
             </Routes>
