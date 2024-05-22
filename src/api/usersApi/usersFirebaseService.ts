@@ -17,27 +17,32 @@ interface UserFirebaseRequest {
     pages?: string[]
 }
 
-async function getUser (id: string): Promise<User> {
-    try {
-        const userDocRef = doc(firestoreDB, "users", id);
-        const userDoc = await getDoc(userDocRef);
+async function getUser (userId: string): Promise<User> {
+    const blogRef = doc(firestoreDB, "users", userId);
 
-        if (!userDoc.exists()) {
-            console.log("No such user!");
-            return { id, username: "", pages: [], error: "No such user" };
-        }
+    const queryData = await getDoc(blogRef)
+        .then((doc) => doc.data())
+        .catch((error) => {
+            console.log(error);
+        });
 
-        const userRequest: UserFirebaseRequest = userDoc.data() as UserFirebaseRequest;
+    const userData: UserFirebaseRequest = queryData as UserFirebaseRequest;
 
-        return {
-            id,
-            username: `${userRequest.user.lastname} ${userRequest.user.firstName}`,
-            pages: userRequest.pages,
-        };
-    } catch (error) {
-        console.error("Error fetching user data:", error);
-        return { id, username: "", pages: [], error: "Error fetching user data" };
-    }
+    const customUsername = `${userData.user.firstName} ${userData.user.lastname === undefined && ''}`;
+    const user: UserFirebase = {
+        data: {
+            email: userData.user.email,
+            firstName: userData.user.firstName,
+            lastname: userData.user.lastname,
+            phoneNumber: userData.user.phoneNumber
+        },
+        pages: userData.pages,
+        username: customUsername
+    };
+
+    return {
+        data: user
+    };
 }
 
 export const usersFirebaseService = firebaseApi.injectEndpoints({
@@ -71,7 +76,7 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
                     const userData = {
                         user: {
                             firstName: registerData.firstName,
-                            lastName: registerData.lastName,
+                            lastname: registerData.lastname,
                             email: user.email,
                             phoneNumber: registerData.phone
                         },
@@ -102,7 +107,7 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
 
                 const userData: UserFirebaseRequest = queryData as UserFirebaseRequest;
 
-                const customUsername = `${userData.user.firstName} ${userData.user.lastname}`;
+                const customUsername = `${userData.user.firstName} ${userData.user.lastname === undefined && ''}`;
                 const user: UserFirebase = {
                     data: {
                         email: userData.user.email,

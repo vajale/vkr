@@ -8,7 +8,7 @@ import {
 } from "@/api/firebasePageAPI/pagesService";
 import { MaterialIcon } from "@/assets/Icon";
 import { useAppSelector } from "@/store/hooks";
-import { selectUserPages } from "@/store/slices/userSlice";
+import { selectUserAuth, selectUserPages } from "@/store/slices/userSlice";
 import Constants from "@/constants";
 import { useNavigate } from "react-router-dom";
 import { NAVIGATION } from "@/constants/navigation";
@@ -25,6 +25,7 @@ const PagesList = (props: ListProps) => {
     const navigate = useNavigate();
 
     const userPagesId = useAppSelector(selectUserPages);
+    const isAuth = useAppSelector(selectUserAuth);
 
     const { data: pagesData, isSuccess: pagesSuccess, isLoading: isPagesLoading } = useFetchPagesQuery(userPagesId);
     const [createPage, { isLoading: isLoadingCreatingNewPage, data: newPageId }] = useCreateNewPageMutation();
@@ -57,6 +58,10 @@ const PagesList = (props: ListProps) => {
     }
 
     const pagesRender = useMemo(() => {
+        if (!isAuth) {
+            return null;
+        }
+
         if (isPagesLoading) {
             return (
                 <div>

@@ -1,8 +1,8 @@
+import React from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { pageActions, selectEditDocumentId, selectPage } from "@/store/slices/pageSlice";
-import { Box, Button, Paper, Popover, Stack, Typography } from "@mui/material";
+import { pageActions, selectPageDocuments } from "@/store/slices/pageSlice";
+import { Button, Stack, Typography } from "@mui/material";
 import { MaterialIcon } from "@/assets/Icon";
-import React, { useEffect, useState } from "react";
 import { closestCenter, DndContext, type DragEndEvent, MouseSensor, useSensor } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { type DocumentBlock, DocumentBlockType } from "@/components/PageView/model/types";
@@ -15,9 +15,7 @@ import DocumentBlockText from "@/components/PageView/ui/DocumentBlockComponents/
 import {
     DocumentPageLinkComponent
 } from "@/components/PageView/ui/DocumentBlockComponents/DocumenkPageLinkComponent/DocumentPageLinkComponent";
-import { useFirebaseAuth } from "@/components/FireBase";
-import { useSelector } from "react-redux";
-import { selectUser } from "@/store/slices/userSlice";
+
 import EmptyDocumentBlock from "@/components/PageView/ui/DocumentBlockComponents/EmptyDocumentBlock/EmptyDocumentBlock";
 import DocumentBlockToDo from "@/components/PageView/ui/DocumentBlockComponents/DocumentBlockToDo/DocumentBlockToDo";
 
@@ -28,9 +26,10 @@ interface BlocksProps {
 }
 
 const DocumentBlocksList = (props: BlocksProps) => {
-    const { docs, onDocumentsChanges, canEdit = true } = props;
+    const { onDocumentsChanges, canEdit } = props;
 
     const dispatch = useAppDispatch();
+    const blocks = useAppSelector(selectPageDocuments);
 
     const handleDragEnd = async (e: DragEndEvent) => {
         const { active, over } = e;
@@ -39,18 +38,18 @@ const DocumentBlocksList = (props: BlocksProps) => {
             return;
         }
 
-        const oldIndex = docs.findIndex((block) => block.id === active.id);
-        const newIndex = docs.findIndex((block) => block.id === over.id);
-        const newArray = arrayMove(docs, oldIndex, newIndex);
+        const oldIndex = blocks.findIndex((block) => block.id === active.id);
+        const newIndex = blocks.findIndex((block) => block.id === over.id);
+        const newArray = arrayMove(blocks, oldIndex, newIndex);
 
-        dispatch(pageActions.updateDocuments(newArray));
+        dispatch(pageActions.updateBlocks(newArray));
 
         if (onDocumentsChanges != null) {
             onDocumentsChanges();
         }
     };
 
-    if (docs.length === 0) {
+    if (blocks.length === 0) {
         return (
             <Stack flexDirection={'column'} alignItems={'flex-start'} gap={2}>
                 <Button><MaterialIcon name={'MdPageview'}/><Typography ml={2}>Пустая страница</Typography></Button>
@@ -67,20 +66,14 @@ const DocumentBlocksList = (props: BlocksProps) => {
         }
     });
 
-    const [anchorEl, setAnchorEl] = React.useState<null | EventTarget>(null);
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
     const handleEmptySpaceClick = async () => {
-        if (docs[docs.length - 1].content !== '') {
-            dispatch(pageActions.addDocumentBlock(DocumentBlockType.TEXT));
-        };
+        // if (docs[docs.length - 1].content !== '') {
+        //     dispatch(pageActions.addNewBlock(DocumentBlockType.TEXT));
+        //     if (onDocumentsChanges != null) {
+        //         onDocumentsChanges();
+        //     }
+        // };
     };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
 
     return (
         <div style={{ padding: 7, width: "100%" }}>
@@ -88,9 +81,8 @@ const DocumentBlocksList = (props: BlocksProps) => {
                 sensors={[mouseSensor]}
                 collisionDetection={closestCenter}
                 onDragEnd={handleDragEnd}>
-                <SortableContext items={docs} strategy={verticalListSortingStrategy}>
-                    {/* eslint-disable-next-line array-callback-return */}
-                    {docs.map((item) => {
+                <SortableContext items={blocks} strategy={verticalListSortingStrategy}>
+                    {blocks.map((item) => {
                         const baseProps = {
                             ignoreButtonsHover: !canEdit,
                             // onAdd: handleAddDocuments,
@@ -100,12 +92,12 @@ const DocumentBlocksList = (props: BlocksProps) => {
                         };
 
                         const handleDataUpdate = (data: string) => {
-                            dispatch(
-                                pageActions.updateDocumentBlock({
-                                    ...item,
-                                    content: data
-                                })
-                            );
+                            // dispatch(
+                            //     pageActions.updateBlocks({
+                            //         ...item,
+                            //         content: data
+                            //     })
+                            // );
 
                             if (onDocumentsChanges != null) {
                                 onDocumentsChanges();
@@ -143,12 +135,12 @@ const DocumentBlocksList = (props: BlocksProps) => {
                                 return (
                                     <Dropable key={item.id} id={item.id}>
                                         <DocumentBlockBase canEdit={canEditDoc} item={item} {...baseProps}>
-                                            <DocumentBlockText
+                                             <DocumentBlockText
                                                 canEdit={canEditDoc}
                                                 block={item}
                                                 onHotKeyInput={handleHotKeyClick}
                                                 onContentChange={handleDataUpdate}
-                                            />
+                                             />
                                         </DocumentBlockBase>
                                     </Dropable>
                                 );
@@ -164,7 +156,7 @@ const DocumentBlocksList = (props: BlocksProps) => {
                                 return (
                                     <Dropable key={item.id} id={item.id}>
                                         <DocumentBlockBase canEdit={canEditDoc} item={item} {...baseProps}>
-                                            <DocumentBlockToDo block={item}/>
+                                            <DocumentBlockToDo canEdit={canEditDoc} block={item}/>
                                         </DocumentBlockBase>
                                     </Dropable>
                                 );
@@ -172,7 +164,7 @@ const DocumentBlocksList = (props: BlocksProps) => {
                                 break;
                         }
                     })}
-                      <EmptyDocumentBlock onClick={handleEmptySpaceClick}/>
+                       <EmptyDocumentBlock onClick={handleEmptySpaceClick}/>
                 </SortableContext>
             </DndContext>
         </div>

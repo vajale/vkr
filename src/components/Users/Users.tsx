@@ -38,9 +38,11 @@ const Users = () => {
         return null;
     }
 
+    console.log(users);
+
     return (
         <Stack marginRight={3} gap={2} flexDirection={'row'}>
-            {/* {users?.map(item => <UserItem key={item} userId={item}/>)} */}
+             {/* {users?.map(item => <UserItem key={item} userId={item}/>)} */}
         </Stack>
     );
 };

@@ -1,6 +1,6 @@
 import { useFetchPageDataQuery } from "@/api/firebasePageAPI/pagesService";
 import React, { useEffect } from "react";
-import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
+import { StyledPageView, StyledPageWrapper } from "@/components/PageView/ui/PageView/styled";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import PageView from "@/components/PageView/ui/PageView/PageView";
 import { pageActions, selectPage } from "@/store/slices/pageSlice";
@@ -24,22 +24,20 @@ const PageWrapper = ({ pageId }: WrapperProps) => {
         }
     }, [data]);
 
-    if (isLoading) {
-        return <SkeletonPage/>;
-    }
-
     if (page === undefined) {
         return (
-            <StyledPageView>
+            <StyledPageWrapper>
                 <DefaultPage/>
-            </StyledPageView>
+            </StyledPageWrapper>
         );
     }
 
     return (
-        <StyledPageView>
-            {isSuccess && <PageView id={pageId} page={page} isLoading={isLoading}/>}
-        </StyledPageView>
+        <StyledPageWrapper>
+            {isLoading
+                ? <SkeletonPage/>
+                : <PageView id={pageId} page={page} isLoading={isLoading}/>}
+        </StyledPageWrapper>
     );
 };
 

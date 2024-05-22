@@ -67,6 +67,7 @@ const RegisterForm = (props: FormProps) => {
                         {...register("password", { required: "Password is required" })}
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Пароль"
+                        size={'small'}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
@@ -88,13 +89,13 @@ const RegisterForm = (props: FormProps) => {
                         helperText={errors.firstName?.message}
                     />
                     <TextField
-                        {...register("lastName", { required: "Last name is required" })}
+                        {...register("lastname", { required: "Last name is required" })}
                         fullWidth
                         variant={'standard'}
                         label="Фамиля"
                         placeholder="Фамиля"
-                        error={!!errors.lastName}
-                        helperText={errors.lastName?.message}
+                        error={!!errors.lastname}
+                        helperText={errors.lastname?.message}
                     />
                     <TextField
                         {...register("phone", { required: "Phone is required" })}

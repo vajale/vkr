@@ -3,7 +3,7 @@ import ModalComponent from "@/components/Modal";
 import { MainButton } from "@/components/buttons/MainButton";
 import { StyledMembers, StyledUser, StyledUserSkeleton } from "@/components/StatickBlocks/Members/styled";
 import { Typography } from "@/components/common/CustomTypography";
-import { Button, TextField } from "@mui/material";
+import { Avatar, Button, TextField } from "@mui/material";
 import { useAppSelector } from "@/store/hooks";
 import { selectPage, selectPageId } from "@/store/slices/pageSlice";
 import { PermissionSelect, UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
@@ -34,7 +34,8 @@ const UserElement: React.FC<IPermissionSelect> = ({ userId, userPermission, page
     return (
         <StyledUser outlined={isClientUser}>
             <div className={"user-profile"}>
-                <img alt={"s"}/>
+                {/* <img alt={"s"}/> */}
+                <Avatar/>
                 <div className={"user"}>
                     <div className={"main-data"}>
                         {data.username}

@@ -1,41 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { Avatar, Paper, Typography } from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { pageActions, selectPageName } from "@/store/slices/pageSlice";
+import React from "react";
+import { Paper, Typography } from "@mui/material";
+import { useAppSelector } from "@/store/hooks";
+import { selectUserAuth } from "@/store/slices/userSlice";
 
 interface HeaderProps {
     text: string;
     background?: string;
     className?: string;
     onContentChange?: (content: string) => void;
+    canEdit?: boolean;
 }
 
 const PageHeader = (props: HeaderProps) => {
-    const { text, className, background, onContentChange } = props;
+    const { text, background, onContentChange, canEdit } = props;
 
     const handleHeaderContentChange = (e: React.FocusEvent<HTMLSpanElement, Element>) => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const content = e.currentTarget.textContent!;
+
         if (onContentChange) {
             onContentChange(content);
         }
     };
 
+    const isHaveBackground = background !== "";
+
     return (
         <div>
-            {background && <div
-                style={{
-                    borderRadius: 7,
-                    height: 200,
-                    backgroundColor: "orange",
-                }}>
-            </div>}
+            {isHaveBackground &&
+                <Paper
+                    style={{
+                        width: 1270,
+                        borderRadius: '14px 14px 0 0',
+                        height: 200,
+                        backgroundColor: background !== '' ? background : 'none',
+                    }}>
+                </Paper>}
 
-            <Typography contentEditable={true} variant={"h4"}
-                        sx={{ mt: 7, mb: 7, ml: 11, fontWeight: 700 }}
+            <Typography contentEditable={canEdit} variant={"h4"}
+                        sx={{ mt: 7, mb: 7, ml: 11, fontWeight: 700, width: 700 }}
                         className={"page-title"}
-                        onBlur={handleHeaderContentChange}
-            >
+                        onBlur={handleHeaderContentChange}>
                 {text}
             </Typography>
         </div>

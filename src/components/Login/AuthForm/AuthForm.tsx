@@ -28,8 +28,8 @@ const AuthForm = (props: AuthProps) => {
     const onSubmit: SubmitHandler<IAuthForm> = async (data) => {
         const { password, email } = data;
         await signInUser(email, password);
-        // onAuth();
-        // reset();
+        onAuth();
+        reset();
     };
 
     const [showPassword, setShowPassword] = React.useState(false);
@@ -89,7 +89,6 @@ const AuthForm = (props: AuthProps) => {
                             <Typography>Зарегистрироваться</Typography>
                         </Button>
                     </Stack>
-                    {/* <SwitchButton onClick={onRegisterClick} isValid={isValid} formType={ButtonType.login}/> */}
                 </Stack>
             </form>
         </StyledAuthPaper>
