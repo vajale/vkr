@@ -3,7 +3,7 @@ import { firebaseAuth, firebaseRealtimeDatabase, firestoreDB } from "@/component
 import { type DocumentBlock, type Page } from "../../components/PageView/model/types";
 import { firebaseApi } from "@/api";
 import { child, get, push, ref, remove, set, update } from "firebase/database";
-import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { PermissionSelect, UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
 import { useAppSelector } from "@/store/hooks";
 import { selectPageId } from "@/store/slices/pageSlice";
@@ -124,6 +124,7 @@ export const pagesService = firebaseApi.injectEndpoints({
                     const pagesResponses = await Promise.all(promises);
                     const validResponses = pagesResponses.filter((response) => response !== null);
 
+                    console.log(validResponses);
                     return {
                         data: validResponses,
                     };
@@ -176,6 +177,50 @@ export const pagesService = firebaseApi.injectEndpoints({
                 } catch (error) {
                     console.error("Ошибка при обновлении данных:", error);
                     throw new Error("Ошибка при обновлении данных");
+                }
+            },
+        }),
+        addToFavorites: builder.mutation<{ id: string }, { pageId: string }>({
+            queryFn: async ({ pageId }) => {
+                const userId = firebaseAuth.currentUser?.uid;
+
+                if (!userId) {
+                    console.log("Пользователь не аутентифицирован");
+                    return { error: "Пользователь не аутентифицирован" };
+                }
+
+                try {
+                    await updateDoc(doc(firestoreDB, "users", userId), {
+                        favorites: arrayUnion(pageId),
+                    });
+
+                    console.log("Страница добавлена в избранное: " + pageId);
+                    return { data: { id: pageId } };
+                } catch (error: any) {
+                    console.error(error.message);
+                    return { error: error.message };
+                }
+            },
+        }),
+        removeFavorites: builder.mutation<{ id: string }, { pageId: string }>({
+            queryFn: async ({ pageId }) => {
+                const userId = firebaseAuth.currentUser?.uid;
+
+                if (!userId) {
+                    console.log("Пользователь не аутентифицирован");
+                    return { error: "Пользователь не аутентифицирован" };
+                }
+
+                try {
+                    await updateDoc(doc(firestoreDB, "users", userId), {
+                        favorites: arrayRemove(pageId),
+                    });
+
+                    console.log("Страница удалена из избранного: " + pageId);
+                    return { data: { id: pageId } };
+                } catch (error: any) {
+                    console.error("Ошибка при обновлении данных:", error.message || error);
+                    return { error: error.message };
                 }
             },
         }),
@@ -356,5 +401,7 @@ export const {
     useRemovePageMutation,
     useFetchPagesQuery,
     useGetUsersWithPermissionsQuery,
-    useUpdateUserPermissionMutation
+    useUpdateUserPermissionMutation,
+    useAddToFavoritesMutation,
+    useRemoveFavoritesMutation
 } = pagesService;

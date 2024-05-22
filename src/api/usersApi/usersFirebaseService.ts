@@ -17,9 +17,10 @@ interface UserFirebaseRequest {
     };
     username?: string;
     pages?: string[];
+    favorites?: string[];
 }
 
-async function getUser(userId: string): Promise<User> {
+async function getUser (userId: string): Promise<User> {
     const blogRef = doc(firestoreDB, "users", userId);
 
     const queryData = await getDoc(blogRef)
@@ -117,25 +118,26 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
             queryFn: async (_arg) => {
                 const { userId } = _arg;
 
-                const blogRef = doc(firestoreDB, "users", userId);
+                const userIdRef = doc(firestoreDB, "users", userId);
 
-                const queryData = await getDoc(blogRef)
+                const queryData = await getDoc(userIdRef)
                     .then((doc) => doc.data())
                     .catch((error) => {
                         console.log(error);
                     });
 
-                const userData: UserFirebaseRequest = queryData as UserFirebaseRequest;
+                const userFirebaseRequest: UserFirebaseRequest = queryData as UserFirebaseRequest;
 
-                const customUsername = `${userData.user.firstName} ${userData.user.lastname === undefined && ""}`;
+                const customUsername = `${userFirebaseRequest.user.firstName} ${userFirebaseRequest.user.lastname === undefined && ""}`;
                 const user: UserFirebase = {
                     data: {
-                        email: userData.user.email,
-                        firstName: userData.user.firstName,
-                        lastname: userData.user.lastname,
-                        phoneNumber: userData.user.phoneNumber,
+                        email: userFirebaseRequest.user.email,
+                        firstName: userFirebaseRequest.user.firstName,
+                        lastname: userFirebaseRequest.user.lastname,
+                        phoneNumber: userFirebaseRequest.user.phoneNumber,
                     },
-                    pages: userData.pages,
+                    pages: userFirebaseRequest.pages,
+                    favorites: userFirebaseRequest.favorites,
                     username: customUsername,
                 };
 
@@ -233,7 +235,7 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
             },
         }),
         getActiveUsersSubscribe: builder.query<string[], { pageId: string }>({
-            async queryFn({ pageId }, { dispatch }) {
+            async queryFn ({ pageId }, { dispatch }) {
                 const dbRef = ref(firebaseRealtimeDatabase, pageId);
                 const usersChild = child(dbRef, "activeUsers");
 

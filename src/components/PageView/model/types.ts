@@ -77,6 +77,7 @@ export interface Page {
     }
     documentBlocks?: DocumentBlock[];
     parent?: string | '',
+    isFavorite?: boolean
 }
 
 export interface CalendarPage {

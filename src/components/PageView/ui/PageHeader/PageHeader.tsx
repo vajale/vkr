@@ -1,9 +1,11 @@
 import React from "react";
 import { Paper, Typography } from "@mui/material";
 import { useAppSelector } from "@/store/hooks";
-import { selectUserAuth } from "@/store/slices/userSlice";
+import { selectUserAuth, selectUserFavorites } from "@/store/slices/userSlice";
 import { MaterialIcon } from "@/assets/Icon";
 import { StyledPageHeader } from "@/components/PageView/ui/PageHeader/styled";
+import { useAddToFavoritesMutation, useRemoveFavoritesMutation } from "@/api/firebasePageAPI/pagesService";
+import { selectPageId } from "@/store/slices/pageSlice";
 
 interface HeaderProps {
     text: string;
@@ -11,10 +13,16 @@ interface HeaderProps {
     className?: string;
     onContentChange?: (content: string) => void;
     canEdit?: boolean;
+    onFavoritesAdd: () => void
 }
 
 const PageHeader = (props: HeaderProps) => {
-    const { text, background, onContentChange, canEdit } = props;
+    const { text, background, onContentChange, canEdit, onFavoritesAdd } = props;
+
+    const userFavoritePages = useAppSelector(selectUserFavorites);
+    const currentPageId = useAppSelector(selectPageId);
+    const [addToFavorites] = useAddToFavoritesMutation();
+    const [removeFromFavorites] = useRemoveFavoritesMutation();
 
     const handleHeaderContentChange = (e: React.FocusEvent<HTMLSpanElement, Element>) => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -27,6 +35,8 @@ const PageHeader = (props: HeaderProps) => {
 
     const isHaveBackground = background !== "";
 
+    const isFavorite = userFavoritePages.find(page => page === currentPageId) != null;
+
     return (
         <StyledPageHeader>
             {isHaveBackground && (
@@ -38,7 +48,16 @@ const PageHeader = (props: HeaderProps) => {
                         height: 200,
                         backgroundColor: background !== "" ? background : "none",
                     }}>
-                    <div className={"grade-wrapper"}>
+                    <div className={"grade-wrapper"} onMouseDown={() => {
+                        void addToFavorites({ pageId: currentPageId });
+                        if (isFavorite) {
+                            void removeFromFavorites({ pageId: currentPageId });
+                            onFavoritesAdd();
+                        } else {
+                            void addToFavorites({ pageId: currentPageId });
+                            onFavoritesAdd();
+                        }
+                    }}>
                         <div className={"background"}></div>
                         <MaterialIcon name={"MdStars"} className={"favorite"} />
                     </div>
