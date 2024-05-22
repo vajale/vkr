@@ -11,6 +11,7 @@ import * as React from "react";
 import { type BlockType, EntityType, InlineStyle, type KeyCommand } from "./config";
 import { HTMLtoState, stateToHTML } from "./convert";
 import LinkDecorator from "./Link";
+import { useEffect } from "react";
 
 export interface EditorApi {
   state: EditorState;
@@ -52,7 +53,12 @@ export const useEditor = (json?: string): EditorApi => {
   //     : EditorState.createEmpty(decorator)
   // );
 
-  const [state, setState] = React.useState(() => getJsonState(json));
+  const [state, setState] = React.useState(getJsonState(json));
+
+    useEffect(() => {
+        setState(getJsonState(json));
+        console.log(json);
+    }, [json]);
 
   const toggleBlockType = React.useCallback((blockType: BlockType) => {
     setState((currentState) =>
