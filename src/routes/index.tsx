@@ -25,7 +25,13 @@ export const DesktopRouter = () => {
 
                 <Route path={`${Constants.URL.INVITE}/:id`} element={<InvitePage />} />
 
-                <Route path={`${Constants.URL.PAGE}/:id`} element={<Page />}>
+                <Route
+                    path={`${Constants.URL.PAGE}/:id`}
+                    element={
+                        <SecureRoute>
+                            <Page />
+                        </SecureRoute>
+                    }>
                     <Route
                         index
                         element={

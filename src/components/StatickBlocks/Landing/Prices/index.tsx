@@ -12,6 +12,7 @@ interface Props {
     };
     price: string;
     img: SVGAElement;
+    position: string;
 }
 
 const CardContentValues: { start: Props; base: Props; pro: Props } = {
@@ -22,22 +23,25 @@ const CardContentValues: { start: Props; base: Props; pro: Props } = {
         },
         price: "500",
         img: Start,
+        position: "Стартовый",
     },
     base: {
         info: {
-            count: "1",
-            store: "1",
+            count: "30",
+            store: "15",
         },
         price: "1000",
         img: Base,
+        position: "Бизнес",
     },
     pro: {
         info: {
-            count: "1",
-            store: "1",
+            count: "50",
+            store: "30",
         },
         price: "1500",
         img: Pro,
+        position: "Премиум",
     },
 };
 
