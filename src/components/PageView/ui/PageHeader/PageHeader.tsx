@@ -2,6 +2,8 @@ import React from "react";
 import { Paper, Typography } from "@mui/material";
 import { useAppSelector } from "@/store/hooks";
 import { selectUserAuth } from "@/store/slices/userSlice";
+import { MaterialIcon } from "@/assets/Icon";
+import { StyledPageHeader } from "@/components/PageView/ui/PageHeader/styled";
 
 interface HeaderProps {
     text: string;
@@ -26,24 +28,32 @@ const PageHeader = (props: HeaderProps) => {
     const isHaveBackground = background !== "";
 
     return (
-        <div>
-            {isHaveBackground &&
+        <StyledPageHeader>
+            {isHaveBackground && (
                 <Paper
+                    className={"background"}
                     style={{
                         width: 1270,
-                        borderRadius: '14px 14px 0 0',
+                        borderRadius: "14px 14px 0 0",
                         height: 200,
-                        backgroundColor: background !== '' ? background : 'none',
+                        backgroundColor: background !== "" ? background : "none",
                     }}>
-                </Paper>}
+                    <div className={"grade-wrapper"}>
+                        <div className={"background"}></div>
+                        <MaterialIcon name={"MdStars"} className={"favorite"} />
+                    </div>
+                </Paper>
+            )}
 
-            <Typography contentEditable={canEdit} variant={"h4"}
-                        sx={{ mt: 7, mb: 7, ml: 11, fontWeight: 700, width: 700 }}
-                        className={"page-title"}
-                        onBlur={handleHeaderContentChange}>
+            <Typography
+                contentEditable={canEdit}
+                variant={"h4"}
+                sx={{ mt: 7, mb: 7, ml: 11, fontWeight: 700, width: 700 }}
+                className={"page-title"}
+                onBlur={handleHeaderContentChange}>
                 {text}
             </Typography>
-        </div>
+        </StyledPageHeader>
     );
 };
 
