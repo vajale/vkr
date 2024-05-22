@@ -43,13 +43,14 @@ export const userSlice = createSlice({
         selectUserId: (state) => (state.authData !== undefined ? state.authData.id : ""),
         selectUsername: (state) => (state.user !== undefined ? state.user?.username ?? "" : ""),
         selectUserPages: (state) => (state.user !== undefined ? state.user.pages ?? [] : []),
+        selectUserFavorites: (state) => (state.user !== undefined ? state.user.favorites ?? [] : []),
         selectIsInitialized: (state) => state._isInitialized,
         selectSignStatus: (state) => state.signStatus,
     },
 });
 
 export const { selectUserAuth, selectIsInitialized, selectSignStatus } = userSlice.selectors;
-export const { selectUser, selectUserPages, selectUserData, selectUsername, selectUserId } =
+export const { selectUser, selectUserPages, selectUserData, selectUsername, selectUserId, selectUserFavorites } =
     userSlice.selectors;
 export default userSlice.reducer;
 

@@ -3,15 +3,12 @@ import { firebaseAuth, firebaseRealtimeDatabase, firestoreDB } from "@/component
 import { type DocumentBlock, type Page } from "../../components/PageView/model/types";
 import { firebaseApi } from "@/api";
 import { child, get, push, ref, remove, set, update } from "firebase/database";
-import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import {
-    PermissionSelect,
-    UserPermission,
-} from "@/components/StatickBlocks/Members/PermissionSelect";
+import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { PermissionSelect, UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
 import { useAppSelector } from "@/store/hooks";
 import { selectPageId } from "@/store/slices/pageSlice";
 
-function isPage(obj: any): obj is Page {
+function isPage (obj: any): obj is Page {
     return (
         obj !== undefined &&
         obj !== null &&
@@ -26,10 +23,10 @@ export interface PageResponse {
 }
 
 export type PageRequestObjectType = PageResponse & {
-    permissions: Record<string, UserPermission>;
+    permissions: Record<string, UserPermission>
 };
 
-export function arrayToObject<T>(arr: T[] | undefined): Record<number, T> {
+export function arrayToObject<T> (arr: T[] | undefined): Record<number, T> {
     const obj: Record<number, T> = {};
     arr.forEach((value, index) => {
         obj[index] = value;
@@ -56,7 +53,7 @@ interface PermissionsResult {
 export const pagesService = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
         fetchPageData: builder.query<Page, { pageId: string }>({
-            async queryFn({ pageId }) {
+            async queryFn ({ pageId }) {
                 // const dispatch = useAppDispatch();
 
                 if (pageId === "") {
@@ -80,7 +77,7 @@ export const pagesService = firebaseApi.injectEndpoints({
                                 id: pageId,
                                 parent: "",
                                 visual: snapshotData.page.visual,
-                                permissions,
+                                permissions
                             },
                         };
                     } else {
@@ -127,6 +124,7 @@ export const pagesService = firebaseApi.injectEndpoints({
                     const pagesResponses = await Promise.all(promises);
                     const validResponses = pagesResponses.filter((response) => response !== null);
 
+                    console.log(validResponses);
                     return {
                         data: validResponses,
                     };
@@ -182,6 +180,50 @@ export const pagesService = firebaseApi.injectEndpoints({
                 }
             },
         }),
+        addToFavorites: builder.mutation<{ id: string }, { pageId: string }>({
+            queryFn: async ({ pageId }) => {
+                const userId = firebaseAuth.currentUser?.uid;
+
+                if (!userId) {
+                    console.log("Пользователь не аутентифицирован");
+                    return { error: "Пользователь не аутентифицирован" };
+                }
+
+                try {
+                    await updateDoc(doc(firestoreDB, "users", userId), {
+                        favorites: arrayUnion(pageId),
+                    });
+
+                    console.log("Страница добавлена в избранное: " + pageId);
+                    return { data: { id: pageId } };
+                } catch (error: any) {
+                    console.error(error.message);
+                    return { error: error.message };
+                }
+            },
+        }),
+        removeFavorites: builder.mutation<{ id: string }, { pageId: string }>({
+            queryFn: async ({ pageId }) => {
+                const userId = firebaseAuth.currentUser?.uid;
+
+                if (!userId) {
+                    console.log("Пользователь не аутентифицирован");
+                    return { error: "Пользователь не аутентифицирован" };
+                }
+
+                try {
+                    await updateDoc(doc(firestoreDB, "users", userId), {
+                        favorites: arrayRemove(pageId),
+                    });
+
+                    console.log("Страница удалена из избранного: " + pageId);
+                    return { data: { id: pageId } };
+                } catch (error: any) {
+                    console.error("Ошибка при обновлении данных:", error.message || error);
+                    return { error: error.message };
+                }
+            },
+        }),
         createNewPage: builder.mutation<{ id: string }, void>({
             queryFn: async () => {
                 const userId = firebaseAuth.currentUser?.uid;
@@ -201,15 +243,15 @@ export const pagesService = firebaseApi.injectEndpoints({
                             documentBlocks: {
                                 0: {
                                     id: new Date().toJSON(),
-                                    content: "",
-                                    type: "TEXT",
-                                },
+                                    content: '',
+                                    type: 'TEXT'
+                                }
                             },
                             visual: {
                                 name: "Новая страница",
                                 background: "whitesmoke",
                             },
-                            id: "",
+                            id: ''
                         },
                         permissions: {
                             [userId]: UserPermission.CREATOR,
@@ -220,7 +262,7 @@ export const pagesService = firebaseApi.injectEndpoints({
 
                     // добавление id
                     const newDbRef = ref(firebaseRealtimeDatabase, pageFirebaseId);
-                    const ssss = child(newDbRef, "page");
+                    const ssss = child(newDbRef, 'page');
                     await update(ssss, { id: pageFirebaseId });
 
                     await updateDoc(doc(firestoreDB, "users", userId), {
@@ -261,6 +303,10 @@ export const pagesService = firebaseApi.injectEndpoints({
 
                     await updateDoc(userDocRef, { pages: updatedPageIds });
 
+                    await updateDoc(doc(firestoreDB, "users", userId), {
+                        favorites: arrayRemove(pageId),
+                    });
+
                     console.log("Страница удалена");
                     return null;
                 } catch (error) {
@@ -276,10 +322,7 @@ export const pagesService = firebaseApi.injectEndpoints({
 
                 const addData = async () => {
                     if (currentUserId != null) {
-                        const reference = ref(
-                            firebaseRealtimeDatabase,
-                            `/${currentUserId}/` + page.id,
-                        );
+                        const reference = ref(firebaseRealtimeDatabase, `/${currentUserId}/` + page.id);
                         await set(reference, page);
                     }
 
@@ -299,30 +342,27 @@ export const pagesService = firebaseApi.injectEndpoints({
 
                 try {
                     const pageChild = child(dbRef, pageId);
-                    const permissionChild = child(pageChild, "permissions");
+                    const permissionChild = child(pageChild, 'permissions');
                     const snapshot = await get(permissionChild);
 
                     if (snapshot.exists()) {
                         const permissions = snapshot.val() as Record<string, UserPermission>;
 
-                        const result = Object.keys(permissions).reduce(
-                            (acc: PermissionsResult, user: string) => {
-                                if (permissions[user] === UserPermission.READER) {
-                                    acc.readers.push(user);
-                                }
-                                if (permissions[user] === UserPermission.CREATOR) {
-                                    acc.creators.push(user);
-                                }
-                                if (permissions[user] === UserPermission.MODERATOR) {
-                                    acc.moderators.push(user);
-                                }
-                                return acc;
-                            },
-                            { readers: [], creators: [], moderators: [] },
-                        );
+                        const result = Object.keys(permissions).reduce((acc: PermissionsResult, user: string) => {
+                            if (permissions[user] === UserPermission.READER) {
+                                acc.readers.push(user);
+                            }
+                            if (permissions[user] === UserPermission.CREATOR) {
+                                acc.creators.push(user);
+                            }
+                            if (permissions[user] === UserPermission.MODERATOR) {
+                                acc.moderators.push(user);
+                            }
+                            return acc;
+                        }, { readers: [], creators: [], moderators: [] });
 
                         return {
-                            data: result,
+                            data: result
                         };
                     } else {
                         console.log("No data available");
@@ -332,10 +372,7 @@ export const pagesService = firebaseApi.injectEndpoints({
                 }
             },
         }),
-        updateUserPermission: builder.mutation<
-            string,
-            { pageId: string; userId: string; newPermission: UserPermission }
-        >({
+        updateUserPermission: builder.mutation<string, { pageId: string, userId: string, newPermission: UserPermission }>({
             queryFn: async ({ userId, newPermission, pageId }) => {
                 const dbRef = ref(firebaseRealtimeDatabase);
                 const pageRef = child(dbRef, pageId);
@@ -370,4 +407,6 @@ export const {
     useFetchPagesQuery,
     useGetUsersWithPermissionsQuery,
     useUpdateUserPermissionMutation,
+    useAddToFavoritesMutation,
+    useRemoveFavoritesMutation
 } = pagesService;

@@ -20,6 +20,7 @@ export interface UserFirebase {
     };
     username?: string;
     pages?: string[];
+    favorites?: string[];
 }
 
 export interface IUserSchema {

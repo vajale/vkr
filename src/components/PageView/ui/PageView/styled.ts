@@ -5,13 +5,13 @@ export const StyledPageView = styled(Stack)(({ theme }: IExtendedThemeProps) => 
 	display: "flex",
 	flexDirection: "column",
 	alignItems: "flex-start",
-	borderRadius: 14,
+	borderRadius: "14px 14px 0 0",
 	backgroundColor: 'white',
 	overflowY: 'auto',
 	overflowX: 'hidden',
 	maxHeight: 700,
 	minHeight: 700,
-	maxWidth: 1270
+	maxWidth: 1270,
 	// ".page-title": {
 	// 	// fontSize: theme?.textSize.sizeText24,
 	// },

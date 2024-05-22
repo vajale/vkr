@@ -18,6 +18,7 @@ interface LinkProps {
     isLoading?: boolean,
     parent?: Page,
     showOptionsButton?: boolean
+    showChildren?: boolean
     icon?: MaterialIconName,
     width?: string | number
     height?: string | number
@@ -35,7 +36,7 @@ const PageLink = (props: LinkProps) => {
         width,
         height,
         id,
-        onPageDelete
+        onPageDelete, showChildren
     } = props;
 
     const dispatch = useAppDispatch();
@@ -81,7 +82,7 @@ const PageLink = (props: LinkProps) => {
                         <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}
                                width={width}>
                             <Stack flexDirection={'row'} alignItems={'center'}>
-                                {showOptionsButton &&
+                                {showChildren &&
                                     <Button onClick={handleButtonOptionsClick} sx={{ minWidth: 20 }}>
                                         <MaterialIcon name={buttonIconName}/>
                                     </Button>}
@@ -89,16 +90,14 @@ const PageLink = (props: LinkProps) => {
                                 <Link sx={{ textDecoration: 'none', ml: 1, overflow: 'hidden' }} href={"#/page/" + href}>
                                     {label}
                                 </Link></Stack>
-                            {isMouseHover && showOptionsButton && (
-                                <>
-                                    <Stack flexDirection={'row'}>
-                                        <Button onClick={handleDeletePage} sx={{ minWidth: 20 }}><MaterialIcon name={"MdDelete"}/></Button>
-                                        <Button sx={{ minWidth: 20 }}><MaterialIcon name={"MdAdd"}/></Button>
-                                    </Stack>
-                                </>
-                            )}
+                            {showOptionsButton && <motion.div initial={{ opacity: 0 }} whileHover={{ opacity: 1 }}>
+                                <Stack mr={2} flexDirection={'row'}>
+                                    <Button onClick={handleDeletePage} sx={{ minWidth: 20 }}><MaterialIcon
+                                        name={"MdDelete"}/></Button>
+                                    {/* <Button sx={{ minWidth: 20 }}><MaterialIcon name={"MdAdd"}/></Button> */}
+                                </Stack>
+                            </motion.div>}
                         </Stack>
-
                     </Stack>
                     {options.isOptionsOpen && (
                         <div style={{ height: 28, marginTop: 7 }}>

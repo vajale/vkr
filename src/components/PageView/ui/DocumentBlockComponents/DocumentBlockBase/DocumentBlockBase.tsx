@@ -80,7 +80,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
     return (
         <motion.div ref={setNodeRef} style={style} id={item.id}>
             <Stack flexDirection={"row"} ref={hoverRef}>
-                <Stack>
+                <Stack position={'relative'}>
                     <motion.div initial={{ opacity: 0 }} whileHover={{ opacity: 1 }} style={{ width: 60 }}>
                             <StyledButtonsContainer flexDirection={"row"}>
                                 <StyledButton

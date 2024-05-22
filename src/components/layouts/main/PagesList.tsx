@@ -1,4 +1,4 @@
-import { Button, Link, Skeleton, Stack, Typography } from "@mui/material";
+import { Button, Divider, Link, Skeleton, Stack, Typography } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
 import PageLink from "@/components/PageLink/PageLink";
 import {
@@ -8,13 +8,15 @@ import {
 } from "@/api/firebasePageAPI/pagesService";
 import { MaterialIcon } from "@/assets/Icon";
 import { useAppSelector } from "@/store/hooks";
-import { selectUserAuth, selectUserPages } from "@/store/slices/userSlice";
+import { selectUserAuth, selectUserFavorites, selectUserPages } from "@/store/slices/userSlice";
 import Constants from "@/constants";
 import { useNavigate } from "react-router-dom";
 import { NAVIGATION } from "@/constants/navigation";
 import { Members } from "@/components/StatickBlocks/Members";
 import { MainButton } from "@/components/buttons/MainButton";
 import AppLink from "@/components/AppLink/AppLink";
+import useToast from "@/utils/hooks/useToast";
+import { useFirebaseAuth } from "@/components/FireBase";
 
 interface ListProps {
     onPageChanged: () => void;
@@ -24,16 +26,17 @@ const PagesList = (props: ListProps) => {
     const { onPageChanged } = props;
     const navigate = useNavigate();
 
+    const { success, info, warning } = useToast();
+    const { refetchUserData } = useFirebaseAuth();
+
     const userPagesId = useAppSelector(selectUserPages);
+    const userFavoritesId = useAppSelector(selectUserFavorites);
     const isAuth = useAppSelector(selectUserAuth);
 
-    const {
-        data: pagesData,
-        isSuccess: pagesSuccess,
-        isLoading: isPagesLoading,
-    } = useFetchPagesQuery(userPagesId);
-    const [createPage, { isLoading: isLoadingCreatingNewPage, data: newPageId }] =
-        useCreateNewPageMutation();
+    const { data: pagesData, isSuccess: pagesSuccess, isLoading: isPagesLoading } = useFetchPagesQuery(userPagesId);
+    const { data: favoritesData, isSuccess: favoritesSuccess, isLoading: isFavoritesLoading } = useFetchPagesQuery(userFavoritesId);
+
+    const [createPage, { isLoading: isLoadingCreatingNewPage, data: newPageId }] = useCreateNewPageMutation();
     const [removePage] = useRemovePageMutation({});
 
     useEffect(() => {
@@ -45,12 +48,14 @@ const PagesList = (props: ListProps) => {
     const handleAddPageClick = () => {
         void createPage().then(() => {
             onPageChanged();
+            info('Страница добавленна');
         });
     };
 
     const handlePageRemove = (pageId: string) => {
         void removePage({ pageId }).then(() => {
             onPageChanged();
+            warning('Страница удаленна');
         });
     };
 
@@ -58,41 +63,66 @@ const PagesList = (props: ListProps) => {
         navigate(Constants.URL.HOME);
     };
 
-    if (!userPagesId) {
+    if (!isAuth) {
         return null;
     }
 
-    const pagesRender = useMemo(() => {
-        if (!isAuth) {
-            return null;
-        }
+    if (isPagesLoading || isFavoritesLoading) {
+        return (
+            <div>
+                <Skeleton width={290} height={50} />
+                <Skeleton width={290} height={50} />
+                <Skeleton width={290} height={50} />
+                <Skeleton width={290} height={50} />
+                <Skeleton width={290} height={50} />
+                <Skeleton width={290} height={50} />
+            </div>
+        );
+    }
 
-        if (isPagesLoading) {
-            return (
-                <div>
-                    <Skeleton width={290} height={50} />
-                    <Skeleton width={290} height={50} />
-                    <Skeleton width={290} height={50} />
-                </div>
-            );
-        }
-        if (pagesSuccess) {
-            return pagesData?.map((page) => (
-                <PageLink
-                    showOptionsButton
-                    href={page.id}
-                    key={page.id}
-                    label={page.visual?.name}
-                    width={290}
-                    onPageDelete={() => {
-                        handlePageRemove(page.id);
-                    }}
-                    icon={"MdSummarize"}
-                    id={page.id}
-                />
-            ));
-        }
-    }, [pagesData, isPagesLoading]);
+    // const pagesRender = useMemo(() => {
+    //     if (!userPagesId) {
+    //         return null;
+    //     }
+    //
+    //     if (pagesSuccess) {
+    //         return pagesData?.map((page) => (
+    //             <PageLink
+    //                 href={page.id}
+    //                 key={page.id}
+    //                 label={page.visual?.name}
+    //                 width={290}
+    //                 onPageDelete={() => {
+    //                     handlePageRemove(page.id);
+    //                 }}
+    //                 icon={"MdSummarize"}
+    //                 id={page.id}
+    //             />
+    //         ));
+    //     }
+    // }, [pagesData]);
+    //
+    // const favoritesRender = useMemo(() => {
+    //     if (!userPagesId) {
+    //         return null;
+    //     }
+    //
+    //     if (favoritesSuccess) {
+    //         return favoritesData?.map((page) => (
+    //             <PageLink
+    //                 href={page.id}
+    //                 key={page.id}
+    //                 label={page.visual?.name}
+    //                 width={290}
+    //                 onPageDelete={() => {
+    //                     handlePageRemove(page.id);
+    //                 }}
+    //                 icon={"MdSummarize"}
+    //                 id={page.id}
+    //             />
+    //         ));
+    //     }
+    // }, [favoritesData]);
 
     return (
         <>
@@ -113,13 +143,51 @@ const PagesList = (props: ListProps) => {
                 mt={2}
                 flexDirection={"row"}
                 alignItems={"center"}
+                >
+                <Typography>Избранное</Typography>
+            </Stack>
+            <Stack gap={1}>{favoritesData?.map((page) => (
+                <PageLink
+                    href={page.id}
+                    key={page.id}
+                    label={page.visual?.name}
+                    width={290}
+                    onPageDelete={() => {
+                        handlePageRemove(page.id);
+                        onPageChanged();
+                    }}
+                    icon={"MdOutlineFavoriteBorder"}
+                    id={page.id}
+                />
+            ))}
+            </Stack>
+            <Divider/>
+            <Stack
+                mt={2}
+                flexDirection={"row"}
+                alignItems={"center"}
                 justifyContent={"space-between"}>
-                <Typography>Страницы</Typography>
+                <Typography>Все страницы</Typography>
                 <Button sx={{ minWidth: 20 }} onClick={handleAddPageClick}>
                     <MaterialIcon name={"MdAdd"} />
                 </Button>
             </Stack>
-            <Stack gap={1}>{pagesRender}</Stack>
+            <Stack gap={1}>{pagesData?.map((page) => (
+                <PageLink
+                    showOptionsButton
+                    href={page.id}
+                    key={page.id}
+                    label={page.visual?.name}
+                    width={290}
+                    onPageDelete={() => {
+                        handlePageRemove(page.id);
+                        onPageChanged();
+                    }}
+                    icon={"MdSummarize"}
+                    id={page.id}
+                />
+            ))}
+            </Stack>
         </>
     );
 };
