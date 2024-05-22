@@ -10,6 +10,7 @@ import "normalize.css";
 import "./style.css";
 import "./assets/fonts/Inter.ttf";
 import { AuthProvider } from "@/Providers/Auth";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
     return (
@@ -17,6 +18,7 @@ const App = () => {
             <Provider store={store}>
                 <ThemeWrapper>
                     <AuthProvider>
+                        <ToastContainer />
                         <DesktopRouter />
                     </AuthProvider>
                 </ThemeWrapper>

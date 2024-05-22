@@ -6,6 +6,7 @@ import { MaterialIcon } from "@/assets/Icon";
 import { StyledPageHeader } from "@/components/PageView/ui/PageHeader/styled";
 import { useAddToFavoritesMutation, useRemoveFavoritesMutation } from "@/api/firebasePageAPI/pagesService";
 import { selectPageId } from "@/store/slices/pageSlice";
+import useToast from "@/utils/hooks/useToast";
 
 interface HeaderProps {
     text: string;
@@ -18,6 +19,8 @@ interface HeaderProps {
 
 const PageHeader = (props: HeaderProps) => {
     const { text, background, onContentChange, canEdit, onFavoritesAdd } = props;
+
+    const { success, warning } = useToast();
 
     const userFavoritePages = useAppSelector(selectUserFavorites);
     const currentPageId = useAppSelector(selectPageId);
@@ -52,9 +55,11 @@ const PageHeader = (props: HeaderProps) => {
                         void addToFavorites({ pageId: currentPageId });
                         if (isFavorite) {
                             void removeFromFavorites({ pageId: currentPageId });
+                            success("Страница удаленна из избранного");
                             onFavoritesAdd();
                         } else {
                             void addToFavorites({ pageId: currentPageId });
+                            success("Страница добавлена в избранное");
                             onFavoritesAdd();
                         }
                     }}>

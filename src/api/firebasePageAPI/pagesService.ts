@@ -303,6 +303,10 @@ export const pagesService = firebaseApi.injectEndpoints({
 
                     await updateDoc(userDocRef, { pages: updatedPageIds });
 
+                    await updateDoc(doc(firestoreDB, "users", userId), {
+                        favorites: arrayRemove(pageId),
+                    });
+
                     console.log("Страница удалена");
                     return null;
                 } catch (error) {

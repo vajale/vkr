@@ -15,6 +15,8 @@ import { NAVIGATION } from "@/constants/navigation";
 import { Members } from "@/components/StatickBlocks/Members";
 import { MainButton } from "@/components/buttons/MainButton";
 import AppLink from "@/components/AppLink/AppLink";
+import useToast from "@/utils/hooks/useToast";
+import { useFirebaseAuth } from "@/components/FireBase";
 
 interface ListProps {
     onPageChanged: () => void;
@@ -23,6 +25,9 @@ interface ListProps {
 const PagesList = (props: ListProps) => {
     const { onPageChanged } = props;
     const navigate = useNavigate();
+
+    const { success, info, warning } = useToast();
+    const { refetchUserData } = useFirebaseAuth();
 
     const userPagesId = useAppSelector(selectUserPages);
     const userFavoritesId = useAppSelector(selectUserFavorites);
@@ -43,12 +48,14 @@ const PagesList = (props: ListProps) => {
     const handleAddPageClick = () => {
         void createPage().then(() => {
             onPageChanged();
+            info('Страница добавленна');
         });
     };
 
     const handlePageRemove = (pageId: string) => {
         void removePage({ pageId }).then(() => {
             onPageChanged();
+            warning('Страница удаленна');
         });
     };
 
@@ -63,6 +70,9 @@ const PagesList = (props: ListProps) => {
     if (isPagesLoading || isFavoritesLoading) {
         return (
             <div>
+                <Skeleton width={290} height={50} />
+                <Skeleton width={290} height={50} />
+                <Skeleton width={290} height={50} />
                 <Skeleton width={290} height={50} />
                 <Skeleton width={290} height={50} />
                 <Skeleton width={290} height={50} />
@@ -144,6 +154,7 @@ const PagesList = (props: ListProps) => {
                     width={290}
                     onPageDelete={() => {
                         handlePageRemove(page.id);
+                        onPageChanged();
                     }}
                     icon={"MdOutlineFavoriteBorder"}
                     id={page.id}
@@ -170,6 +181,7 @@ const PagesList = (props: ListProps) => {
                     width={290}
                     onPageDelete={() => {
                         handlePageRemove(page.id);
+                        onPageChanged();
                     }}
                     icon={"MdSummarize"}
                     id={page.id}
