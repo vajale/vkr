@@ -1,4 +1,4 @@
-import { ref, onValue, child } from "firebase/database";
+import { child, onValue, ref } from "firebase/database";
 import { firebaseRealtimeDatabase } from "@/components/FireBase";
 import { firebaseApi } from "@/api";
 import { type Page } from "@/components/PageView/model/types";
@@ -6,10 +6,7 @@ import { UserPermission } from "@/components/StatickBlocks/Members/PermissionSel
 
 interface PageResponse {
     page: Page;
-    permissions: {
-        creator: string;
-        moder: string;
-    };
+    permissions: unknown;
 }
 
 type PageRequestObjectType = PageResponse;
@@ -20,21 +17,23 @@ const api = firebaseApi.injectEndpoints({
             async queryFn ({ pageId }, { dispatch }) {
                 const dbRef = ref(firebaseRealtimeDatabase);
                 const specificNodeRef = child(dbRef, pageId);
-                const pageChild = child(specificNodeRef, "page");
 
                 return await new Promise((resolve) => {
-                    const unsubscribe = onValue(pageChild, (snapshot) => {
+                    const unsubscribe = onValue(specificNodeRef, (snapshot) => {
                             if (snapshot.exists()) {
-                                const snapshotData: Page = snapshot.val();
-                                const docBlocksArray = snapshotData?.documentBlocks ? Object.values(snapshotData?.documentBlocks) : [];
+                                const snapshotData: PageResponse = snapshot.val();
+
+                                const docBlocksArray = snapshotData?.page.documentBlocks
+                                    ? Object.values(snapshotData?.page.documentBlocks)
+                                    : [];
 
                                 const pageData = {
                                     data: {
                                         documentBlocks: docBlocksArray,
                                         id: pageId,
                                         parent: "",
-                                        visual: snapshotData.visual,
-                                    },
+                                        visual: snapshotData.page.visual,
+                                    } as Page,
                                 };
 
                                 resolve(pageData);
@@ -62,11 +61,12 @@ const api = firebaseApi.injectEndpoints({
 
                 const dbRef = ref(firebaseRealtimeDatabase);
                 const specificNodeRef = child(dbRef, pageId);
-                const pageChild = child(specificNodeRef, "page");
 
-                const unsubscribe = onValue(pageChild, (snapshot) => {
+                const unsubscribe = onValue(specificNodeRef, (snapshot) => {
                     if (snapshot.exists()) {
                         updateCachedData((draft) => {
+                            console.log(snapshot.val());
+
                             return snapshot.val();
                         });
                     }

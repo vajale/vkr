@@ -26,7 +26,7 @@ export type PageRequestObjectType = PageResponse & {
     permissions: Record<string, UserPermission>
 };
 
-export function arrayToObject<T> (arr: DocumentBlock[] | undefined): Record<number, T> {
+export function arrayToObject<T> (arr: T[] | undefined): Record<number, T> {
     const obj: Record<number, T> = {};
     arr.forEach((value, index) => {
         obj[index] = value;
@@ -60,7 +60,6 @@ export const pagesService = firebaseApi.injectEndpoints({
                     return null;
                 }
 
-                const userId = firebaseAuth.currentUser?.uid;
                 const dbRef = ref(firebaseRealtimeDatabase);
 
                 try {
@@ -78,6 +77,7 @@ export const pagesService = firebaseApi.injectEndpoints({
                                 id: pageId,
                                 parent: "",
                                 visual: snapshotData.page.visual,
+                                permissions
                             },
                         };
                     } else {

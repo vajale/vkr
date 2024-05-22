@@ -121,6 +121,9 @@ export const pageSlice = createSlice({
         removePage: create.reducer((state, action) => {
             state.pageData = undefined;
         }),
+        setPermissionData: create.reducer((state, action) => {
+            state.permissions = action.payload;
+        }),
     }),
     selectors: {
         selectPage: (state) => state.pageData,
@@ -128,6 +131,7 @@ export const pageSlice = createSlice({
         selectPageName: (state) => state.pageData?.visual?.name ?? "Страница",
         selectPageBackground: (state) => state.pageData?.visual?.background ?? "",
         selectPageDocuments: (state) => state.pageData?.documentBlocks ?? [],
+        selectPagePermission: (state) => state.permissions || [],
         selectPageIsEdit: (state) => state.isPageEdit,
         selectPageHeaderFlag: (state) => state.style.header,
         selectPageLogo: (state) => state.style.logo,
@@ -139,5 +143,6 @@ export const { reducer: pageReducer } = pageSlice;
 export const {
     selectPage,
     selectPageId,
-    selectPageDocuments
+    selectPageDocuments,
+    selectPagePermission
 } = pageSlice.selectors;
