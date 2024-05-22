@@ -21,7 +21,7 @@ const CardContentValues: { start: Props; base: Props; pro: Props } = {
             count: "10",
             store: "5",
         },
-        price: "500",
+        price: "бесплатно",
         img: Start,
         position: "Стартовый",
     },
@@ -30,7 +30,7 @@ const CardContentValues: { start: Props; base: Props; pro: Props } = {
             count: "30",
             store: "15",
         },
-        price: "1000",
+        price: "1000 руб",
         img: Base,
         position: "Бизнес",
     },
@@ -39,7 +39,7 @@ const CardContentValues: { start: Props; base: Props; pro: Props } = {
             count: "50",
             store: "30",
         },
-        price: "1500",
+        price: "1500 руб",
         img: Pro,
         position: "Премиум",
     },
@@ -65,7 +65,7 @@ export const Prices = () => {
                     </div>
                 </div>
                 <div className={"connect"}>
-                    <div className={"title"}>{price} руб</div>
+                    <div className={"title"}>{price}</div>
                     <Button>
                         <div className="background" />
                         <span>Подключить</span>

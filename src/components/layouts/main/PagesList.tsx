@@ -26,8 +26,13 @@ const PagesList = (props: ListProps) => {
 
     const userPagesId = useAppSelector(selectUserPages);
 
-    const { data: pagesData, isSuccess: pagesSuccess, isLoading: isPagesLoading } = useFetchPagesQuery(userPagesId);
-    const [createPage, { isLoading: isLoadingCreatingNewPage, data: newPageId }] = useCreateNewPageMutation();
+    const {
+        data: pagesData,
+        isSuccess: pagesSuccess,
+        isLoading: isPagesLoading,
+    } = useFetchPagesQuery(userPagesId);
+    const [createPage, { isLoading: isLoadingCreatingNewPage, data: newPageId }] =
+        useCreateNewPageMutation();
     const [removePage] = useRemovePageMutation({});
 
     useEffect(() => {
@@ -94,9 +99,9 @@ const PagesList = (props: ListProps) => {
                 onClick={handleMainButton}>
                 СЕЙФ +
             </Typography>
-            <PageLink id={""} href={"calendar"} label={"Поиск"} icon={"MdSearch"} />
+            {/* <PageLink id={""} href={"calendar"} label={"Поиск"} icon={"MdSearch"} /> */}
             <Stack mt={4}>
-                <AppLink icon={"MdCalendarMonth"} href={'/calendar'} label={'Календарь'}/>
+                <AppLink icon={"MdCalendarMonth"} href={"/calendar"} label={"Календарь"} />
                 <Members />
             </Stack>
             <Stack

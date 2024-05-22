@@ -34,7 +34,7 @@ export const CarouselContent = ({ lHeader, header, title, imgId, index }: ICarou
         if (isAuth) {
             return "Войти в СЕЙФ";
         }
-        return "попробывать бесплатно";
+        return "попробовать бесплатно";
     }, [isAuth]);
 
     return (

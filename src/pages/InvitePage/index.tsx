@@ -47,9 +47,9 @@ export const InvitePage = () => {
         return (
             <StyledInvitePage>
                 <div className={"host"}>
-                    <Typography className={"title"}>{`Huilo`}</Typography>
+                    <Typography className={"title"}>{``}</Typography>
                     <Typography className={"pageId"}>
-                        прилашает вас к редактированию страницы
+                        Вы прилашены к редактированию страницы!
                     </Typography>
                 </div>
                 <div className={"select-buttons"}>
