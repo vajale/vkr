@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { LandingLayout } from "@/components/layouts/landing";
 import ModalComponent from "@/components/Modal";
 import { StyledInvitePage } from "@/pages/InvitePage/styled";
@@ -10,21 +10,37 @@ import { useUpdateUserPermissionMutation } from "@/api/firebasePageAPI/pagesServ
 import { UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
 
 export const InvitePage = () => {
-    const { isAuth, authState: [user] } = useFirebaseAuth();
+    const {
+        isAuth,
+        authState: [user],
+    } = useFirebaseAuth();
     const id = useParams();
     const navigate = useNavigate();
 
-    const [updatePermissions] = useUpdateUserPermissionMutation();
+    const [clicked, setIsClicked] = useState(false);
+
+    const [updatePermissions, { data, isLoading, isSuccess }] = useUpdateUserPermissionMutation();
 
     const onClose = () => {
         console.log("onClose");
     };
 
     const handleAccept = () => {
-        console.log(id.id);
-        void updatePermissions({ pageId: id.id, userId: user?.uid, newPermission: UserPermission.MODERATOR });
-        console.log("handleAccepte");
+        setIsClicked(true);
+        void updatePermissions({
+            pageId: id.id,
+            userId: user?.uid,
+            newPermission: UserPermission.MODERATOR,
+        });
     };
+
+    useEffect(() => {
+        if (!isLoading && clicked && isSuccess && id.id) {
+            setTimeout(() => {
+                navigate(`${NAVIGATION.PAGE}${id.id}`, { replace: true });
+            }, 3000);
+        }
+    }, [clicked, isLoading]);
 
     const navigateToLandig = () => {
         navigate(NAVIGATION.LANDING.MAIN, { replace: true });

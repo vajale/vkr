@@ -15,6 +15,7 @@ interface HeaderProps {
 
 const PageHeader = (props: HeaderProps) => {
     const { text, background, onContentChange, canEdit } = props;
+    const [isFavorite, setIsFavorite] = React.useState(false);
 
     const handleHeaderContentChange = (e: React.FocusEvent<HTMLSpanElement, Element>) => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -38,9 +39,15 @@ const PageHeader = (props: HeaderProps) => {
                         height: 200,
                         backgroundColor: background !== "" ? background : "none",
                     }}>
-                    <div className={"grade-wrapper"}>
-                        <div className={"background"}></div>
-                        <MaterialIcon name={"MdStars"} className={"favorite"} />
+                    <div
+                        className={"grade-wrapper"}
+                        onClick={() => {
+                            setIsFavorite(!isFavorite);
+                        }}>
+                        <MaterialIcon
+                            name={"MdStars"}
+                            className={`favorite${isFavorite ? "--active" : ""}`}
+                        />
                     </div>
                 </Paper>
             )}
