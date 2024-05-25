@@ -7,7 +7,7 @@ export const TextEditorProvider: React.FC<{ children: React.ReactNode, json: str
     const editorApi = useEditor(json);
 
     return (
-        <div style={{ position: 'relative', width: 1000 }}>
+        <div style={{ position: 'relative', width: "100%", minWidth: 70, maxWidth: 1100 }}>
             <TextEditorContext.Provider value={editorApi}>
                 {children}
             </TextEditorContext.Provider>

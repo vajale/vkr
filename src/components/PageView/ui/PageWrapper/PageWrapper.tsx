@@ -20,8 +20,6 @@ const PageWrapper = ({ pageId }: WrapperProps) => {
 
     useEffect(() => {
         if (isSuccess) {
-            console.log(data);
-
             dispatch(pageActions.setPage(data.page));
             dispatch(pageActions.setPermissionData(data.permissions));
         }

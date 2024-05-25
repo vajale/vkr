@@ -7,8 +7,8 @@ import { useState } from "react";
 export interface TextEditorProps {
     onChange: (json: string) => void,
     canEdit: boolean,
-    onFocus: () => void,
-    onBlur: () => void,
+    onFocus?: () => void,
+    onBlur?: () => void,
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({ onChange, canEdit, onBlur, onFocus }) => {
@@ -36,12 +36,16 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange, canEdit, onBlur, onFo
                 blockRenderMap={BLOCK_RENDER_MAP}
                 editorState={editorApi.state}
                 onChange={editorApi.onChange}
-                placeholder={'Напишите что-нибудь...'}
+                placeholder={''}
                 onFocus={() => {
-                    onFocus();
+                    if (onFocus) {
+                        onFocus();
+                    }
                 }}
                 onBlur={() => {
-                    onBlur();
+                    if (onBlur) {
+                        onBlur();
+                    }
                     handleEditorChange();
                 }}
                 keyBindingFn={editorApi.handlerKeyBinding}

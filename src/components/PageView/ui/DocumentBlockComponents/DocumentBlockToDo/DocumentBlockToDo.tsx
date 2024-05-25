@@ -1,11 +1,19 @@
 import React, { useMemo, useState } from "react";
-import type { DocumentContentType, DocumentTextBlock, DocumentTodoBlock } from "@/components/PageView/model/types";
+import {
+    type DocumentContentType,
+    DocumentTextBlock,
+    type DocumentTodoBlock,
+    Task,
+    type Todo
+} from "@/components/PageView/model/types";
 import { Button, Checkbox, Stack, Typography } from "@mui/material";
 import { DndContext } from "@dnd-kit/core";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useAppDispatch } from "@/store/hooks";
 import { pageActions } from "@/store/slices/pageSlice";
 import { MaterialIcon } from "@/assets/Icon";
+import { motion } from "framer-motion";
+import EditableTextField from "@/components/PageView/ui/EditableTextField/EditableTextField";
 
 interface TodoProps {
     block: DocumentTodoBlock;
@@ -17,52 +25,70 @@ interface TodoProps {
 const DocumentBlockToDo = (props: TodoProps) => {
     const { block, canEdit, onContentChange } = props;
 
-    const [todos, setTodos] = useState(() => block.todos);
-    const [content, setContent] = useState<string>(() => block.content);
-
     const dispatch = useAppDispatch();
 
-    const getFontPadding = useMemo(() => {
-        const { textType } = block;
-
-        switch (textType?.variant) {
-            case "h4":
-                return 2;
-            case "h5":
-                return 1;
-            default:
-                return 'subtitle1';
+    const [todos, setTodos] = useState<Todo[] | []>(() => {
+        if (block.todos === undefined) {
+            return [];
         }
-    }, []);
+
+        return block.todos;
+    });
 
     const handleSetCheckTodo = (id: string) => {
-        setTodos(prevTodos => {
-            return prevTodos.map(todo => {
-                if (todo.id === id) {
-                    return { ...todo, completed: !todo.completed };
-                }
-                return todo;
-            });
+        const newTodos = todos.map(todo => {
+            if (todo.id === id) {
+                return { ...todo, completed: !todo.completed };
+            }
+            return todo;
         });
 
-        dispatch(pageActions.updateBlock({ ...block, todos }));
+        setTodos(newTodos);
+        dispatch(pageActions.updateBlock({ ...block, todos: newTodos }));
     };
 
     const handleCreateNewTask = () => {
-        setTodos(prevState => [...prevState, {
+        const newTodos = [...todos, {
             id: new Date().toJSON(),
             completed: false,
-            title: 'Задача'
-        }]);
+            title: ``
+        }];
 
-        dispatch(pageActions.updateBlock({ ...block, todos }));
+        setTodos(newTodos);
+        dispatch(pageActions.updateBlock({ ...block, todos: newTodos }));
     };
 
     const handleRemoveTask = (id: string) => {
-        const filterTodos = block.todos.filter(item => item.id === id);
+        const filterTodos = block.todos.filter(item => item.id !== id);
         setTodos(filterTodos);
 
-        dispatch(pageActions.updateBlock({ ...block, todos: filterTodos }));
+        dispatch(pageActions.updateBlock({ todos: filterTodos }));
+    };
+
+    const handleContentChange = (json: string) => {
+        if (onContentChange) {
+            onContentChange(json);
+
+            dispatch(
+                pageActions.updateBlock({ ...block, content: json })
+            );
+        }
+    };
+
+    const handleTaskChange = (id: string, json: string) => {
+        console.log(json);
+
+        const newTodos = todos.map(todo => {
+            if (todo.id === id) {
+                return { ...todo, title: json };
+            }
+            return todo;
+        });
+
+        setTodos(newTodos);
+        dispatch(
+            pageActions.updateBlock({ ...block, todos: newTodos })
+        );
     };
 
     const todosRender = useMemo(() => {
@@ -71,52 +97,50 @@ const DocumentBlockToDo = (props: TodoProps) => {
         }
 
         return todos?.map((item) => {
+            if (todos.length === 0) {
+                return (<div onMouseDown={handleCreateNewTask}></div>);
+            }
+
             return (
-                <div key={item.id} id={item.id}>
-                    <Stack flexDirection={'row'} alignItems={'center'}>
+                    <Stack alignItems={'center'} flexDirection={'row'} key={item.id}>
                         <Checkbox checked={item.completed} onChange={() => {
                             handleSetCheckTodo(item.id);
                         }}/>
-                        <Typography>{item.title}</Typography>
-                        <Button style={{ minWidth: 30, borderRadius: 4 }} onClick={handleCreateNewTask}>
-                            <MaterialIcon name={"MdAdd"}/>
-                        </Button>
-                        <Button style={{ minWidth: 30, borderRadius: 4 }} onClick={() => {
-                            handleRemoveTask(item.id);
-                        }}>
-                            <MaterialIcon name={"MdDelete"}/>
-                        </Button>
+                        <EditableTextField
+                            canEdit={canEdit}
+                            title={item.title}
+                            onContentChange={(jsonString) => {
+                                handleTaskChange(item.id, jsonString);
+                            }}/>
+                        <motion.div initial={{ opacity: 0 }} whileHover={{ opacity: 1 }}>
+                            <Button style={{ minWidth: 30, borderRadius: 4 }} onClick={handleCreateNewTask}>
+                                <MaterialIcon name={"MdAdd"}/>
+                            </Button>
+                            <Button style={{ minWidth: 30, borderRadius: 4 }} onClick={() => {
+                                handleRemoveTask(item.id);
+                            }}>
+                                <MaterialIcon name={"MdDelete"}/>
+                            </Button>
+                        </motion.div>
                     </Stack>
-                </div>
             );
         });
     }, [todos]);
 
     return (
         <div>
-            <Typography width={"900px"} p={getFontPadding}
-                        component={'div'}
-                        data-placeholder={'asffas'}
-                        variant={block.textType?.variant ?? 'subtitle1'}
-                        fontWeight={block.textType?.weight}
-                        color={block.textType?.fontColor ?? 'none'}
-                        contentEditable={canEdit}
-                        onInput={(e) => {
-                            setContent(e.currentTarget.textContent!);
-                        }}
-                        onBlur={() => {
-                            if (onContentChange != null) {
-                                onContentChange(content);
-                            }
-
-                            dispatch(pageActions.updateBlock({ ...block, content }));
-                        }}>
-                {block.content}
-            </Typography>
+            <Stack flexDirection={'row'}>
+                <EditableTextField canEdit={canEdit} title={block.content} onContentChange={handleContentChange}/>
+                <Button style={{ minWidth: 30, borderRadius: 4 }} onClick={handleCreateNewTask}>
+                    <MaterialIcon name={"MdAdd"}/>
+                </Button>
+            </Stack>
             <DndContext>
                 {todos
                     ? <SortableContext items={todos} strategy={verticalListSortingStrategy}>
-                        {todosRender}
+                        <Stack marginLeft={3} alignItems={'flex-start'}>
+                            {todosRender}
+                        </Stack>
                     </SortableContext>
                     : <Button style={{ minWidth: 30, borderRadius: 4 }} onClick={handleCreateNewTask}>
                         <MaterialIcon name={"MdAdd"}/>

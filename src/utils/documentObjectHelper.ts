@@ -1,11 +1,27 @@
 import {
     DocumentBlockType,
-    type DocumentCheckboxBlock, type DocumentCodeBlock,
+    type DocumentCheckboxBlock,
+    type DocumentCodeBlock,
     type DocumentPageLinkBlock,
-    type DocumentTextBlock, type DocumentTodoBlock
+    type DocumentTextBlock,
+    type DocumentTodoBlock
 } from "@/components/PageView/model/types";
-import type DocumentBlockToDo
-    from "@/components/PageView/ui/DocumentBlockComponents/DocumentBlockToDo/DocumentBlockToDo";
+
+export const getPageLinkWithParent = (link: string) => {
+    const id = new Date().toJSON();
+
+    const newBlock: DocumentPageLinkBlock = {
+        id,
+        type: DocumentBlockType.LINK,
+        src: link,
+        content: "Page_link",
+        textType: {
+            variant: "subtitle1"
+        },
+    };
+
+    return newBlock;
+};
 
 export const documentObjectHelper = (type: DocumentBlockType) => {
     const id = new Date().toJSON();
@@ -45,7 +61,7 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
             content: "Page_link",
             textType: {
                 variant: "subtitle1"
-            }
+            },
         };
 
         return newBlock;

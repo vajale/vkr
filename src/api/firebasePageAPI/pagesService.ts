@@ -26,6 +26,8 @@ export type PageRequestObjectType = PageResponse & {
     permissions: Record<string, UserPermission>
 };
 
+export type SimplyPage = Omit<Page, 'documentBlocks' | 'isFavorite'>;
+
 export function arrayToObject<T> (arr: T[] | undefined): Record<number, T> {
     const obj: Record<number, T> = {};
     arr.forEach((value, index) => {
@@ -75,7 +77,8 @@ export const pagesService = firebaseApi.injectEndpoints({
                             data: {
                                 documentBlocks: docBlocksArray,
                                 id: pageId,
-                                parent: "",
+                                parent: snapshotData.page.parent,
+                                child: snapshotData.page.child,
                                 visual: snapshotData.page.visual,
                                 permissions
                             },
@@ -88,7 +91,7 @@ export const pagesService = firebaseApi.injectEndpoints({
                 }
             },
         }),
-        fetchPages: builder.query<Page[], string[]>({
+        fetchPages: builder.query<SimplyPage[], string[]>({
             queryFn: async (pageIds) => {
                 if (!Array.isArray(pageIds) || pageIds.length === 0) {
                     throw new Error("Invalid input: pageIds must be a non-empty array.");
@@ -110,7 +113,9 @@ export const pagesService = firebaseApi.injectEndpoints({
                                     visual: {
                                         name: page.visual?.name,
                                     },
-                                };
+                                    child: page.child,
+                                    parent: page.parent
+                                } satisfies SimplyPage;
                             } else {
                                 console.log(`No data available for pageId: ${pageId}`);
                                 return null;
@@ -124,7 +129,6 @@ export const pagesService = firebaseApi.injectEndpoints({
                     const pagesResponses = await Promise.all(promises);
                     const validResponses = pagesResponses.filter((response) => response !== null);
 
-                    console.log(validResponses);
                     return {
                         data: validResponses,
                     };
@@ -224,8 +228,8 @@ export const pagesService = firebaseApi.injectEndpoints({
                 }
             },
         }),
-        createNewPage: builder.mutation<{ id: string }, void>({
-            queryFn: async () => {
+        createNewPage: builder.mutation<{ id: string }, { parentId?: string }>({
+            queryFn: async ({ parentId }) => {
                 const userId = firebaseAuth.currentUser?.uid;
 
                 if (!userId) {
@@ -260,11 +264,20 @@ export const pagesService = firebaseApi.injectEndpoints({
 
                     const pageFirebaseId = await push(dbRef, newPageObj).then((data) => data.key);
 
-                    // добавление id
+                    // добавление id в RealtimeBd
                     const newDbRef = ref(firebaseRealtimeDatabase, pageFirebaseId);
                     const ssss = child(newDbRef, 'page');
                     await update(ssss, { id: pageFirebaseId });
 
+                    // обновление child в родителской странице
+
+                    if (parentId) {
+                        const parentRef = ref(firebaseRealtimeDatabase, parentId);
+                        const parentPageRef = child(parentRef, 'page');
+                        await update(parentPageRef, { child: pageFirebaseId });
+                    }
+
+                    // добавление id в database
                     await updateDoc(doc(firestoreDB, "users", userId), {
                         pages: arrayUnion(pageFirebaseId),
                     });
@@ -290,6 +303,11 @@ export const pagesService = firebaseApi.injectEndpoints({
                 const realtimeDataBaseRef = ref(firebaseRealtimeDatabase, pageId);
 
                 try {
+                    // const snapshot = await get(child(realtimeDataBaseRef, pageId));
+
+                    // const snapshotData = snapshot.val() as PageResponse;
+                    // const child = snapshotData.child;
+
                     await remove(realtimeDataBaseRef);
 
                     const userDocSnapshot = await getDoc(userDocRef);

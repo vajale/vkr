@@ -12,6 +12,7 @@ export const StyledPageView = styled(Stack)(({ theme }: IExtendedThemeProps) => 
 	maxHeight: 700,
 	minHeight: 700,
 	maxWidth: 1270,
+	width: 1270,
 	// ".page-title": {
 	// 	// fontSize: theme?.textSize.sizeText24,
 	// },

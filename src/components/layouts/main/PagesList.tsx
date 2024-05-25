@@ -1,6 +1,5 @@
-import { Button, Divider, Link, Skeleton, Stack, Typography } from "@mui/material";
+import { Button, Divider, Skeleton, Stack, Typography } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
-import PageLink from "@/components/PageLink/PageLink";
 import {
     useCreateNewPageMutation,
     useFetchPagesQuery,
@@ -13,9 +12,11 @@ import Constants from "@/constants";
 import { useNavigate } from "react-router-dom";
 import { NAVIGATION } from "@/constants/navigation";
 import { Members } from "@/components/StatickBlocks/Members";
-import { MainButton } from "@/components/buttons/MainButton";
 import AppLink from "@/components/AppLink/AppLink";
 import useToast from "@/utils/hooks/useToast";
+import LayoutPageLink from "@/components/layouts/main/LayoutPageLink";
+import FavoritePageLink from "@/components/layouts/main/FavoritePageLink";
+import { buildDeepHierarchy } from "@/utils/helper/helpers";
 import { useFirebaseAuth } from "@/components/FireBase";
 
 interface ListProps {
@@ -24,20 +25,21 @@ interface ListProps {
 
 const PagesList = (props: ListProps) => {
     const { onPageChanged } = props;
+
     const navigate = useNavigate();
 
-    const { success, info, warning } = useToast();
+    const { info, warning, notify } = useToast();
+
     const { refetchUserData } = useFirebaseAuth();
 
     const userPagesId = useAppSelector(selectUserPages);
     const userFavoritesId = useAppSelector(selectUserFavorites);
     const isAuth = useAppSelector(selectUserAuth);
 
-    const { data: pagesData, isSuccess: pagesSuccess, isLoading: isPagesLoading } = useFetchPagesQuery(userPagesId);
-    const { data: favoritesData, isSuccess: favoritesSuccess, isLoading: isFavoritesLoading } = useFetchPagesQuery(userFavoritesId);
+    const { data: pagesData, isLoading: isPagesLoading, refetch } = useFetchPagesQuery(userPagesId);
+    const { data: favoritesData, isLoading: isFavoritesLoading } = useFetchPagesQuery(userFavoritesId);
 
     const [createPage, { isLoading: isLoadingCreatingNewPage, data: newPageId }] = useCreateNewPageMutation();
-    const [removePage] = useRemovePageMutation({});
 
     useEffect(() => {
         if (!isLoadingCreatingNewPage && newPageId) {
@@ -46,17 +48,21 @@ const PagesList = (props: ListProps) => {
     }, [newPageId, isLoadingCreatingNewPage]);
 
     const handleAddPageClick = () => {
-        void createPage().then(() => {
-            onPageChanged();
+        void createPage({ parentId: '' }).then(() => {
             info('Страница добавленна');
+            onPageChanged();
         });
     };
 
-    const handlePageRemove = (pageId: string) => {
-        void removePage({ pageId }).then(() => {
-            onPageChanged();
-            warning('Страница удаленна');
-        });
+    const handlePageRemove = () => {
+        void refetch();
+        onPageChanged();
+        warning('Страница удаленна');
+    };
+
+    const handleChildPageCreated = () => {
+        void refetch();
+        notify('Дочерняя страница добавленна');
     };
 
     const handleMainButton = () => {
@@ -70,59 +76,28 @@ const PagesList = (props: ListProps) => {
     if (isPagesLoading || isFavoritesLoading) {
         return (
             <div>
-                <Skeleton width={290} height={50} />
-                <Skeleton width={290} height={50} />
-                <Skeleton width={290} height={50} />
-                <Skeleton width={290} height={50} />
-                <Skeleton width={290} height={50} />
-                <Skeleton width={290} height={50} />
+                <Skeleton width={290} height={50}/>
+                <Skeleton width={290} height={50}/>
+                <Skeleton width={290} height={50}/>
+                <Skeleton width={290} height={50}/>
+                <Skeleton width={290} height={50}/>
+                <Skeleton width={290} height={50}/>
             </div>
         );
     }
 
-    // const pagesRender = useMemo(() => {
-    //     if (!userPagesId) {
-    //         return null;
-    //     }
+    const items1 = [
+        { id: 1, name: 'Item 1', child: undefined },
+        { id: 2, name: 'Item 2', child: 1 },
+        { id: 4, name: 'Item 4', child: 5 },
+        { id: 5, name: 'Item 5', child: undefined },
+    ];
+
+    const allPages = pagesData && buildDeepHierarchy(pagesData);
     //
-    //     if (pagesSuccess) {
-    //         return pagesData?.map((page) => (
-    //             <PageLink
-    //                 href={page.id}
-    //                 key={page.id}
-    //                 label={page.visual?.name}
-    //                 width={290}
-    //                 onPageDelete={() => {
-    //                     handlePageRemove(page.id);
-    //                 }}
-    //                 icon={"MdSummarize"}
-    //                 id={page.id}
-    //             />
-    //         ));
-    //     }
-    // }, [pagesData]);
-    //
-    // const favoritesRender = useMemo(() => {
-    //     if (!userPagesId) {
-    //         return null;
-    //     }
-    //
-    //     if (favoritesSuccess) {
-    //         return favoritesData?.map((page) => (
-    //             <PageLink
-    //                 href={page.id}
-    //                 key={page.id}
-    //                 label={page.visual?.name}
-    //                 width={290}
-    //                 onPageDelete={() => {
-    //                     handlePageRemove(page.id);
-    //                 }}
-    //                 icon={"MdSummarize"}
-    //                 id={page.id}
-    //             />
-    //         ));
-    //     }
-    // }, [favoritesData]);
+    // if (pagesData) {
+    //     console.log(buildDeepHierarchy(pagesData));
+    // }
 
     return (
         <>
@@ -136,60 +111,58 @@ const PagesList = (props: ListProps) => {
             </Typography>
             {/* <PageLink id={""} href={"calendar"} label={"Поиск"} icon={"MdSearch"} /> */}
             <Stack mt={4}>
-                <AppLink icon={"MdCalendarMonth"} href={"/calendar"} label={"Календарь"} />
-                <Members />
+                <AppLink icon={"MdCalendarMonth"} href={"/calendar"} label={"Календарь"}/>
+                <Members/>
             </Stack>
-            <Stack
-                mt={2}
-                flexDirection={"row"}
-                alignItems={"center"}
-                >
+            <Stack mt={2} flexDirection={"row"} alignItems={"center"}>
                 <Typography>Избранное</Typography>
             </Stack>
-            <Stack gap={1}>{favoritesData?.map((page) => (
-                <PageLink
-                    href={page.id}
-                    key={page.id}
-                    label={page.visual?.name}
-                    width={290}
-                    onPageDelete={() => {
-                        handlePageRemove(page.id);
-                        onPageChanged();
-                    }}
-                    icon={"MdOutlineFavoriteBorder"}
-                    id={page.id}
-                />
-            ))}
+            <Stack gap={1}>
+                {favoritesData?.map((page) => (
+                    <FavoritePageLink
+                        page={page}
+                        key={page.id}
+                    />
+                ))}
             </Stack>
             <Divider/>
-            <Stack
-                mt={2}
-                flexDirection={"row"}
-                alignItems={"center"}
-                justifyContent={"space-between"}>
+            <Stack mt={2} flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
                 <Typography>Все страницы</Typography>
                 <Button sx={{ minWidth: 20 }} onClick={handleAddPageClick}>
-                    <MaterialIcon name={"MdAdd"} />
+                    <MaterialIcon name={"MdAdd"}/>
                 </Button>
             </Stack>
-            <Stack gap={1}>{pagesData?.map((page) => (
-                <PageLink
-                    showOptionsButton
-                    href={page.id}
-                    key={page.id}
-                    label={page.visual?.name}
-                    width={290}
-                    onPageDelete={() => {
-                        handlePageRemove(page.id);
-                        onPageChanged();
-                    }}
-                    icon={"MdSummarize"}
-                    id={page.id}
-                />
-            ))}
+            <Stack gap={1}>
+                  {/* <Hierarchy items={buildDeepHierarchy(items)}/> */}
+                  {pagesData && allPages.map((page) => (
+                    <LayoutPageLink key={page.id}
+                                    page={page}
+                                    onPageCreated={handleChildPageCreated}
+                                    onPageDelete={handlePageRemove}
+                    />
+                  ))}
             </Stack>
         </>
     );
 };
 
 export default PagesList;
+
+// const Item = ({ item }) => {
+//     return (
+//         <div style={{ marginLeft: '20px', border: '1px solid gray', padding: '10px' }}>
+//             <div>{item.name}</div>
+//             {item.child && <Item item={item.child} />}
+//         </div>
+//     );
+// };
+//
+// const Hierarchy = ({ items }) => {
+//     return (
+//         <div>
+//             {items?.map(item => (
+//                 <Item key={item.id} item={item} />
+//             ))}
+//         </div>
+//     );
+// };
