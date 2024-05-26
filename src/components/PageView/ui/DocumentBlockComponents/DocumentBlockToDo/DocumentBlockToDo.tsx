@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     type DocumentContentType,
     DocumentTextBlock,
@@ -35,6 +35,12 @@ const DocumentBlockToDo = (props: TodoProps) => {
         return block.todos;
     });
 
+    useEffect(() => {
+        setTodos(block.todos);
+    }, [block.todos]);
+
+    console.log(todos);
+
     const handleSetCheckTodo = (id: string) => {
         const newTodos = todos.map(todo => {
             if (todo.id === id) {
@@ -59,9 +65,9 @@ const DocumentBlockToDo = (props: TodoProps) => {
     };
 
     const handleRemoveTask = (id: string) => {
-        const filterTodos = block.todos.filter(item => item.id !== id);
-        setTodos(filterTodos);
+        const filterTodos = todos.filter(item => item.id !== id);
 
+        setTodos(filterTodos);
         dispatch(pageActions.updateBlock({ todos: filterTodos }));
     };
 

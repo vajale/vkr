@@ -8,6 +8,7 @@ import { pageActions } from "@/store/slices/pageSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { MaterialIcon } from "@/assets/Icon";
+import { useFirebaseAuth } from "@/components/FireBase";
 
 interface LinkProps {
     page: SimplyPage,
@@ -19,6 +20,7 @@ const LayoutPageLink = (props: LinkProps) => {
     const { page, onPageDelete, onPageCreated } = props;
 
     const [options, setOptions] = useState<{ isOptionsOpen: boolean }>(() => ({ isOptionsOpen: false }));
+    const { refetchUserData } = useFirebaseAuth();
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -40,10 +42,13 @@ const LayoutPageLink = (props: LinkProps) => {
         void createPage({ parentId: page.id }).then((newPageData) => {
             const newPageId = newPageData.data.id;
             dispatch(pageActions.updatePage({ child: newPageId }));
+
+            onPageCreated();
+
             navigate(`${NAVIGATION.PAGE}${newPageId}`, { replace: true });
         });
 
-        onPageCreated();
+        refetchUserData();
     };
 
     const buttonIconName = options.isOptionsOpen ? "MdKeyboardArrowDown" : "MdKeyboardArrowRight";
