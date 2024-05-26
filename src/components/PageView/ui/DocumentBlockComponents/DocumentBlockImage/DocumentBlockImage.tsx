@@ -34,11 +34,25 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
         setDragStartY(e.clientY);
         document.addEventListener("mousemove", handleDrag);
         document.addEventListener("mouseup", stopDrag);
+        document.addEventListener("mouseup", updateBlock);
     };
 
     const stopDrag = () => {
         document.removeEventListener("mousemove", handleDrag);
         document.removeEventListener("mouseup", stopDrag);
+    };
+
+    const updateBlock = () => {
+        console.log(width);
+        console.log(height);
+        const newObj = {
+            ...item,
+            sizes: {
+                width,
+                height,
+            },
+        };
+        dispatch(pageActions.updateBlock(newObj));
     };
 
     const page = useAppSelector(selectPage);
@@ -71,17 +85,6 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
         setDragStartX(e.clientX);
     };
 
-    useEffect(() => {
-        const newObj = {
-            ...item,
-            sizes: {
-                width,
-                height,
-            },
-        };
-        dispatch(pageActions.updateBlock(newObj));
-    }, [width, height]);
-
     const image = useMemo(() => {
         if (isLoading) {
             return <CircularProgress />;
@@ -100,7 +103,7 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
 
     return (
         <StyledDocumentBlockImage width={sizes?.width} height={sizes?.height}>
-            <div className="resizable-box" style={{ width: sizes.width, height: sizes.height }}>
+            <div className="resizable-box" style={{ width, height }}>
                 {image}
                 <div
                     className="handle right"
