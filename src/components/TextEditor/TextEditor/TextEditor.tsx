@@ -36,7 +36,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange, canEdit, onBlur, onFo
                 blockRenderMap={BLOCK_RENDER_MAP}
                 editorState={editorApi.state}
                 onChange={editorApi.onChange}
-                placeholder={''}
+                placeholder={'Напишите что-нибудь...'}
                 onFocus={() => {
                     if (onFocus) {
                         onFocus();

@@ -62,6 +62,7 @@ const PagesList = (props: ListProps) => {
 
     const handleChildPageCreated = () => {
         void refetch();
+        onPageChanged();
         notify('Дочерняя страница добавленна');
     };
 
