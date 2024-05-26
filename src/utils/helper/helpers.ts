@@ -29,50 +29,45 @@
 //     return hierarchy;
 // }
 
-export function buildDeepHierarchy (items) {
+export function buildDeepHierarchy(items) {
     const itemMap = new Map();
 
     // Создаем карту элементов по id
-    items.forEach(item => {
+    items.forEach((item) => {
         itemMap.set(item.id, { ...item, child: undefined });
     });
 
     // Обновляем поле child, чтобы оно содержало объект, а не id
-    items.forEach(item => {
+    items.map((item) => {
         if (item.child !== undefined) {
-            const parent = itemMap.get(item.child);
-            const child = itemMap.get(item.id);
+            const parent = itemMap.get(item.id);
+            const child = itemMap.get(item.child);
             if (parent && child) {
-                parent.child = child;
+                parent.child = {
+                    ...child,
+                    parent: item.id,
+                };
+                itemMap.delete(item.child);
             }
         }
     });
 
-    // Фильтруем элементы, которые не являются child других элементов
-    const hierarchy = [];
-    items.forEach(item => {
-        if (!items.some(otherItem => otherItem.id === item.child)) {
-            hierarchy.push(itemMap.get(item.id));
-        }
-    });
-
-    console.log(hierarchy);
-    return hierarchy;
+    return Array.from(itemMap.values());
 }
 
 export const rawData = [
     { id: 1, name: "Root element", parent: 0 },
     { id: 2, name: "Child of the first element", parent: 1 },
-    { id: 555, name: "Child of the second element", parent: 2 }
+    { id: 555, name: "Child of the second element", parent: 2 },
 ];
 
-export function pack (data) {
-    const childs = id =>
-        data.filter(item => item.parent === id)
-            .map(
-                ({ id, name }) => ({ id, name, children: childs(id) })
-            ).map(
-            ({ id, name, children }) => children.length ? { id, name, children } : { id, name }
-        );
+export function pack(data) {
+    const childs = (id) =>
+        data
+            .filter((item) => item.parent === id)
+            .map(({ id, name }) => ({ id, name, children: childs(id) }))
+            .map(({ id, name, children }) =>
+                children.length ? { id, name, children } : { id, name },
+            );
     return childs(0);
 }
