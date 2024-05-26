@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import TextEditor, { TextEditorProvider } from "@/components/TextEditor/TextEditor";
 import ToolPanel from "@/components/TextEditor/ToolPanel";
+import { StyledMotionDiv } from "@/components/PageView/ui/EditableTextField/styled";
 
 interface TextBlockProps {
     title: string;
     canEdit?: boolean;
     onContentChange?: (jsonString: string) => void;
-    disableEditTools?: boolean,
+    disableEditTools?: boolean;
 }
 
 const EditableTextField = (props: TextBlockProps) => {
@@ -32,23 +33,25 @@ const EditableTextField = (props: TextBlockProps) => {
     };
 
     return (
-        <motion.div initial={{ border: 'none' }}
-                    whileHover={{ border: "1px solid #d7d7d7" }}
-                    style={{
-                        boxSizing: 'unset',
-                        border: toolPanelOpen ? '1px solid #d7d7d7' : 'none',
-                        borderRadius: 7,
-                        padding: 7
-                    }}>
+        <StyledMotionDiv
+            initial={{ border: "none" }}
+            whileHover={{ border: "1px solid #d7d7d7" }}
+            style={{
+                boxSizing: "unset",
+                border: toolPanelOpen ? "1px solid #d7d7d7" : "none",
+                borderRadius: 7,
+                padding: 7,
+            }}>
             <TextEditorProvider json={title}>
-                {toolPanelOpen && <ToolPanel/>}
-                <TextEditor onFocus={handleFocus}
-                            onBlur={handleBlur}
-                            canEdit={canEdit}
-                            onChange={handleContentChange}
+                {toolPanelOpen && <ToolPanel />}
+                <TextEditor
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    canEdit={canEdit}
+                    onChange={handleContentChange}
                 />
             </TextEditorProvider>
-        </motion.div>
+        </StyledMotionDiv>
     );
 };
 

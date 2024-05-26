@@ -2,9 +2,10 @@ import {
     DocumentBlockType,
     type DocumentCheckboxBlock,
     type DocumentCodeBlock,
+    type DocumentPageImageBlock,
     type DocumentPageLinkBlock,
     type DocumentTextBlock,
-    type DocumentTodoBlock
+    type DocumentTodoBlock,
 } from "@/components/PageView/model/types";
 
 export const getPageLinkWithParent = (link: string) => {
@@ -16,7 +17,7 @@ export const getPageLinkWithParent = (link: string) => {
         src: link,
         content: "Page_link",
         textType: {
-            variant: "subtitle1"
+            variant: "subtitle1",
         },
     };
 
@@ -33,8 +34,8 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
             type,
             content: defaultContent,
             textType: {
-                variant: "subtitle1"
-            }
+                variant: "subtitle1",
+            },
         };
 
         return newBlock;
@@ -46,8 +47,8 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
             content: defaultContent,
             flag: false,
             textType: {
-                variant: "subtitle1"
-            }
+                variant: "subtitle1",
+            },
         };
 
         return newBlock;
@@ -57,10 +58,28 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
         const newBlock: DocumentPageLinkBlock = {
             id,
             type,
-            src: '/',
+            src: "/",
             content: "Page_link",
             textType: {
-                variant: "subtitle1"
+                variant: "subtitle1",
+            },
+        };
+
+        return newBlock;
+    }
+
+    if (type === DocumentBlockType.IMAGE) {
+        const newBlock: DocumentPageImageBlock = {
+            id,
+            type,
+            src: id,
+            sizes: {
+                width: "200",
+                height: "200",
+            },
+            alt: "img_block",
+            textType: {
+                variant: "subtitle1",
             },
         };
 
@@ -73,8 +92,8 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
             type,
             content: defaultContent,
             textType: {
-                variant: "subtitle1"
-            }
+                variant: "subtitle1",
+            },
         };
 
         return newBlock;
@@ -84,17 +103,17 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
         const newBlock: DocumentTodoBlock = {
             id,
             type,
-            content: 'Задачи',
+            content: "Задачи",
             textType: {
-                variant: "subtitle1"
+                variant: "subtitle1",
             },
             todos: [
                 {
-                    id: 'TODO' + id,
+                    id: "TODO" + id,
                     completed: false,
-                    title: "Новая задача"
-                }
-            ]
+                    title: "Новая задача",
+                },
+            ],
         };
 
         return newBlock;

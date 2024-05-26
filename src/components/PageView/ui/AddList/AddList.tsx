@@ -29,6 +29,7 @@ const AddList = ({ onAddBlock }: ListProps) => {
         // if (newType === DocumentBlockType.IMAGE || newType === DocumentBlockType.QUOTE || DocumentBlockType.LINK) return;
 
         dispatch(pageActions.addNewBlock(newType));
+        console.log(newType);
         onAddBlock(newType);
     };
 
@@ -42,7 +43,7 @@ const AddList = ({ onAddBlock }: ListProps) => {
 
     const handleCreatePage = async () => {
         void createPage({ parentId: pageId }).then((newPageData) => {
-            info('Страница добавленна');
+            info("Страница добавленна");
             handleButtonAdd(DocumentBlockType.LINK);
 
             const childLink = newPageData.data.id;
@@ -57,7 +58,7 @@ const AddList = ({ onAddBlock }: ListProps) => {
     };
 
     return (
-        <StyledBox width={140} position={'absolute'}>
+        <StyledBox width={140} position={"absolute"}>
             <Stack>
                 <Button
                     onClick={() => {
@@ -71,13 +72,13 @@ const AddList = ({ onAddBlock }: ListProps) => {
                     }}>
                     Сделать чекбокс
                 </Button>
+                <Button onClick={handleCreateTodo}>Сделать TO-DO</Button>
+                <Button onClick={handleCreatePage}>Создать ссылку на страницу</Button>
                 <Button
-                    onClick={handleCreateTodo}>
-                    Сделать TO-DO
-                </Button>
-                <Button
-                    onClick={handleCreatePage}>
-                    Создать ссылку на страницу
+                    onClick={() => {
+                        handleButtonAdd(DocumentBlockType.IMAGE);
+                    }}>
+                    Добавить изображение
                 </Button>
             </Stack>
         </StyledBox>

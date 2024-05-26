@@ -23,7 +23,7 @@ interface DocumentBlockBaseProps {
     onAdd?: (type: DocumentBlockType) => void;
     children: React.ReactNode;
     onTypeChange?: (type: DocumentBlockType, id: string) => void;
-    canEdit?: boolean
+    canEdit?: boolean;
 }
 
 const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
@@ -67,7 +67,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
     //     dispatch(pageActions.setEditDocumentId(''));
     // };
 
-    const showButtons = canEdit && (isHover || (addListOpen || editListOpen));
+    const showButtons = canEdit && (isHover || addListOpen || editListOpen);
 
     const handleCloseLists = () => {
         setAddListOpen(false);
@@ -77,52 +77,58 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
     return (
         <motion.div ref={setNodeRef} style={style} id={item.id}>
             <Stack flexDirection={"row"} ref={hoverRef}>
-                <Stack position={'relative'}>
-                    <motion.div initial={{ opacity: 0 }} whileHover={{ opacity: 1 }} style={{ width: 60 }}>
+                <Stack position={"relative"}>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileHover={{ opacity: 1 }}
+                        style={{ width: 60 }}>
                         <StyledButtonsContainer flexDirection={"row"}>
                             <StyledButton
                                 onClick={() => {
-                                    setAddListOpen(prevState => !prevState);
+                                    setAddListOpen((prevState) => !prevState);
                                     setEditListOpen(false);
                                     // dispatch(pageActions.setEditDocumentId(item.id));
                                 }}>
-                                <MaterialIcon name={"MdAdd"}/>
+                                <MaterialIcon name={"MdAdd"} />
                             </StyledButton>
                             <div id={item.id} {...listeners} {...attributes}>
                                 <StyledButton
                                     onClick={() => {
-                                        setEditListOpen(prevState => !prevState);
+                                        setEditListOpen((prevState) => !prevState);
                                         setAddListOpen(false);
                                         // dispatch(pageActions.setEditDocumentId(item.id));
                                     }}>
-                                    {/* <MaterialIcon name={"MdGroup"}/> */}
-                                    |
+                                    {/* <MaterialIcon name={"MdGroup"}/> */}|
                                 </StyledButton>
                             </div>
                         </StyledButtonsContainer>
-                        {addListOpen && <AddList onEdit={handleCloseLists} onAddBlock={handleAddBlock}/>}
-                        {editListOpen && <EditList onEdit={handleCloseLists} block={item}/>}
+                        {addListOpen && (
+                            <AddList onEdit={handleCloseLists} onAddBlock={handleAddBlock} />
+                        )}
+                        {editListOpen && <EditList onEdit={handleCloseLists} block={item} />}
                     </motion.div>
                 </Stack>
                 {
                     <DndContext>
-                        <div style={{
-                            width: 1100,
-                            padding: 4,
-                            borderRadius: 7,
-                            opacity: editListOpen || addListOpen ? 0.7 : 1,
-                        }}>{children}</div>
+                        <div
+                            style={{
+                                width: 1100,
+                                padding: 4,
+                                borderRadius: 7,
+                                opacity: editListOpen || addListOpen ? 0.7 : 1,
+                            }}>
+                            {children}
+                        </div>
                     </DndContext>
                 }
                 <div id={item.id} {...listeners} {...attributes}>
                     <StyledButton
                         onClick={() => {
-                            setEditListOpen(prevState => !prevState);
+                            setEditListOpen((prevState) => !prevState);
                             setAddListOpen(false);
                             // dispatch(pageActions.setEditDocumentId(item.id));
                         }}>
-                        {/* <MaterialIcon name={"MdGroup"}/> */}
-                        |
+                        {/* <MaterialIcon name={"MdGroup"}/> */}|
                     </StyledButton>
                 </div>
             </Stack>

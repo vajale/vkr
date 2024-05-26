@@ -15,10 +15,10 @@ export interface DocumentBlockBase {
     type: DocumentBlockType;
     content: DocumentContentType;
     textType: {
-        variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'subtitlePrimary' | 'subtitleSecondary'
-        weight?: 'strong' | 'bald' | 'default',
-        fontColor?: string
-    } | null
+        variant: "h1" | "h2" | "h3" | "h4" | "h5" | "subtitlePrimary" | "subtitleSecondary";
+        weight?: "strong" | "bald" | "default";
+        fontColor?: string;
+    } | null;
 }
 
 export type DocumentContentType = string;
@@ -52,10 +52,20 @@ export interface DocumentPageLinkBlock extends DocumentBlockBase {
     src?: string;
 }
 
+export interface DocumentPageImageBlock extends DocumentBlockBase {
+    type: DocumentBlockType.IMAGE;
+    src?: string;
+    alt?: string;
+    sizes: {
+        width?: string;
+        height?: string;
+    };
+}
+
 export interface Todo {
-    title: string,
-    completed: boolean,
-    id: string
+    title: string;
+    completed: boolean;
+    id: string;
 }
 
 export interface DocumentTodoBlock extends DocumentBlockBase {
@@ -67,29 +77,31 @@ export type DocumentBlock =
     | DocumentTextBlock
     | DocumentImageBlock
     | DocumentCodeBlock
-    | DocumentCheckboxBlock | DocumentPageLinkBlock | DocumentTodoBlock;
+    | DocumentCheckboxBlock
+    | DocumentPageLinkBlock
+    | DocumentTodoBlock;
 
 export interface Page {
     id: string;
     visual?: {
-        background?: string,
+        background?: string;
         name?: string;
-    }
+    };
     documentBlocks?: DocumentBlock[];
-    parent?: string | '',
-    child?: string | '',
-    isFavorite?: boolean
+    parent?: string | "";
+    child?: string | "";
+    isFavorite?: boolean;
 }
 
 export interface CalendarPage {
-    id: string,
-    tasks: Task[]
+    id: string;
+    tasks: Task[];
 }
 
 export interface Task {
-    id: string,
-    content: string,
-    priority: string
-    date: string
-    time: string
+    id: string;
+    content: string;
+    priority: string;
+    date: string;
+    time: string;
 }
