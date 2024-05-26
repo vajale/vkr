@@ -52,7 +52,7 @@ export interface DocumentPageLinkBlock extends DocumentBlockBase {
     src?: string;
 }
 
-interface Todo {
+export interface Todo {
     title: string,
     completed: boolean,
     id: string
@@ -77,6 +77,7 @@ export interface Page {
     }
     documentBlocks?: DocumentBlock[];
     parent?: string | '',
+    child?: string | '',
     isFavorite?: boolean
 }
 

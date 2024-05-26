@@ -65,8 +65,6 @@ const api = firebaseApi.injectEndpoints({
                 const unsubscribe = onValue(specificNodeRef, (snapshot) => {
                     if (snapshot.exists()) {
                         updateCachedData((draft) => {
-                            console.log(snapshot.val());
-
                             return snapshot.val();
                         });
                     }

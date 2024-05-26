@@ -156,7 +156,7 @@ const DocumentBlocksList = (props: BlocksProps) => {
                                 return (
                                     <Dropable key={item.id} id={item.id}>
                                         <DocumentBlockBase canEdit={canEditDoc} item={item} {...baseProps}>
-                                            <DocumentBlockToDo canEdit={canEditDoc} block={item}/>
+                                            <DocumentBlockToDo canEdit={canEditDoc} onContentChange={handleDataUpdate} block={item}/>
                                         </DocumentBlockBase>
                                     </Dropable>
                                 );

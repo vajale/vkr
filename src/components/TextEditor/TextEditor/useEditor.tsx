@@ -57,7 +57,6 @@ export const useEditor = (json?: string): EditorApi => {
 
     useEffect(() => {
         setState(getJsonState(json));
-        console.log(json);
     }, [json]);
 
   const toggleBlockType = React.useCallback((blockType: BlockType) => {

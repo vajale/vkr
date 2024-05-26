@@ -5,6 +5,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { pageActions } from "@/store/slices/pageSlice";
 import TextEditor, { TextEditorProvider } from "@/components/TextEditor/TextEditor";
 import ToolPanel from "@/components/TextEditor/ToolPanel";
+import EditableTextField from "@/components/PageView/ui/EditableTextField/EditableTextField";
 
 interface TextBlockProps {
     block: DocumentTextBlock;
@@ -15,11 +16,10 @@ interface TextBlockProps {
 
 const DocumentBlockText = (props: TextBlockProps) => {
     const { block, onContentChange, canEdit } = props;
-    const [toolPanelOpen, setToolPanelOpen] = useState(false);
 
     const dispatch = useAppDispatch();
 
-    const handleTextChange = (json: string) => {
+    const handleContentChange = (json: string) => {
         if (onContentChange) {
             onContentChange(json);
 
@@ -29,25 +29,8 @@ const DocumentBlockText = (props: TextBlockProps) => {
         }
     };
 
-    const handleBlur = () => {
-        setToolPanelOpen(false);
-    };
-
-    const handleFocus = () => {
-        setToolPanelOpen(true);
-    };
-
     return (
-        <motion.div style={{ border: toolPanelOpen ? '1px solid #d7d7d7' : 'none', borderRadius: 7, padding: 7 }}>
-            <TextEditorProvider json={block.content}>
-                {toolPanelOpen && <ToolPanel/>}
-                <TextEditor onFocus={handleFocus}
-                            onBlur={handleBlur}
-                            canEdit={canEdit}
-                            onChange={handleTextChange}
-                />
-            </TextEditorProvider>
-        </motion.div>
+        <EditableTextField title={block.content} canEdit={canEdit} onContentChange={handleContentChange}/>
     );
 };
 

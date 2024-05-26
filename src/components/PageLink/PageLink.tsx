@@ -10,47 +10,33 @@ import { StyledPageLink } from "@/components/PageLink/styled";
 import { useAppDispatch } from "@/store/hooks";
 import { pageActions } from "@/store/slices/pageSlice";
 import { userActions } from "@/store/slices/userSlice";
+import { useCreateNewPageMutation } from "@/api/firebasePageAPI/pagesService";
 
 interface LinkProps {
     href: string,
-    id: string
     label?: string,
     isLoading?: boolean,
-    parent?: Page,
     showOptionsButton?: boolean
-    showChildren?: boolean
+    showChildrenButton?: boolean
     icon?: MaterialIconName,
+    children?: React.ReactNode,
     width?: string | number
     height?: string | number
-    onPageDelete?: () => void
+    onPageDelete?: () => void,
+    onChildrenPageCreated: () => void
 }
 
 const PageLink = (props: LinkProps) => {
     const {
         label = 'Страница',
         href,
-        parent,
         showOptionsButton,
         icon,
         isLoading,
         width,
         height,
-        id,
-        onPageDelete, showChildren
+        onPageDelete, children, onChildrenPageCreated
     } = props;
-
-    const dispatch = useAppDispatch();
-
-    const [options, setOptions] = useState<{ isOptionsOpen: boolean }>(() => ({ isOptionsOpen: false }));
-
-    const docRef = useRef<HTMLDivElement>(null);
-    const [isMouseHover] = useMouseHover(docRef);
-
-    const handleButtonOptionsClick = () => {
-        setOptions(prevState => ({ isOptionsOpen: !prevState.isOptionsOpen }));
-    };
-
-    const buttonIconName = options.isOptionsOpen ? "MdArrowForwardIos" : "MdArrowForwardIos";
 
     if (isLoading) {
         return (
@@ -64,51 +50,37 @@ const PageLink = (props: LinkProps) => {
         }
     };
 
+    const handleCreateChildrenPage = () => {
+        if (onChildrenPageCreated != null) {
+            onChildrenPageCreated();
+        }
+    };
+
     return (
         <StyledPageLink>
-            <motion.div whileHover={{ scale: 1.01 }}
-                        initial={{ scale: 1 }}
-                        style={{
-                            width,
-                            height,
-                            display: "flex",
-                            justifyContent: "space-between",
-                            padding: 7,
-                            borderRadius: 7
-                        }}
-                        ref={docRef} key={href}>
-                <Stack>
-                    <Stack flexDirection={'row'} gap={1} justifyContent={"space-between"}>
-                        <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}
-                               width={width}>
-                            <Stack flexDirection={'row'} alignItems={'center'}>
-                                {showChildren &&
-                                    <Button onClick={handleButtonOptionsClick} sx={{ minWidth: 20 }}>
-                                        <MaterialIcon name={buttonIconName}/>
-                                    </Button>}
-                                {icon && <MaterialIcon name={icon}/>}
-                                <Link sx={{ textDecoration: 'none', ml: 1, overflow: 'hidden' }} href={"#/page/" + href}>
-                                    {label}
-                                </Link></Stack>
-                            {showOptionsButton && <motion.div initial={{ opacity: 0 }} whileHover={{ opacity: 1 }}>
-                                <Stack mr={2} flexDirection={'row'}>
-                                    <Button onClick={handleDeletePage} sx={{ minWidth: 20 }}><MaterialIcon
-                                        name={"MdDelete"}/></Button>
-                                    {/* <Button sx={{ minWidth: 20 }}><MaterialIcon name={"MdAdd"}/></Button> */}
-                                </Stack>
-                            </motion.div>}
+            <Stack justifyContent={'space-between'}>
+                <Stack flexDirection={'row'} gap={1} justifyContent={"space-between"}>
+                    <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}
+                           width={width}>
+                        <Stack flexDirection={'row'} alignItems={'center'}>
+                            {icon && <MaterialIcon name={icon}/>}
+                            <Link sx={{ textDecoration: 'none', ml: 1, overflow: 'hidden' }} href={"#/page/" + href}>
+                                {children ?? label}
+                            </Link>
                         </Stack>
+                        {showOptionsButton && <motion.div initial={{ opacity: 0 }} whileHover={{ opacity: 1 }}>
+                            <Stack mr={2} flexDirection={'row'}>
+                                <Button onClick={handleDeletePage} sx={{ minWidth: 20 }}>
+                                    <MaterialIcon name={"MdDelete"}/>
+                                </Button>
+                                <Button onClick={handleCreateChildrenPage} sx={{ minWidth: 20 }}>
+                                    <MaterialIcon name={"MdAdd"}/>
+                                </Button>
+                            </Stack>
+                        </motion.div>}
                     </Stack>
-                    {options.isOptionsOpen && (
-                        <div style={{ height: 28, marginTop: 7 }}>
-                            {parent
-                                ? <Link href={parent.id}>
-                                    {label}
-                                </Link>
-                                : <Typography ml={4} sx={{ opacity: 0.8 }}>Нет страниц</Typography>}
-                        </div>)}
                 </Stack>
-            </motion.div>
+            </Stack>
         </StyledPageLink>
     )
         ;

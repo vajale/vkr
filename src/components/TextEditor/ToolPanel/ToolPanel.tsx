@@ -71,7 +71,6 @@ const ToolPanel: React.FC = () => {
         Простой
       </StyledEditorButton>
         <Divider orientation={'vertical'}/>
-
         {Object.values(InlineStyle).map((v) => (
         <StyledEditorButton
           key={v}
@@ -84,7 +83,6 @@ const ToolPanel: React.FC = () => {
         </StyledEditorButton>
       ))}
         <Divider orientation={'vertical'}/>
-
         <StyledEditorButton
         className="tool-panel__item"
         onClick={() => {

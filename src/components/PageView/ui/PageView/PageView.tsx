@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
 import PageHeader from "../PageHeader/PageHeader";
 
@@ -50,7 +50,6 @@ const PageView = (props: ViewProps) => {
         dispatch(pageActions.updateHeader({ name: content }));
     };
 
-    const headerText = page.visual?.name ?? 'Новая страница';
     const isHaveDocBlocks = page.documentBlocks !== undefined;
     const blocks = page.documentBlocks ?? [];
 
@@ -59,10 +58,9 @@ const PageView = (props: ViewProps) => {
     return (
         <StyledPageView>
             <PageHeader onContentChange={handleHeaderChange}
-                        text={headerText}
                         onFavoritesAdd={refetchUserData}
-                        background={page.visual?.background}
                         canEdit={canEditPage}
+                        page={page}
             />
             {isHaveDocBlocks && <DocumentBlocksList canEdit={canEditPage} docs={blocks}/>}
         </StyledPageView>

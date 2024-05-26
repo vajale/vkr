@@ -129,6 +129,10 @@ export const usersFirebaseService = firebaseApi.injectEndpoints({
                 const userFirebaseRequest: UserFirebaseRequest = queryData as UserFirebaseRequest;
 
                 const customUsername = `${userFirebaseRequest.user.firstName} ${userFirebaseRequest.user.lastname === undefined && ""}`;
+
+                // const pageMap = new Set(userFirebaseRequest.pages);
+                // console.log(Array.from(new Set(userFirebaseRequest.pages)));
+
                 const user: UserFirebase = {
                     data: {
                         email: userFirebaseRequest.user.email,

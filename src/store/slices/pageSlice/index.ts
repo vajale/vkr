@@ -5,7 +5,7 @@ import {
     type DocumentBlockType,
     type Page,
 } from "@/components/PageView/model/types";
-import { documentObjectHelper } from "@/utils/documentObjectHelper";
+import { documentObjectHelper, getPageLinkWithParent } from "@/utils/documentObjectHelper";
 import { insertElementBefore } from "@/utils";
 
 const initialState: DocumentsPageSchema = {
@@ -106,6 +106,13 @@ export const pageSlice = createSlice({
             // @ts-expect-error
             state.pageData.documentBlocks = [...state.pageData.documentBlocks, document];
         }),
+        addNewPageLinkBlock: create.reducer((state, action: PayloadAction<{ link: string }>) => {
+            const document = getPageLinkWithParent(action.payload.link);
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            state.pageData.documentBlocks = [...state.pageData.documentBlocks, document];
+        }),
         removeBlock: create.reducer((state, action: PayloadAction<{ id: string }>) => {
             if (state.pageData === undefined) return;
 
@@ -131,7 +138,7 @@ export const pageSlice = createSlice({
         selectPageName: (state) => state.pageData?.visual?.name ?? "Страница",
         selectPageBackground: (state) => state.pageData?.visual?.background ?? "",
         selectPageDocuments: (state) => state.pageData?.documentBlocks ?? [],
-        selectPagePermission: (state) => state.permissions || [],
+        selectPagePermission: (state) => state.permissions ?? [],
         selectPageIsEdit: (state) => state.isPageEdit,
         selectPageHeaderFlag: (state) => state.style.header,
         selectPageLogo: (state) => state.style.logo,
@@ -144,5 +151,6 @@ export const {
     selectPage,
     selectPageId,
     selectPageDocuments,
+    selectPageName,
     selectPagePermission
 } = pageSlice.selectors;

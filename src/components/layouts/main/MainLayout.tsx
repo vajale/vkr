@@ -16,9 +16,8 @@ interface LayoutProps {
 export const MainLayout: React.FC<LayoutProps> = memo((props) => {
     const { children } = props;
 
-    // не убирать, нихуя ничего не работает
+    // не убирать, ато нихуя ничего не работает
     const { refetchUserData } = useFirebaseAuth();
-    const dispatch = useAppDispatch();
 
     // TODO апдейт названия страницы
 

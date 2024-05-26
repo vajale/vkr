@@ -5,15 +5,9 @@ export const StyledPageLink = styled("div")(({ theme }: IExtendedThemeProps) => 
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    height: 24,
-    padding: 7,
+    // height: '100%',
     a: {
         fontFamily: "Inter",
         fontWeight: 500,
-    },
-    "&:hover": {
-        backgroundColor: theme?.menuBackground.primary,
-        scale: 1.1,
-        borderRadius: 7,
     },
 }));
