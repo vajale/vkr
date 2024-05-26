@@ -24,11 +24,11 @@ const AddList = ({ onAddBlock }: ListProps) => {
     const [createPage] = useCreateNewPageMutation();
 
     const handleButtonAdd = (newType: DocumentBlockType) => {
-        if (onAddBlock == null) return;
+        // if (onAddBlock == null) return;
+        //
+        // if (newType === DocumentBlockType.IMAGE || newType === DocumentBlockType.QUOTE || DocumentBlockType.LINK) return;
 
-        if (newType === DocumentBlockType.IMAGE || newType === DocumentBlockType.QUOTE || DocumentBlockType.LINK) return;
-
-        dispatch(pageActions.addNewPageLinkBlock(newType));
+        dispatch(pageActions.addNewBlock(newType));
         onAddBlock(newType);
     };
 
