@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { closestCenter, DndContext, type DragEndEvent, MouseSensor, useSensor } from "@dnd-kit/core";
 import { Button, Paper, Stack, Typography } from "@mui/material";
-import { MaterialIcon } from "@/assets/Icon";
-import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import CreateTaskButton from "@/components/Tasks/CreateTaskButton";
 import { type Task } from "@/components/PageView/model/types";
 import Dropable from "@/components/DnDComponents/Dropable/Dropable";
@@ -11,32 +8,11 @@ import DndTask from "@/components/Tasks/DndTask";
 
 interface TaskWrapperProps {
     label: string,
-    items: Task[]
+    tabId: string
+    items: Task[],
 }
 
-const DndTaskWrapper = ({ label = 'Задачи', items }: TaskWrapperProps) => {
-    const [tasks, setTasks] = useState(items);
-
-    const handleDragEnd = async (e: DragEndEvent) => {
-        const { active, over } = e;
-
-        if (over === null || active.id === over.id) {
-            return;
-        }
-
-        const oldIndex = tasks.findIndex((task) => task.id === active.id);
-        const newIndex = tasks.findIndex((task) => task.id === over.id);
-        const newArray = arrayMove(tasks, oldIndex, newIndex);
-
-        setTasks(newArray);
-    };
-
-    const mouseSensor = useSensor(MouseSensor, {
-        activationConstraint: {
-            distance: 20,
-        },
-    });
-
+const DndTaskWrapper = ({ label = 'Задачи', items, tabId }: TaskWrapperProps) => {
     const haveTasks = false;
 
     return (
@@ -47,21 +23,13 @@ const DndTaskWrapper = ({ label = 'Задачи', items }: TaskWrapperProps) => 
                     |
                 </Button>
             </Stack>
-            <Stack p={2}>
-                {haveTasks
-                    ? <CreateTaskButton/>
-                    : (
-                        <DndContext onDragEnd={handleDragEnd} sensors={[mouseSensor]}
-                                    collisionDetection={closestCenter}>
-                            <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
-                                {tasks.map((item) => (
-                                    <Dropable key={item.id} id={item.id}>
-                                        <DndTask task={item}/>
-                                    </Dropable>
-                                ))}
-                            </SortableContext>
-                        </DndContext>
-                    )}
+            <Stack id={tabId} p={2}>
+                {items.map((item) => (
+                    <Dropable nodeId={item.id} key={item.id} id={item.id}>
+                        <DndTask task={item}/>
+                    </Dropable>
+                ))}
+                <CreateTaskButton/>
             </Stack>
 
         </Paper>

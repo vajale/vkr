@@ -3,9 +3,7 @@ import React, { useState } from "react";
 import { Button, Paper, Stack } from "@mui/material";
 import { type Task } from "@/components/PageView/model/types";
 import { MaterialIcon } from "@/assets/Icon";
-import EditableTextField from "../PageView/ui/EditableTextField/EditableTextField";
 import { useSortable } from "@dnd-kit/sortable";
-import { useDraggable } from "@dnd-kit/core";
 
 interface TaskProps {
     task: Task
@@ -31,9 +29,10 @@ const DndTask = ({ task }: TaskProps) => {
 
     return (
         <div id={task.id} ref={setNodeRef} {...listeners} {...attributes} style={style}>
-            <Paper sx={{ padding: 1 }}>
+            <Paper sx={{ padding: 1, minWidth: 200 }}>
                 <Stack width={"100%"} flexDirection={'row'} justifyContent={'space-between'}>
-                    <EditableTextField width={'200px'} canEdit={canEdit} title={task.content}/>
+                    {/* <EditableTextField width={'200px'} canEdit={canEdit} title={task.content}/> */}
+                    {task.id}
                     <Button onClick={handleSwitchEdit} size={'small'} sx={{ width: 28, height: 28, minWidth: 28 }}>
                         <MaterialIcon name={'MdEdit'}/>
                     </Button>
