@@ -1,5 +1,5 @@
 import Immutable from "immutable";
-import { DraftEditorCommand, DefaultDraftBlockRenderMap } from "draft-js";
+import { type DraftEditorCommand, DefaultDraftBlockRenderMap } from "draft-js";
 
 export enum EntityType {
   link = "link",
@@ -21,10 +21,10 @@ export enum BlockType {
 }
 
 export enum InlineStyle {
-  BOLD = "BOLD",
-  ITALIC = "ITALIC",
-  UNDERLINE = "UNDERLINE",
-  ACCENT = "ACCENT",
+  BOLD = "B",
+  ITALIC = "I",
+  UNDERLINE = "U",
+  ACCENT = "A",
 }
 
 export const BLOCK_LABELS = {

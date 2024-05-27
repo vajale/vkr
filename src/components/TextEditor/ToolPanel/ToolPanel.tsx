@@ -27,7 +27,7 @@ const ToolPanel: React.FC = () => {
           toggleBlockType(BlockType.h1);
         }}
       >
-        Заголовок
+          H1
       </StyledEditorButton>
         <Divider orientation={'vertical'}/>
       <StyledEditorButton
@@ -40,7 +40,7 @@ const ToolPanel: React.FC = () => {
           toggleBlockType(BlockType.h2);
         }}
       >
-        Подзаголовок
+        H2
       </StyledEditorButton>
         <Divider orientation={'vertical'}/>
 
@@ -54,7 +54,7 @@ const ToolPanel: React.FC = () => {
           toggleBlockType(BlockType.cite);
         }}
       >
-        Сноска
+        H3
       </StyledEditorButton>
         <Divider orientation={'vertical'}/>
 
@@ -68,7 +68,7 @@ const ToolPanel: React.FC = () => {
           toggleBlockType(BlockType.default);
         }}
       >
-        Простой
+        H4
       </StyledEditorButton>
         <Divider orientation={'vertical'}/>
         {Object.values(InlineStyle).map((v) => (
@@ -89,7 +89,7 @@ const ToolPanel: React.FC = () => {
           console.log(toHtml());
         }}
       >
-        Print
+        P
       </StyledEditorButton>
     </StyledEditorButtonsContainer>
   );

@@ -5,6 +5,7 @@ export const URL = {
     UNAUTHORIZED: "/unauthorized",
     LANDING: "/landing",
     INVITE: "/invite",
+    TASKS: "/tasks",
 
     MAIN: "main",
     PRICES: "prices",
@@ -15,6 +16,7 @@ export const URL = {
 export const NAVIGATION = {
     HOME: URL.HOME,
     PAGE: `${URL.PAGE}/`,
+    TASKS: `${URL.TASKS}/`,
     INVITE: `${URL.INVITE}/`,
     LANDING: {
         MAIN: `${URL.LANDING}/${URL.MAIN}`,

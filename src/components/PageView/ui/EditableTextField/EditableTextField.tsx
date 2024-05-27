@@ -9,10 +9,11 @@ interface TextBlockProps {
     canEdit?: boolean;
     onContentChange?: (jsonString: string) => void;
     disableEditTools?: boolean;
+    width?: string,
 }
 
 const EditableTextField = (props: TextBlockProps) => {
-    const { canEdit, onContentChange, title, disableEditTools } = props;
+    const { canEdit, onContentChange, title, disableEditTools, width } = props;
 
     const [toolPanelOpen, setToolPanelOpen] = useState(false);
 
@@ -35,14 +36,14 @@ const EditableTextField = (props: TextBlockProps) => {
     return (
         <StyledMotionDiv
             initial={{ border: "none" }}
-            whileHover={{ border: "1px solid #d7d7d7" }}
+            whileHover={{ border: canEdit ? "1px solid #d7d7d7" : 'none' }}
             style={{
-                boxSizing: "unset",
+                boxSizing: "revert-layer",
                 border: toolPanelOpen ? "1px solid #d7d7d7" : "none",
                 borderRadius: 7,
                 padding: 7,
             }}>
-            <TextEditorProvider json={title}>
+            <TextEditorProvider width={width} json={title}>
                 {toolPanelOpen && <ToolPanel />}
                 <TextEditor
                     onFocus={handleFocus}

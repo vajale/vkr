@@ -1,4 +1,4 @@
-import { type DocumentBlock, DocumentBlockType, type Page } from "../../components/PageView/model/types";
+import { type DocumentBlock, DocumentBlockType, type Page, type Task } from "../../components/PageView/model/types";
 import { type User } from "@/utils/types";
 
 export const mock =
@@ -14,6 +14,19 @@ export const rainbowColors = [
     '#009494', // Голубой
     '#00006e', // Синий
     '#2c0050' // Фиолетовый
+];
+
+export const mocktasks: Task[] = [
+    {
+        id: '1',
+        content: "leee324345leee324345leee32",
+        priority: '1',
+        time: '00:00:00',
+        date: ''
+    },
+    { id: '2', content: "leee574574574574573", priority: '1', time: '00:00:00', date: '' },
+    { id: '3', content: "leee45", priority: '1', time: '00:00:00', date: '' },
+    { id: '4', content: "leee124587-78-76-678-678-671", priority: '1', time: '00:00:00', date: '' },
 ];
 
 export const mockDocs1: DocumentBlock[] = [
