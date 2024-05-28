@@ -1,4 +1,4 @@
-import { type DocumentBlock, DocumentBlockType, type Page } from "../../components/PageView/model/types";
+import { type DocumentBlock, DocumentBlockType, type Page, type Task } from "../../components/PageView/model/types";
 import { type User } from "@/utils/types";
 
 export const mock =
@@ -14,6 +14,70 @@ export const rainbowColors = [
     '#009494', // Голубой
     '#00006e', // Синий
     '#2c0050' // Фиолетовый
+];
+
+ export const getBackground = (task: Task) => {
+    switch (task.priority) {
+        case '1':
+            return '#7ae6ff';
+        case '2':
+            return '#9fff80';
+        case '3':
+            return '#f7ff93';
+        case '4':
+            return '#ff7171';
+    }
+};
+
+export const mocktasks: Task[] = [
+    {
+        id: '1',
+        content: "leee324345leee324345leee32",
+        priority: '1',
+        time: '00:00:00',
+        date: ''
+    },
+    { id: '2', content: "leee574574574574573", priority: '2', time: '00:00:00', date: '' },
+    { id: '3', content: "leee45", priority: '3', time: '00:00:00', date: '' },
+    { id: '4', content: "leee124587-78-76-678-678-671", priority: '4', time: '00:00:00', date: '' },
+];
+
+export const mocktasks2: Task[] = [
+    {
+        id: '11',
+        content: "leee324345leee324345leee32",
+        priority: '2',
+        time: '00:00:00',
+        date: ''
+    },
+    { id: '12', content: "leee574574574574573", priority: '2', time: '00:00:00', date: '' },
+    { id: '13', content: "leee45", priority: '3', time: '00:00:00', date: '' },
+    { id: '14', content: "leee124587-78-76-678-678-671", priority: '4', time: '00:00:00', date: '' },
+];
+
+export const mocktasks3: Task[] = [
+    {
+        id: '21',
+        content: "leee324345leee324345leee32",
+        priority: '1',
+        time: '00:00:00',
+        date: ''
+    },
+    { id: '22', content: "leee574574574574573", priority: '2', time: '00:00:00', date: '' },
+    { id: '23', content: "leee45", priority: '1', time: '00:00:00', date: '' },
+    { id: '24', content: "leee124587-78-76-678-678-671", priority: '4', time: '00:00:00', date: '' },
+];
+export const mocktasks4: Task[] = [
+    {
+        id: '31',
+        content: "leee324345leee324345leee32",
+        priority: '3',
+        time: '00:00:00',
+        date: ''
+    },
+    { id: '32', content: "leee574574574574573", priority: '3', time: '00:00:00', date: '' },
+    { id: '33', content: "leee45", priority: '4', time: '00:00:00', date: '' },
+    { id: '34', content: "leee124587-78-76-678-678-671", priority: '2', time: '00:00:00', date: '' },
 ];
 
 export const mockDocs1: DocumentBlock[] = [

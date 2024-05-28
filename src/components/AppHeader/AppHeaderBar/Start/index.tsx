@@ -7,7 +7,7 @@ export const AppHeaderStart: React.FunctionComponent = () => {
         <Stack flexDirection={'row'} alignItems={"center"}>
             <Stack ml={7} gap={7} flexDirection={'row'}>
                 <Link underline={'none'} href={'#/calendar'}>Календарь</Link>
-                <Link underline={'none'} href={'#/home'}>Задачи</Link>
+                <Link underline={'none'} href={'#/tasks'}>Задачи</Link>
             </Stack>
         </Stack>
     );

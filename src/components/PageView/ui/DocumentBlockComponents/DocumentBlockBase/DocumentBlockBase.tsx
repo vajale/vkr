@@ -32,8 +32,6 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
     const [addListOpen, setAddListOpen] = React.useState(false);
     const [editListOpen, setEditListOpen] = React.useState(false);
 
-    const dispatch = useAppDispatch();
-
     const { setNodeRef, listeners, attributes, transform, active } = useSortable({ id: item.id });
 
     const hoverRef = useRef<HTMLDivElement>(null);

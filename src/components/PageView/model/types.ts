@@ -101,7 +101,7 @@ export interface CalendarPage {
 export interface Task {
     id: string;
     content: string;
-    priority: string;
+    priority: '1' | '2' | '3' | '4';
     date: string;
     time: string;
 }
