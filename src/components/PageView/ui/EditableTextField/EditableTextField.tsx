@@ -13,7 +13,7 @@ interface TextBlockProps {
 }
 
 const EditableTextField = (props: TextBlockProps) => {
-    const { canEdit, onContentChange, title, disableEditTools, width } = props;
+    const { canEdit = true, onContentChange, title, disableEditTools, width } = props;
 
     const [toolPanelOpen, setToolPanelOpen] = useState(false);
 

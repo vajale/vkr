@@ -17,7 +17,7 @@ export const StyledEditorButton = styled(Button)(({ theme }: IExtendedThemeProps
     minWidth: 25
 }));
 
-export const StyledMotionDiv = styled(motion.div)(({ isEmpty }: { isEmpty: boolean }) => ({
+export const StyledMotionDiv = styled(motion.div)(({ isEmpty }: { isEmpty?: boolean }) => ({
     backgroundColor: isEmpty ? "whitesmoke" : "transparent",
     transition: "1 ease-out",
 }));

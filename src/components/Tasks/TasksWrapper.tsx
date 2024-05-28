@@ -59,19 +59,28 @@ const TasksWrapper = () => {
             </Stack>
             <Box height={'90%'} sx={{ backgroundColor: 'whitesmoke' }} margin={1} borderRadius={1}>
                 <Grid container spacing={3} gap={1} padding={5}>
-                    <DndContext onDragMove={handleDragMove} onDragEnd={handleDragEnd} sensors={[mouseSensor]} collisionDetection={closestCenter}>
+                    <DndContext onDragMove={handleDragMove} onDragEnd={handleDragEnd} sensors={[mouseSensor]}
+                                collisionDetection={closestCenter}>
                         <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
                             <Grid xs>
-                                <DndTaskWrapper tabId={1} items={tasks.filter(task => task.priority == '1')} label={'Сделать'}/>
+                                <DndTaskWrapper tabId={'1'} bgColor={'#7ae6ff'}
+                                                items={tasks.filter(task => task.priority == '1')}
+                                                label={'Сделать'}/>
                             </Grid>
                             <Grid xs>
-                                <DndTaskWrapper tabId={2} items={tasks.filter(task => task.priority == '2')} label={'Делается'}/>
+                                <DndTaskWrapper tabId={'2'} bgColor={'#9fff80'}
+                                                items={tasks.filter(task => task.priority == '2')}
+                                                label={'Делается'}/>
                             </Grid>
                             <Grid xs>
-                                <DndTaskWrapper tabId={3} items={tasks.filter(task => task.priority == '3')} label={'Сделано'}/>
+                                <DndTaskWrapper tabId={'3'} bgColor={'#f7ff93'}
+                                                items={tasks.filter(task => task.priority == '3')}
+                                                label={'Сделано'}/>
                             </Grid>
                             <Grid xs>
-                                <DndTaskWrapper tabId={4} items={tasks.filter(task => task.priority == '4')} label={'Проблемы'}/>
+                                <DndTaskWrapper tabId={'4'} bgColor={'#ff7171'}
+                                                items={tasks.filter(task => task.priority == '4')}
+                                                label={'Проблемы'}/>
                             </Grid>
                         </SortableContext>
                     </DndContext>

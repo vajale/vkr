@@ -16,6 +16,19 @@ export const rainbowColors = [
     '#2c0050' // Фиолетовый
 ];
 
+ export const getBackground = (task: Task) => {
+    switch (task.priority) {
+        case '1':
+            return '#7ae6ff';
+        case '2':
+            return '#9fff80';
+        case '3':
+            return '#f7ff93';
+        case '4':
+            return '#ff7171';
+    }
+};
+
 export const mocktasks: Task[] = [
     {
         id: '1',

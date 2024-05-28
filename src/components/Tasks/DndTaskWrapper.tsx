@@ -10,20 +10,21 @@ interface TaskWrapperProps {
     label: string,
     tabId: string
     items: Task[],
+    bgColor: string
 }
 
-const DndTaskWrapper = ({ label = 'Задачи', items, tabId }: TaskWrapperProps) => {
+const DndTaskWrapper = ({ label = 'Задачи', items, tabId, bgColor }: TaskWrapperProps) => {
     const haveTasks = false;
 
     return (
-        <Paper sx={{ backgroundColor: 'white', minHeight: 70 }}>
+        <Paper sx={{ backgroundColor: bgColor, minHeight: 70 }}>
             <Stack p={2} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
                 <Typography>{label}</Typography>
                 <Button sx={{ width: 28, height: 28, minWidth: 28 }}>
-                    |
+
                 </Button>
             </Stack>
-            <Stack id={tabId} p={2}>
+            <Stack id={tabId} gap={1} p={2}>
                 {items.map((item) => (
                     <Dropable nodeId={item.id} key={item.id} id={item.id}>
                         <DndTask task={item}/>
