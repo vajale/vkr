@@ -1,5 +1,6 @@
 import { convertFromHTML, convertToHTML } from "draft-convert";
 import { CUSTOM_STYLE_MAP, BlockType, EntityType, InlineStyle } from "./config";
+import React from "react";
 
 export const stateToHTML = convertToHTML<InlineStyle, BlockType>({
   styleToHTML: (style) => {

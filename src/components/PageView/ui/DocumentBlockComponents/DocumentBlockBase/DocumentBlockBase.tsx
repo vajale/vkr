@@ -8,7 +8,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useAppDispatch } from "@/store/hooks";
 import { pageActions } from "@/store/slices/pageSlice";
 import { type DocumentBlock, type DocumentBlockType } from "../../../model/types";
-import { MaterialIcon } from "@/assets/Icon";
+import { LucideIcon, MaterialIcon } from "@/assets/Icon";
 import { motion } from "framer-motion";
 import AddList from "@/components/PageView/ui/AddList/AddList";
 import EditList from "@/components/PageView/ui/EditList/EditList";
@@ -96,7 +96,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
                                         setAddListOpen(false);
                                         // dispatch(pageActions.setEditDocumentId(item.id));
                                     }}>
-                                    {/* <MaterialIcon name={"MdGroup"}/> */}|
+                                    <LucideIcon name={'LuGripVertical'}/>
                                 </StyledButton>
                             </div>
                         </StyledButtonsContainer>
@@ -108,27 +108,11 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
                 </Stack>
                 {
                     <DndContext>
-                        <div
-                            style={{
-                                width: 1100,
-                                padding: 4,
-                                borderRadius: 7,
-                                opacity: editListOpen || addListOpen ? 0.7 : 1,
-                            }}>
+                        <div style={{ padding: 4, borderRadius: 7, opacity: editListOpen || addListOpen ? 0.7 : 1 }}>
                             {children}
                         </div>
                     </DndContext>
                 }
-                <div id={item.id} {...listeners} {...attributes}>
-                    <StyledButton
-                        onClick={() => {
-                            setEditListOpen((prevState) => !prevState);
-                            setAddListOpen(false);
-                            // dispatch(pageActions.setEditDocumentId(item.id));
-                        }}>
-                        {/* <MaterialIcon name={"MdGroup"}/> */}|
-                    </StyledButton>
-                </div>
             </Stack>
         </motion.div>
     );

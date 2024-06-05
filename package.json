@@ -34,6 +34,7 @@
     "@babel/preset-react": "^7.23.3",
     "@babel/register": "^7.23.7",
     "@svgr/webpack": "^8.1.0",
+    "@types/draft-convert": "^2.1.8",
     "@types/lodash": "^4.17.1",
     "@types/node": "^20.11.16",
     "@types/react-slick": "^0.23.13",

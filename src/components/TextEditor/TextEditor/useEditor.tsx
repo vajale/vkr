@@ -5,7 +5,7 @@ import {
     CompositeDecorator,
     type DraftEntityMutability,
     EditorState,
-    RichUtils, convertFromRaw,
+    RichUtils, convertFromRaw, ContentState,
 } from "draft-js";
 import * as React from "react";
 import { type BlockType, EntityType, InlineStyle, type KeyCommand } from "./config";
@@ -14,23 +14,26 @@ import LinkDecorator from "./Link";
 import { useEffect } from "react";
 
 export interface EditorApi {
-  state: EditorState;
-  onChange: (state: EditorState) => void;
-  toggleBlockType: (blockType: BlockType) => void;
-  currentBlockType: BlockType;
-  toHtml: () => string;
-  toggleInlineStyle: (inlineStyle: InlineStyle) => void;
-  hasInlineStyle: (inlineStyle: InlineStyle) => boolean;
-  addLink: (url: string) => void;
-  setEntityData: (entityKey: string, data: Record<string, string>) => void;
-  handleKeyCommand: (
-    command: KeyCommand,
-    editorState: EditorState
-  ) => DraftHandleValue;
-  handlerKeyBinding: (e: React.KeyboardEvent) => KeyCommand | null;
+    state: EditorState;
+    onChange: (state: EditorState) => void;
+    toggleBlockType: (blockType: BlockType) => void;
+    currentBlockType: BlockType;
+    toHtml: () => string;
+    toggleInlineStyle: (inlineStyle: InlineStyle) => void;
+    hasInlineStyle: (inlineStyle: InlineStyle) => boolean;
+    addLink: (url: string) => void;
+    setEntityData: (entityKey: string, data: Record<string, string>) => void;
+    handleKeyCommand: (
+        command: KeyCommand,
+        editorState: EditorState
+    ) => DraftHandleValue;
+    handlerKeyBinding: (e: React.KeyboardEvent) => KeyCommand | null;
+    hasContentOnClick: string
 }
 
 const decorator = new CompositeDecorator([LinkDecorator]);
+
+const html = `<p>Lorem ipsum</p>`;
 
 const getJsonState = (jsonString: string) => {
     if (jsonString === '' || jsonString === undefined) {
@@ -46,149 +49,170 @@ const getJsonState = (jsonString: string) => {
     }
 };
 
-export const useEditor = (json?: string): EditorApi => {
-  // const [state, setState] = React.useState(() =>
-  //   html
-  //     ? EditorState.createWithContent(HTMLtoState(html), decorator)
-  //     : EditorState.createEmpty(decorator)
-  // );
+// const getHtmlJsonState = (jsonString: string) => {
+//     if (jsonString === '' || jsonString === undefined) {
+//         return EditorState.createEmpty(decorator);
+//     }
+//
+//     try {
+//         const raw = JSON.parse(jsonString);
+//         const contentState = convertFromRaw(raw);
+//         return EditorState.createWithContent(contentState);
+//     } catch (e) {
+//         return EditorState.createEmpty();
+//     }
+// };
 
-  const [state, setState] = React.useState(getJsonState(json));
+export const useEditor = (json?: string): EditorApi => {
+    const [state, setState] = React.useState(() =>
+        json
+            ? EditorState.createWithContent(HTMLtoState(json), decorator)
+            : EditorState.createWithContent(ContentState.createFromText('lee'))
+    );
+
+    // const [state, setState] = React.useState(getJsonState(json));
 
     useEffect(() => {
         setState(getJsonState(json));
     }, [json]);
 
-  const toggleBlockType = React.useCallback((blockType: BlockType) => {
-    setState((currentState) =>
-      RichUtils.toggleBlockType(currentState, blockType)
-    );
-  }, []);
-
-  const currentBlockType = React.useMemo(() => {
-    const selection = state.getSelection();
-    const content = state.getCurrentContent();
-    const block = content.getBlockForKey(selection.getStartKey());
-    return block.getType() as BlockType;
-  }, [state]);
-
-  const toggleInlineStyle = React.useCallback((inlineStyle: InlineStyle) => {
-    setState((currentState) =>
-      RichUtils.toggleInlineStyle(currentState, inlineStyle)
-    );
-  }, []);
-
-  const hasInlineStyle = React.useCallback(
-    (inlineStyle: InlineStyle) => {
-      const currentStyle = state.getCurrentInlineStyle();
-      return currentStyle.has(inlineStyle);
-    },
-    [state]
-  );
-
-  const setEntityData = React.useCallback((entityKey, data) => {
-    setState((currentState) => {
-      const content = currentState.getCurrentContent();
-      const contentStateUpdated = content.mergeEntityData(entityKey, data);
-      return EditorState.push(
-        currentState,
-        contentStateUpdated,
-        "apply-entity"
-      );
-    });
-  }, []);
-
-  const addEntity = React.useCallback(
-    (
-      entityType: EntityType,
-      data: Record<string, string>,
-      mutability: DraftEntityMutability
-    ) => {
-      setState((currentState) => {
-        const contentState = currentState.getCurrentContent();
-        const contentStateWithEntity = contentState.createEntity(
-          entityType,
-          mutability,
-          data
+    const toggleBlockType = React.useCallback((blockType: BlockType) => {
+        setState((currentState) =>
+            RichUtils.toggleBlockType(currentState, blockType)
         );
-        const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newState = EditorState.set(currentState, {
-          currentContent: contentStateWithEntity,
+    }, []);
+
+    const currentBlockType = React.useMemo(() => {
+        const selection = state.getSelection();
+        const content = state.getCurrentContent();
+        const block = content.getBlockForKey(selection.getStartKey());
+        return block.getType() as BlockType;
+    }, [state]);
+
+    const toggleInlineStyle = React.useCallback((inlineStyle: InlineStyle) => {
+        setState((currentState) =>
+            RichUtils.toggleInlineStyle(currentState, inlineStyle)
+        );
+    }, []);
+
+    const hasInlineStyle = React.useCallback(
+        (inlineStyle: InlineStyle) => {
+            const currentStyle = state.getCurrentInlineStyle();
+            return currentStyle.has(inlineStyle);
+        },
+        [state]
+    );
+
+    const setEntityData = React.useCallback((entityKey, data) => {
+        setState((currentState) => {
+            const content = currentState.getCurrentContent();
+            const contentStateUpdated = content.mergeEntityData(entityKey, data);
+            return EditorState.push(
+                currentState,
+                contentStateUpdated,
+                "apply-entity"
+            );
         });
-        return RichUtils.toggleLink(
-          newState,
-          newState.getSelection(),
-          entityKey
-        );
-      });
-    },
-    []
-  );
+    }, []);
 
-  const addLink = React.useCallback(
-    (url) => {
-      addEntity(EntityType.link, { url }, "MUTABLE");
-    },
-    [addEntity]
-  );
+    const addEntity = React.useCallback(
+        (
+            entityType: EntityType,
+            data: Record<string, string>,
+            mutability: DraftEntityMutability
+        ) => {
+            setState((currentState) => {
+                const contentState = currentState.getCurrentContent();
+                const contentStateWithEntity = contentState.createEntity(
+                    entityType,
+                    mutability,
+                    data
+                );
+                const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+                const newState = EditorState.set(currentState, {
+                    currentContent: contentStateWithEntity,
+                });
+                return RichUtils.toggleLink(
+                    newState,
+                    newState.getSelection(),
+                    entityKey
+                );
+            });
+        },
+        []
+    );
 
-  const handleKeyCommand = React.useCallback(
-    (command: KeyCommand, editorState: EditorState) => {
-      if (command === "accent") {
-        toggleInlineStyle(InlineStyle.ACCENT);
-        return "handled";
-      }
+    const addLink = React.useCallback(
+        (url) => {
+            addEntity(EntityType.link, { url }, "MUTABLE");
+        },
+        [addEntity]
+    );
 
-      const newState = RichUtils.handleKeyCommand(editorState, command);
+    const handleKeyCommand = React.useCallback(
+        (command: KeyCommand, editorState: EditorState) => {
+            if (command === "accent") {
+                toggleInlineStyle(InlineStyle.ACCENT);
+                return "handled";
+            }
 
-      if (newState) {
-        setState(newState);
-        return "handled";
-      }
+            const newState = RichUtils.handleKeyCommand(editorState, command);
 
-      return "not-handled";
-    },
-    [toggleInlineStyle]
-  );
+            if (newState) {
+                setState(newState);
+                return "handled";
+            }
 
-  const handlerKeyBinding = React.useCallback((e: React.KeyboardEvent) => {
-    if (e.keyCode === 81 && KeyBindingUtil.hasCommandModifier(e)) {
-      return "accent";
-    }
+            return "not-handled";
+        },
+        [toggleInlineStyle]
+    );
 
-    return getDefaultKeyBinding(e);
-  }, []);
+    const handlerKeyBinding = React.useCallback((e: React.KeyboardEvent) => {
+        if (e.keyCode === 81 && KeyBindingUtil.hasCommandModifier(e)) {
+            return "accent";
+        }
 
-  const toHtml = React.useCallback(
-    () => stateToHTML(state.getCurrentContent()),
-    [state]
-  );
+        return getDefaultKeyBinding(e);
+    }, []);
 
-  return React.useMemo(
-    () => ({
-      state,
-      onChange: setState,
-      toggleBlockType,
-      currentBlockType,
-      toggleInlineStyle,
-      hasInlineStyle,
-      toHtml,
-      addLink,
-      setEntityData,
-      handleKeyCommand,
-      handlerKeyBinding,
-    }),
-    [
-      state,
-      toggleBlockType,
-      currentBlockType,
-      toggleInlineStyle,
-      hasInlineStyle,
-      toHtml,
-      addLink,
-      setEntityData,
-      handleKeyCommand,
-      handlerKeyBinding,
-    ]
-  );
+    const toHtml = React.useCallback(
+        () => stateToHTML(state.getCurrentContent()),
+        [state]
+    );
+
+    const getCursorPosition = React.useMemo(
+        () => state.getSelection().getAnchorOffset() !== 0,
+        [state]
+    );
+
+    return React.useMemo(
+        () => ({
+            state,
+            onChange: setState,
+            toggleBlockType,
+            currentBlockType,
+            toggleInlineStyle,
+            hasInlineStyle,
+            toHtml,
+            addLink,
+            setEntityData,
+            handleKeyCommand,
+            handlerKeyBinding,
+            hasContentOnClick: getCursorPosition
+        }),
+        [
+            state,
+            toggleBlockType,
+            currentBlockType,
+            toggleInlineStyle,
+            hasInlineStyle,
+            toHtml,
+            addLink,
+            setEntityData,
+            handleKeyCommand,
+            handlerKeyBinding,
+            getCursorPosition
+        ]
+    );
 };

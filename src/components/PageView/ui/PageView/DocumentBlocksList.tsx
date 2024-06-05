@@ -82,17 +82,6 @@ const DocumentBlocksList = (props: BlocksProps) => {
         },
     });
 
-    const handleEmptySpaceClick = async () => {
-        // if (docs[docs.length - 1].content !== '') {
-        //     dispatch(pageActions.addNewBlock(DocumentBlockType.TEXT));
-        //     if (onDocumentsChanges != null) {
-        //         onDocumentsChanges();
-        //     }
-        // };
-    };
-
-    console.log(blocks);
-
     return (
         <div style={{ padding: 7, width: "100%" }}>
             <DndContext
@@ -211,7 +200,7 @@ const DocumentBlocksList = (props: BlocksProps) => {
                                 break;
                         }
                     })}
-                    <EmptyDocumentBlock onClick={handleEmptySpaceClick} />
+                    <EmptyDocumentBlock onClick={onDocumentsChanges} />
                 </SortableContext>
             </DndContext>
         </div>

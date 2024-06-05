@@ -1,4 +1,4 @@
-import { Box, Stack, styled } from "@mui/material";
+import { Box, Button, Stack, styled } from "@mui/material";
 import { type IExtendedThemeProps } from "@/themes/types";
 
 export const StyledBox = styled(Box)((theme: IExtendedThemeProps) => ({
@@ -13,8 +13,8 @@ export const StyledList = styled(Stack)((theme: IExtendedThemeProps) => ({
    gap: 3
 }));
 
-export const StyledListButton = styled("button")(() => ({
+export const StyledListButton = styled(Button)(() => ({
    border: "none",
    padding: 7,
-   hover: "opacity: 0.6",
+   maxWidth: 210
 }));

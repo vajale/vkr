@@ -30,7 +30,7 @@ const DocumentBlockText = (props: TextBlockProps) => {
     };
 
     return (
-        <EditableTextField title={block.content} canEdit={canEdit} onContentChange={handleContentChange}/>
+        <EditableTextField placeholder={'Напишите что-нибудь...'} title={block.content} canEdit={canEdit} onContentChange={handleContentChange}/>
     );
 };
 

@@ -39,8 +39,6 @@ const DocumentBlockToDo = (props: TodoProps) => {
         setTodos(block.todos);
     }, [block.todos]);
 
-    console.log(todos);
-
     const handleSetCheckTodo = (id: string) => {
         const newTodos = todos.map(todo => {
             if (todo.id === id) {
@@ -104,7 +102,7 @@ const DocumentBlockToDo = (props: TodoProps) => {
 
         return todos?.map((item) => {
             if (todos.length === 0) {
-                return (<div onMouseDown={handleCreateNewTask}></div>);
+                return (<div key={item.id} onMouseDown={handleCreateNewTask}></div>);
             }
 
             return (
@@ -113,6 +111,7 @@ const DocumentBlockToDo = (props: TodoProps) => {
                             handleSetCheckTodo(item.id);
                         }}/>
                         <EditableTextField
+                            placeholder={'...'}
                             canEdit={canEdit}
                             title={item.title}
                             onContentChange={(jsonString) => {
@@ -136,7 +135,12 @@ const DocumentBlockToDo = (props: TodoProps) => {
     return (
         <div>
             <Stack flexDirection={'row'}>
-                <EditableTextField canEdit={canEdit} title={block.content} onContentChange={handleContentChange}/>
+                <EditableTextField
+                    placeholder={'Напишите что-нибудь...'}
+                    canEdit={canEdit}
+                    width={'400px'}
+                    title={block.content}
+                    onContentChange={handleContentChange}/>
                 <Button style={{ minWidth: 30, borderRadius: 4 }} onClick={handleCreateNewTask}>
                     <MaterialIcon name={"MdAdd"}/>
                 </Button>

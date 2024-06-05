@@ -3,8 +3,9 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLazyGetDocumentImageQuery, useSetDocumentImageMutation } from "@/api/documentImage";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { pageActions, selectPage } from "@/store/slices/pageSlice";
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Stack } from "@mui/material";
 import { type DocumentPageImageBlock } from "@/components/PageView/model/types";
+import { MaterialIcon } from "@/assets/Icon";
 
 interface IProps {
     item: DocumentPageImageBlock;
@@ -98,6 +99,26 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
         );
     }, [isLoading, data]);
 
+    const handleSwitchViewStyle = () => {
+        dispatch(pageActions.updateBlock({
+            ...item,
+            simpleView: !item.simpleView
+        }));
+    };
+
+    if (item.simpleView) {
+        return (
+            <div>
+                <Button onClick={handleSwitchViewStyle}>
+                    <Stack flexDirection={'row'} gap={1} alignItems={'center'}>
+                        {item.alt}
+                        <MaterialIcon name={'MdEditDocument'}/>
+                    </Stack>
+                </Button>
+            </div>
+        );
+    }
+
     return (
         <StyledDocumentBlockImage width={sizes?.width} height={sizes?.height}>
             <div className="resizable-box" style={{ width: sizes.width, height: sizes.height }}>
@@ -108,7 +129,7 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
                     onMouseEnter={handleInitialDrag}
                 />
             </div>
-            <input
+             <input
                 className={"file-input"}
                 type="file"
                 ref={fileInputElement}
@@ -116,7 +137,7 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
                 onChange={async (event) => {
                     await handleChange(event);
                 }}
-            />
+             />
         </StyledDocumentBlockImage>
     );
 };

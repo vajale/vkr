@@ -37,9 +37,9 @@ export const mocktasks: Task[] = [
         time: '00:00:00',
         date: ''
     },
-    { id: '2', content: "leee574574574574573", priority: '2', time: '00:00:00', date: '' },
-    { id: '3', content: "leee45", priority: '3', time: '00:00:00', date: '' },
-    { id: '4', content: "leee124587-78-76-678-678-671", priority: '4', time: '00:00:00', date: '' },
+    { id: '2', content: '', priority: '2', time: '00:00:00', date: '' },
+    { id: '3', content: '', priority: '3', time: '00:00:00', date: '' },
+    { id: '4', content: '', priority: '4', time: '00:00:00', date: '' },
 ];
 
 export const mocktasks2: Task[] = [

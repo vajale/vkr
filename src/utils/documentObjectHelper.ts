@@ -78,9 +78,7 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
                 height: "200",
             },
             alt: "img_block",
-            textType: {
-                variant: "subtitle1",
-            },
+            simpleView: false,
         };
 
         return newBlock;

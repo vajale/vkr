@@ -32,8 +32,7 @@ const DndTask = ({ task }: TaskProps) => {
         <div id={task.id} ref={setNodeRef} {...listeners} {...attributes} style={style}>
             <Paper sx={{ padding: 1, minWidth: 200 }}>
                 <Stack width={"100%"} flexDirection={'row'} justifyContent={'space-between'}>
-                     <EditableTextField width={'200px'} canEdit={canEdit} title={task.content}/>
-                    {task.id}
+                    <EditableTextField width={'200px'} canEdit={canEdit} title={task.content} placeholder={'...'}/>
                     <Button onClick={handleSwitchEdit} size={'small'} sx={{ width: 28, height: 28, minWidth: 28 }}>
                         <MaterialIcon name={'MdEdit'}/>
                     </Button>

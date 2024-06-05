@@ -8,12 +8,13 @@ export const StyledEditorButtonsContainer = styled(Stack)(({ theme }: IExtendedT
     borderRadius: 7,
     top: -50,
     backgroundColor: theme?.menuBackground.primary,
+    minWidth: 300,
+    zIndex: 100
 }));
 
 export const StyledEditorButton = styled(Button)(({ theme }: IExtendedThemeProps) => ({
     height: 20,
-    width: 21,
-    maxWidth: 49,
+    maxWidth: 90,
     minWidth: 25
 }));
 

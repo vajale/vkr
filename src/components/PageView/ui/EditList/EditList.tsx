@@ -1,14 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
 
 import { DocumentBlockType, type DocumentBlock } from "../../model/types";
-import { Button, FormControl, MenuItem, Popover, Select, Stack } from "@mui/material";
 import { useAppDispatch } from "@/store/hooks";
 import { pageActions } from "@/store/slices/pageSlice";
 import { motion } from "framer-motion";
-import { MaterialIcon } from "@/assets/Icon";
-import { StyledBox, StyledList } from "@/components/PageView/ui/EditList/styled";
-import EditTextSelect from "@/components/PageView/ui/EditList/EditTextSelect";
-import EditColorSelect from "@/components/PageView/ui/EditList/EditColorSelect";
+import { LucideIcon, MaterialIcon } from "@/assets/Icon";
+import { StyledBox, StyledList, StyledListButton } from "@/components/PageView/ui/EditList/styled";
 
 interface EditListProps {
     block: DocumentBlock,
@@ -31,29 +28,44 @@ const EditList = ({ block, onEdit }: EditListProps) => {
         onEdit();
     };
 
+    const handleSwitchViewStyle = () => {
+        dispatch(pageActions.updateBlock({
+            ...block,
+            simpleView: !block.simpleView
+        }));
+        onEdit();
+    };
+
+    const getBlockOptions = () => {
+        switch (block.type) {
+            case DocumentBlockType.IMAGE:
+                return (
+                    <StyledListButton fullWidth size={'small'} onClick={handleSwitchViewStyle}>
+                        Изменить стиль
+                        <LucideIcon name={'LuBookDown'}/>
+                    </StyledListButton>
+                );
+        }
+    };
+
     return (
         <StyledBox position={'absolute'}>
             <StyledList alignContent={'flex-start'}>
                 <motion.div>
-                    <Button fullWidth sx={{ maxHeight: 40 }}
-                            onClick={handleDeleteButtonClick}>
+                    <StyledListButton fullWidth size={'small'}
+                                      onClick={handleDeleteButtonClick}>
                         <MaterialIcon name={"MdDeleteOutline"}/>
                         Удалить
-                    </Button>
+                    </StyledListButton>
                 </motion.div>
                 <motion.div>
-                    <Button fullWidth sx={{ maxHeight: 40 }}
-                            onClick={handleDuplicateBlock}>
+                    <StyledListButton fullWidth size={'small'}
+                                       onClick={handleDuplicateBlock}>
                         <MaterialIcon name={"MdOutlineNoteAlt"}/>
                         Дублировать
-                    </Button>
+                    </StyledListButton>
                 </motion.div>
-                {/* <motion.div> */}
-                {/*    <Stack gap={2}> */}
-                {/*        <EditTextSelect block={block} onSelect={handleSelectChange}/> */}
-                {/*        <EditColorSelect block={block} onSelect={handleSelectChange}/> */}
-                {/*    </Stack> */}
-                {/* </motion.div> */}
+                {getBlockOptions()}
             </StyledList>
         </StyledBox>
     );

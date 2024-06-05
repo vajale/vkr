@@ -4,7 +4,7 @@ import React from "react";
 interface DropableProps {
    id: string;
    children: React.ReactElement;
-   nodeId: string
+   nodeId?: string
 }
 
 const Dropable = (props: DropableProps) => {

@@ -60,6 +60,7 @@ export interface DocumentPageImageBlock extends DocumentBlockBase {
         width?: string;
         height?: string;
     };
+    simpleView?: boolean
 }
 
 export interface Todo {

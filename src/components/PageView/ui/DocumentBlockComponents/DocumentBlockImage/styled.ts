@@ -4,6 +4,8 @@ export const StyledDocumentBlockImage = styled("div")(
     ({ width = "200", height = "200" }: { width?: string; height?: string }) => ({
         minHeight: "10px",
         minWidth: "10px",
+        maxWidth: "400px",
+        maxHeight: "400px",
 
         ".resizable-box": {
             position: "relative",
@@ -17,11 +19,12 @@ export const StyledDocumentBlockImage = styled("div")(
             width: "10px",
             height: "10px",
             backgroundColor: "gray",
+            borderRadius: 7
         },
 
         ".right": {
-            bottom: "5px",
-            right: "5px",
+            bottom: "0px",
+            right: "0px",
             transform: "translateX(-50%)",
             cursor: "nwse-resize",
         },
