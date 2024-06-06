@@ -6,6 +6,7 @@ import { closestCenter, DndContext, type DragEndEvent, MouseSensor, useSensor } 
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { calendarActions, selectTasks } from "@/store/slices/calendarSlice";
+import KanbanBoard from "@/components/DnDComponents/Dropable/Test";
 
 const TasksWrapper = () => {
     const dispatch = useAppDispatch();
@@ -59,28 +60,7 @@ const TasksWrapper = () => {
                 <MaterialIcon name={'MdFavoriteBorder'}/>
             </Stack>
             <Box height={'90%'} sx={{ backgroundColor: 'whitesmoke' }} margin={1} borderRadius={1}>
-                <Stack flexDirection={'row'} spacing={3} gap={1} padding={5}>
-                    <DndContext onDragEnd={handleDragEnd} sensors={[mouseSensor]}
-                                collisionDetection={closestCenter}>
-                        <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
-                            <DndTaskWrapper tabId={'1'} bgColor={'#7ae6ff'}
-                                            items={todoTask}
-                                            label={'Сделать'}/>
-
-                            <DndTaskWrapper tabId={'2'} bgColor={'#9fff80'}
-                                            items={makeTask}
-                                            label={'Делается'}/>
-
-                            <DndTaskWrapper tabId={'3'} bgColor={'#f7ff93'}
-                                            items={finishedTask}
-                                            label={'Сделано'}/>
-
-                            <DndTaskWrapper tabId={'4'} bgColor={'#ff7171'}
-                                            items={errorTask}
-                                            label={'Проблемы'}/>
-                        </SortableContext>
-                    </DndContext>
-                </Stack>
+                <KanbanBoard/>
             </Box>
         </Paper>
     );

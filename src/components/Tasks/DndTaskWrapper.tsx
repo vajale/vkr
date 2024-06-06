@@ -12,9 +12,13 @@ interface TaskWrapperProps {
     tabId: string
     items: Task[],
     bgColor: string
+    createTask: (columnId: string) => void;
+    updateTask: (id: string, content: string) => void;
+    deleteTask: (id: string) => void;
+    tasks: Task[];
 }
 
-const DndTaskWrapper = ({ label = 'Задачи', items, tabId, bgColor }: TaskWrapperProps) => {
+const DndTaskWrapper = ({ label = 'Задачи', items, tabId, bgColor, createTask, tasks, deleteTask, updateTask }: TaskWrapperProps) => {
     return (
         <Paper sx={{ backgroundColor: bgColor, minHeight: 70, width: 300 }}>
             <Stack p={2} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
@@ -31,7 +35,6 @@ const DndTaskWrapper = ({ label = 'Задачи', items, tabId, bgColor }: TaskW
                     ))}
                 <CreateTaskButton id={tabId}/>
             </Stack>
-
         </Paper>
     );
 };
