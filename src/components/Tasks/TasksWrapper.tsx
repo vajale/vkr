@@ -1,16 +1,19 @@
 import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { MaterialIcon } from "@/assets/Icon";
 import DndTaskWrapper from "./DndTaskWrapper";
-import { mocktasks, mocktasks2, mocktasks3, mocktasks4 } from "@/utils/mock/mockdata";
 import { closestCenter, DndContext, type DragEndEvent, MouseSensor, useSensor } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { calendarActions, selectTasks } from "@/store/slices/calendarSlice";
 
 const TasksWrapper = () => {
-    const [tasks, setTasks] = useState([...mocktasks, ...mocktasks2, ...mocktasks3, ...mocktasks4]);
+    const dispatch = useAppDispatch();
+
+    const tasks = useAppSelector(selectTasks);
 
     const handleDragEnd = async (e: DragEndEvent) => {
-        const { active, over, collisions } = e;
+        const { active, over } = e;
 
         if (over === null || active.id === over.id) {
             return;
@@ -22,17 +25,14 @@ const TasksWrapper = () => {
 
         if (over) {
             const overNodeId = document.querySelector(`[id="${over.id}"]`).parentNode.id;
+            const findTask = tasks.find(task => task.id === active.id);
 
-            setTasks(tasks.map((item) => {
-                if (item.id === active.id) {
-                    item.priority = overNodeId;
-                }
+            console.log(overNodeId);
 
-                return item;
-            }));
+            if (overNodeId) {
+                dispatch(calendarActions.updateTaskPriority({ id: findTask.id, priority: overNodeId }));
+            }
         }
-
-        setTasks(newArray);
     };
 
     const mouseSensor = useSensor(MouseSensor, {
@@ -41,13 +41,14 @@ const TasksWrapper = () => {
         },
     });
 
-    const handleDragMove = (e: DragEndEvent) => {
-        const { active, over, collisions } = e;
-        //
-        // if (collisions != null) {
-        //     collisions.map(item => { console.log(item.data.droppableContainer.node.current.parentNode); });
-        // }
-    };
+    const [todoTask, makeTask, finishedTask, errorTask] = useMemo(() => {
+        const tasks1 = tasks.filter(task => task.priority === '1');
+        const tasks2 = tasks.filter(task => task.priority === '2');
+        const tasks3 = tasks.filter(task => task.priority === '3');
+        const tasks4 = tasks.filter(task => task.priority === '4');
+
+        return [tasks1, tasks2, tasks3, tasks4];
+    }, [tasks]);
 
     return (
         <Paper sx={{ width: '98%', margin: 1, height: '90%' }}>
@@ -58,33 +59,33 @@ const TasksWrapper = () => {
                 <MaterialIcon name={'MdFavoriteBorder'}/>
             </Stack>
             <Box height={'90%'} sx={{ backgroundColor: 'whitesmoke' }} margin={1} borderRadius={1}>
-                <Grid container spacing={3} gap={1} padding={5}>
-                    <DndContext onDragMove={handleDragMove} onDragEnd={handleDragEnd} sensors={[mouseSensor]}
+                <Stack flexDirection={'row'} spacing={3} gap={1} padding={5}>
+                    <DndContext onDragEnd={handleDragEnd} sensors={[mouseSensor]}
                                 collisionDetection={closestCenter}>
                         <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
                             <Grid xs>
                                 <DndTaskWrapper tabId={'1'} bgColor={'#7ae6ff'}
-                                                items={tasks.filter(task => task.priority == '1')}
+                                                items={todoTask}
                                                 label={'Сделать'}/>
                             </Grid>
                             <Grid xs>
                                 <DndTaskWrapper tabId={'2'} bgColor={'#9fff80'}
-                                                items={tasks.filter(task => task.priority == '2')}
+                                                items={makeTask}
                                                 label={'Делается'}/>
                             </Grid>
                             <Grid xs>
                                 <DndTaskWrapper tabId={'3'} bgColor={'#f7ff93'}
-                                                items={tasks.filter(task => task.priority == '3')}
+                                                items={finishedTask}
                                                 label={'Сделано'}/>
                             </Grid>
                             <Grid xs>
                                 <DndTaskWrapper tabId={'4'} bgColor={'#ff7171'}
-                                                items={tasks.filter(task => task.priority == '4')}
+                                                items={errorTask}
                                                 label={'Проблемы'}/>
                             </Grid>
                         </SortableContext>
                     </DndContext>
-                </Grid>
+                </Stack>
             </Box>
         </Paper>
     );

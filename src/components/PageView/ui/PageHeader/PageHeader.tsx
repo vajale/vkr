@@ -75,7 +75,7 @@ const PageHeader = (props: HeaderProps) => {
             <Stack>
                 <Typography sx={{ mt: 7, ml: 11, opacity: 0.3 }}>
                     <strong>{page.id}</strong>
-                    {page.child !== undefined && page.child}
+                    {/* {page.child !== undefined && page.child} */}
                 </Typography>
                 <Typography
                     contentEditable={canEdit}

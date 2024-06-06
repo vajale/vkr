@@ -3,7 +3,7 @@ import CalendarCell from "@/pages/Calendar/CalendarCell";
 import { type DateCellItem } from "@/utils/hooks/useCalendar";
 import { StyledCalendarGrid } from "@/pages/Calendar/styled";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { calendarActions, selectCalendarTasks } from "@/store/slices/calendarSlice";
+import { calendarActions, selectTasks } from "@/store/slices/calendarSlice";
 import CalendarCellTask from "@/pages/Calendar/CalendarCellTask";
 import { type Task } from "@/components/PageView/model/types";
 
@@ -16,7 +16,7 @@ const CalendarMonthWrapper = (props: WrapperProps) => {
     const { cells, onCellClick } = props;
 
     const dispatch = useAppDispatch();
-    const tasks = useAppSelector(selectCalendarTasks);
+    const tasks = useAppSelector(selectTasks);
 
     const handleCellClick = (date: DateCellItem, task: Task | null) => {
         // if (task != null) {

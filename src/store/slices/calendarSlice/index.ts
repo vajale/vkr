@@ -1,10 +1,12 @@
 import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
+import { mockTasks } from "@/utils/mock/mockdata";
+
 import { type ICalendarSchema } from "@/store/slices/calendarSlice/types";
 import { type Task } from "@/components/PageView/model/types";
 
 const initialState: ICalendarSchema = {
-    tasks: [],
+    tasks: mockTasks,
     selectedTask: undefined
 };
 
@@ -12,7 +14,7 @@ export const calenderSlice = createSlice({
     name: "calendar",
     initialState,
     reducers: {
-        updateTasks: (state, action: PayloadAction<Task>) => {
+        updateTask: (state, action: PayloadAction<Task>) => {
             if (state.tasks.find(task => task.id === action.payload.id) == null) {
                 state.tasks = [...state.tasks, action.payload];
                 state.selectedTask = action.payload;
@@ -31,6 +33,22 @@ export const calenderSlice = createSlice({
                 });
             }
         },
+        updateTaskPriority: (state, action: PayloadAction<{ id: string, priority: string }>) => {
+            state.tasks.map(task => {
+                if (task.id === action.payload.id) {
+                    task.priority = action.payload.priority;
+                    return task;
+                }
+
+                return task;
+            });
+        },
+        setTasks: (state, action: PayloadAction<Task[]>) => {
+            state.tasks = action.payload;
+        },
+        addTasks: (state, action: PayloadAction<Task>) => {
+            state.tasks = [...state.tasks, action.payload];
+        },
         removeTask: (state, action: PayloadAction<Task>) => {
             state.tasks = state.tasks.filter(task => task.id !== action.payload.id);
         },
@@ -39,15 +57,15 @@ export const calenderSlice = createSlice({
         }
     },
     selectors: {
-        selectCalendarTasks: (state) => state.tasks,
+        selectTasks: (state) => state.tasks,
         selectEditTask: (state) => state.tasks.find(task => state.selectedTask?.id === task.id),
     }
 });
 
 export const selectTaskById = (taskId: string) =>
-    createSelector([selectCalendarTasks], tasks => tasks.find(task => task.id === taskId));
+    createSelector([selectTasks], tasks => tasks.find(task => task.id === taskId));
 
-export const { selectCalendarTasks, selectEditTask } = calenderSlice.selectors;
+export const { selectTasks, selectEditTask } = calenderSlice.selectors;
 export default calenderSlice.reducer;
 
 export const { actions: calendarActions } = calenderSlice;

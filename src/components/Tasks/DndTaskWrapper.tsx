@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { Button, Paper, Stack, Typography } from "@mui/material";
 import CreateTaskButton from "@/components/Tasks/CreateTaskButton";
@@ -16,21 +16,24 @@ interface TaskWrapperProps {
 const DndTaskWrapper = ({ label = 'Задачи', items, tabId, bgColor }: TaskWrapperProps) => {
     const haveTasks = false;
 
+    const tasks = useMemo(() => {
+        return items.map((item) => (
+            <Dropable nodeId={item.id} key={item.id} id={item.id}>
+                <DndTask task={item}/>
+            </Dropable>
+        ));
+    }, [items]);
+
     return (
         <Paper sx={{ backgroundColor: bgColor, minHeight: 70 }}>
             <Stack p={2} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
                 <Typography>{label}</Typography>
                 <Button sx={{ width: 28, height: 28, minWidth: 28 }}>
-
                 </Button>
             </Stack>
             <Stack id={tabId} gap={1} p={2}>
-                {items.map((item) => (
-                    <Dropable nodeId={item.id} key={item.id} id={item.id}>
-                        <DndTask task={item}/>
-                    </Dropable>
-                ))}
-                <CreateTaskButton/>
+                {tasks || <Dropable id={tabId} nodeId={tabId}/>}
+                <CreateTaskButton id={tabId}/>
             </Stack>
 
         </Paper>

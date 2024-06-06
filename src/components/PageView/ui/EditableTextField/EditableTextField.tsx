@@ -15,7 +15,7 @@ interface TextBlockProps {
 
 const cursorOffset = {
     x: -50,
-    y: -45
+    y: -65
 };
 
 const EditableTextField = (props: TextBlockProps) => {

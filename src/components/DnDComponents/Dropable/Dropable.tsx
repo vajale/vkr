@@ -3,7 +3,7 @@ import React from "react";
 
 interface DropableProps {
    id: string;
-   children: React.ReactElement;
+   children?: React.ReactElement;
    nodeId?: string
 }
 

@@ -30,13 +30,6 @@ export const rainbowColors = [
 };
 
 export const mocktasks: Task[] = [
-    {
-        id: '1',
-        content: "leee324345leee324345leee32",
-        priority: '1',
-        time: '00:00:00',
-        date: ''
-    },
     { id: '2', content: '', priority: '2', time: '00:00:00', date: '' },
     { id: '3', content: '', priority: '3', time: '00:00:00', date: '' },
     { id: '4', content: '', priority: '4', time: '00:00:00', date: '' },
@@ -50,9 +43,6 @@ export const mocktasks2: Task[] = [
         time: '00:00:00',
         date: ''
     },
-    { id: '12', content: "leee574574574574573", priority: '2', time: '00:00:00', date: '' },
-    { id: '13', content: "leee45", priority: '3', time: '00:00:00', date: '' },
-    { id: '14', content: "leee124587-78-76-678-678-671", priority: '4', time: '00:00:00', date: '' },
 ];
 
 export const mocktasks3: Task[] = [
@@ -63,9 +53,7 @@ export const mocktasks3: Task[] = [
         time: '00:00:00',
         date: ''
     },
-    { id: '22', content: "leee574574574574573", priority: '2', time: '00:00:00', date: '' },
-    { id: '23', content: "leee45", priority: '1', time: '00:00:00', date: '' },
-    { id: '24', content: "leee124587-78-76-678-678-671", priority: '4', time: '00:00:00', date: '' },
+
 ];
 export const mocktasks4: Task[] = [
     {
@@ -75,10 +63,9 @@ export const mocktasks4: Task[] = [
         time: '00:00:00',
         date: ''
     },
-    { id: '32', content: "leee574574574574573", priority: '3', time: '00:00:00', date: '' },
-    { id: '33', content: "leee45", priority: '4', time: '00:00:00', date: '' },
-    { id: '34', content: "leee124587-78-76-678-678-671", priority: '2', time: '00:00:00', date: '' },
 ];
+
+export const mockTasks = [...mocktasks, ...mocktasks2, ...mocktasks3, ...mocktasks4];
 
 export const mockDocs1: DocumentBlock[] = [
     {
@@ -87,7 +74,7 @@ export const mockDocs1: DocumentBlock[] = [
         content: "BIDLO",
         textType: {
             variant: 'subtitle1'
-        }
+        },
     },
     {
         id: "3",

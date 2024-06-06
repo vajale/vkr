@@ -5,6 +5,8 @@ import { type Task } from "@/components/PageView/model/types";
 import { MaterialIcon } from "@/assets/Icon";
 import { useSortable } from "@dnd-kit/sortable";
 import EditableTextField from "../PageView/ui/EditableTextField/EditableTextField";
+import { useDraggable, useDroppable } from "@dnd-kit/core";
+import { motion } from "framer-motion";
 
 interface TaskProps {
     task: Task
@@ -13,7 +15,7 @@ interface TaskProps {
 const DndTask = ({ task }: TaskProps) => {
     const [canEdit, setEdit] = useState(false);
 
-    const { setNodeRef, listeners, attributes, transform, active } = useSortable({ id: task.id });
+    const { setNodeRef, listeners, attributes, transform, active, transition, isDragging } = useSortable({ id: task.id });
 
     const style = {
         transform: CSS.Translate.toString(transform),
@@ -21,7 +23,9 @@ const DndTask = ({ task }: TaskProps) => {
         height: "auto",
         display: "flex",
         border: "none",
-        opacity: active?.id === task.id ? 0.7 : 1,
+        opacity: isDragging,
+        transition,
+        cursor: 'move',
     };
 
     const handleSwitchEdit = () => {
@@ -29,16 +33,16 @@ const DndTask = ({ task }: TaskProps) => {
     };
 
     return (
-        <div id={task.id} ref={setNodeRef} {...listeners} {...attributes} style={style}>
+        <motion.div id={task.id} ref={setNodeRef} {...listeners} {...attributes} style={style}>
             <Paper sx={{ padding: 1, minWidth: 200 }}>
                 <Stack width={"100%"} flexDirection={'row'} justifyContent={'space-between'}>
-                    <EditableTextField width={'200px'} canEdit={canEdit} title={task.content} placeholder={'...'}/>
+                    <EditableTextField width={'200px'} canEdit={canEdit} title={task.content} placeholder={task.id}/>
                     <Button onClick={handleSwitchEdit} size={'small'} sx={{ width: 28, height: 28, minWidth: 28 }}>
                         <MaterialIcon name={'MdEdit'}/>
                     </Button>
                 </Stack>
             </Paper>
-        </div>
+        </motion.div>
 
     );
 };
