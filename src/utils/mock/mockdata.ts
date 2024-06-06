@@ -69,7 +69,7 @@ export const mockTasks = [...mocktasks, ...mocktasks2, ...mocktasks3, ...mocktas
 
 export const mockDocs1: DocumentBlock[] = [
     {
-        id: "1",
+        id: "143643643634623613612",
         type: DocumentBlockType.TEXT,
         content: "BIDLO",
         textType: {
@@ -77,7 +77,7 @@ export const mockDocs1: DocumentBlock[] = [
         },
     },
     {
-        id: "3",
+        id: "3125125125152",
         type: DocumentBlockType.LINK,
         content: "To do",
         textType: {
@@ -96,7 +96,7 @@ export const mockDocs2: DocumentBlock[] = [
         }
     },
     {
-        id: "65iuj5jrs",
+        id: "125125125125",
         type: DocumentBlockType.TEXT,
         content: "52125512",
         textType: {
@@ -104,7 +104,7 @@ export const mockDocs2: DocumentBlock[] = [
         }
     },
     {
-        id: "ewrewr",
+        id: "124124",
         type: DocumentBlockType.CODE,
         content: "xcbxcbxcb",
         textType: {

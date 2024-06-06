@@ -15,7 +15,7 @@ interface TaskProps {
 const DndTask = ({ task }: TaskProps) => {
     const [canEdit, setEdit] = useState(false);
 
-    const { setNodeRef, listeners, attributes, transform, active, transition, isDragging } = useSortable({ id: task.id });
+    const { setNodeRef, listeners, attributes, transform, transition, isDragging } = useSortable({ id: task.id, data: { type: 'Task', task } });
 
     const style = {
         transform: CSS.Translate.toString(transform),
@@ -23,7 +23,7 @@ const DndTask = ({ task }: TaskProps) => {
         height: "auto",
         display: "flex",
         border: "none",
-        opacity: isDragging,
+        opacity: isDragging ? 0.8 : 1,
         transition,
         cursor: 'move',
     };

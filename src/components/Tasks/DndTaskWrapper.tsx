@@ -5,6 +5,7 @@ import CreateTaskButton from "@/components/Tasks/CreateTaskButton";
 import { type Task } from "@/components/PageView/model/types";
 import Dropable from "@/components/DnDComponents/Dropable/Dropable";
 import DndTask from "@/components/Tasks/DndTask";
+import { SortableContext } from "@dnd-kit/sortable";
 
 interface TaskWrapperProps {
     label: string,
@@ -14,25 +15,20 @@ interface TaskWrapperProps {
 }
 
 const DndTaskWrapper = ({ label = 'Задачи', items, tabId, bgColor }: TaskWrapperProps) => {
-    const haveTasks = false;
-
-    const tasks = useMemo(() => {
-        return items.map((item) => (
-            <Dropable nodeId={item.id} key={item.id} id={item.id}>
-                <DndTask task={item}/>
-            </Dropable>
-        ));
-    }, [items]);
-
     return (
-        <Paper sx={{ backgroundColor: bgColor, minHeight: 70 }}>
+        <Paper sx={{ backgroundColor: bgColor, minHeight: 70, width: 300 }}>
             <Stack p={2} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
                 <Typography>{label}</Typography>
                 <Button sx={{ width: 28, height: 28, minWidth: 28 }}>
                 </Button>
             </Stack>
             <Stack id={tabId} gap={1} p={2}>
-                {tasks || <Dropable id={tabId} nodeId={tabId}/>}
+                    {items.map((item) => (
+                        <Dropable id={item.id} key={item.id} nodeId={item.id}>
+                            <DndTask key={item.id} task={item}/>
+                        </Dropable>
+
+                    ))}
                 <CreateTaskButton id={tabId}/>
             </Stack>
 

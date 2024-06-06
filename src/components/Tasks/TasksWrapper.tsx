@@ -63,26 +63,21 @@ const TasksWrapper = () => {
                     <DndContext onDragEnd={handleDragEnd} sensors={[mouseSensor]}
                                 collisionDetection={closestCenter}>
                         <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
-                            <Grid xs>
-                                <DndTaskWrapper tabId={'1'} bgColor={'#7ae6ff'}
-                                                items={todoTask}
-                                                label={'Сделать'}/>
-                            </Grid>
-                            <Grid xs>
-                                <DndTaskWrapper tabId={'2'} bgColor={'#9fff80'}
-                                                items={makeTask}
-                                                label={'Делается'}/>
-                            </Grid>
-                            <Grid xs>
-                                <DndTaskWrapper tabId={'3'} bgColor={'#f7ff93'}
-                                                items={finishedTask}
-                                                label={'Сделано'}/>
-                            </Grid>
-                            <Grid xs>
-                                <DndTaskWrapper tabId={'4'} bgColor={'#ff7171'}
-                                                items={errorTask}
-                                                label={'Проблемы'}/>
-                            </Grid>
+                            <DndTaskWrapper tabId={'1'} bgColor={'#7ae6ff'}
+                                            items={todoTask}
+                                            label={'Сделать'}/>
+
+                            <DndTaskWrapper tabId={'2'} bgColor={'#9fff80'}
+                                            items={makeTask}
+                                            label={'Делается'}/>
+
+                            <DndTaskWrapper tabId={'3'} bgColor={'#f7ff93'}
+                                            items={finishedTask}
+                                            label={'Сделано'}/>
+
+                            <DndTaskWrapper tabId={'4'} bgColor={'#ff7171'}
+                                            items={errorTask}
+                                            label={'Проблемы'}/>
                         </SortableContext>
                     </DndContext>
                 </Stack>
