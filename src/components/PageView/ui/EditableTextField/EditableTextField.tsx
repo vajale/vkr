@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import TextEditor, { TextEditorProvider, useEditorApi } from "@/components/TextEditor/TextEditor";
 import ToolPanel from "@/components/TextEditor/ToolPanel";
 import { StyledMotionDiv } from "@/components/PageView/ui/EditableTextField/styled";
+import { useClickPosition } from "@/utils/hooks/useMouseClick";
 
 interface TextBlockProps {
     title: string;
@@ -14,8 +15,8 @@ interface TextBlockProps {
 }
 
 const cursorOffset = {
-    x: -50,
-    y: -55
+    x: 0,
+    y: 0
 };
 
 const EditableTextField = (props: TextBlockProps) => {
@@ -47,7 +48,7 @@ const EditableTextField = (props: TextBlockProps) => {
     return (
         <StyledMotionDiv>
             <TextEditorProvider width={width} json={title}>
-                {toolPanelOpen && disableEditTools && <ToolPanel position={clickPosition}/>}
+                {toolPanelOpen && <ToolPanel position={clickPosition}/>}
                 <TextEditor
                     placeholder={placeholder}
                     onFocus={handleFocus}

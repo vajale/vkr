@@ -34,6 +34,8 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
 
+        console.log(x, y);
+
         if (onContentCursorClick) {
             onContentCursorClick(x, y);
         }
@@ -41,7 +43,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
 
     return (
         <div ref={divRef}
-             onClick={handleDivClick} style={{ position: 'relative' }}>
+             onClick={handleDivClick}>
             <Editor spellCheck
                     handleKeyCommand={editorApi.handleKeyCommand}
                     customStyleMap={CUSTOM_STYLE_MAP}

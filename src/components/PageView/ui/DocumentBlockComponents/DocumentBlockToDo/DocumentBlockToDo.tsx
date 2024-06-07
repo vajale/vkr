@@ -114,6 +114,7 @@ const DocumentBlockToDo = (props: TodoProps) => {
                             placeholder={'...'}
                             canEdit={canEdit}
                             title={item.title}
+                            width={'100%'}
                             onContentChange={(jsonString) => {
                                 handleTaskChange(item.id, jsonString);
                             }}/>

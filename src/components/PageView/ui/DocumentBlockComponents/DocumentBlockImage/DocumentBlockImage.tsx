@@ -117,7 +117,7 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
     if (item.simpleView) {
         return (
             <div>
-                <Button onClick={handleSwitchViewStyle}>
+                <Button onClick={handleSwitchViewStyle} sx={{ backgroundColor: 'rgb(0,0,0,0.1)' }}>
                     <Stack flexDirection={'row'} gap={1} alignItems={'center'}>
                         {item.alt}
                         <MaterialIcon name={'MdEditDocument'}/>
