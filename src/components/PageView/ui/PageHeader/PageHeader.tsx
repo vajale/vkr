@@ -4,16 +4,19 @@ import { useAppSelector } from "@/store/hooks";
 import { selectUserAuth, selectUserFavorites } from "@/store/slices/userSlice";
 import { MaterialIcon } from "@/assets/Icon";
 import { StyledPageHeader } from "@/components/PageView/ui/PageHeader/styled";
-import { useAddToFavoritesMutation, useRemoveFavoritesMutation } from "@/api/firebasePageAPI/pagesService";
+import {
+    useAddToFavoritesMutation,
+    useRemoveFavoritesMutation,
+} from "@/api/firebasePageAPI/pagesService";
 import { selectPageId } from "@/store/slices/pageSlice";
 import useToast from "@/utils/hooks/useToast";
 import { type Page } from "@/components/PageView/model/types";
 
 interface HeaderProps {
-    page: Page
+    page: Page;
     onContentChange?: (content: string) => void;
     canEdit?: boolean;
-    onFavoritesAdd: () => void,
+    onFavoritesAdd: () => void;
 }
 
 const PageHeader = (props: HeaderProps) => {
@@ -38,9 +41,9 @@ const PageHeader = (props: HeaderProps) => {
 
     const isHaveBackground = page.visual?.background !== "";
 
-    const isFavorite = userFavoritePages.find(page => page === currentPageId) != null;
-    const headerText = page.visual?.name ?? 'Новая страница';
-    const headerBackground = page.visual?.background ?? 'none';
+    const isFavorite = userFavoritePages.find((page) => page === currentPageId) != null;
+    const headerText = page.visual?.name ?? "Новая страница";
+    const headerBackground = page.visual?.background ?? "none";
 
     return (
         <StyledPageHeader>
@@ -48,27 +51,29 @@ const PageHeader = (props: HeaderProps) => {
                 <Paper
                     className={"background"}
                     style={{
-                        width: 1270,
+                        width: "100%",
                         borderRadius: "14px 14px 0 0",
                         height: 200,
                         backgroundColor: headerBackground,
                     }}>
-                    <div className={"grade-wrapper"} onMouseDown={() => {
-                        void addToFavorites({ pageId: currentPageId });
-                        if (isFavorite) {
-                            void removeFromFavorites({ pageId: currentPageId });
-                            success("Страница удаленна из избранного");
-                            onFavoritesAdd();
-                        } else {
+                    <div
+                        className={"grade-wrapper"}
+                        onMouseDown={() => {
                             void addToFavorites({ pageId: currentPageId });
-                            success("Страница добавлена в избранное");
-                            onFavoritesAdd();
-                        }
-                    }}>
-	                    <MaterialIcon
-		                    name={"MdStars"}
-		                    className={`favorite${isFavorite ? "--active" : ""}`}
-	                    />
+                            if (isFavorite) {
+                                void removeFromFavorites({ pageId: currentPageId });
+                                success("Страница удаленна из избранного");
+                                onFavoritesAdd();
+                            } else {
+                                void addToFavorites({ pageId: currentPageId });
+                                success("Страница добавлена в избранное");
+                                onFavoritesAdd();
+                            }
+                        }}>
+                        <MaterialIcon
+                            name={"MdStars"}
+                            className={`favorite${isFavorite ? "--active" : ""}`}
+                        />
                     </div>
                 </Paper>
             )}

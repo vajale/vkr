@@ -110,7 +110,7 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
                     <DndContext>
                         <div
                             style={{
-                                width: 1100,
+                                width: "100%",
                                 padding: 4,
                                 borderRadius: 7,
                                 opacity: editListOpen || addListOpen ? 0.7 : 1,

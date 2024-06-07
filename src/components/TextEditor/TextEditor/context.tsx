@@ -4,18 +4,16 @@ import { type EditorApi, useEditor } from "./useEditor";
 const TextEditorContext = React.createContext<EditorApi | undefined>(undefined);
 
 export const TextEditorProvider: React.FC<{
-    children: React.ReactNode,
-    json: string,
-    width?: string,
-    height?: string
+    children: React.ReactNode;
+    json: string;
+    width?: string;
+    height?: string;
 }> = ({ children, json, height, width }) => {
     const editorApi = useEditor(json);
 
     return (
-        <div style={{ position: 'relative', width, height, minWidth: 70, maxWidth: 1100 }}>
-            <TextEditorContext.Provider value={editorApi}>
-                {children}
-            </TextEditorContext.Provider>
+        <div style={{ position: "relative", width, height, minWidth: 70, maxWidth: "100%" }}>
+            <TextEditorContext.Provider value={editorApi}>{children}</TextEditorContext.Provider>
         </div>
     );
 };

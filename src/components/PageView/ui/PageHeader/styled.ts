@@ -1,6 +1,7 @@
 import { styled } from "@mui/material";
 
 export const StyledPageHeader = styled("div")(() => ({
+    width: "100%",
     ".background": {
         display: "flex",
         flexDirection: "row",
