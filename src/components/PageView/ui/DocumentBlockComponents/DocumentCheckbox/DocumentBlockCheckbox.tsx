@@ -55,7 +55,7 @@ const DocumentBlockCheckbox = ({ block, onContentChange, canEdit = true }: Check
             </div>
             {block.flag &&
                 <MotionDivider initial={{ scale: 0 }}
-                               animate={{ scale: 1 }}
+                               animate={{ scale: 0.95 }}
                                orientation={'horizontal'}
                                variant={'fullWidth'}
                                flexItem

@@ -7,10 +7,13 @@ import CustomTimePicker from "@/components/TimePicker/CustomTimePicker";
 import CustomRadioGroup from "@/components/RadioGroup/CustomRadioGroup";
 import { type Task } from "@/components/PageView/model/types";
 import { type DateCellItem } from "@/utils/hooks/useCalendar";
+import { selectUserId, selectUsername } from "@/store/slices/userSlice";
+import { MaterialIcon } from "@/assets/Icon";
 
 interface ModalProps {
     defaultDate: DateCellItem | null
     onTaskCreate: () => void
+    onClose: () => void
     modalOpen: boolean
 }
 
@@ -22,7 +25,10 @@ const def = {
 };
 
 const CreateTaskModal = (props: ModalProps) => {
-    const { defaultDate, modalOpen, onTaskCreate } = props;
+    const { defaultDate, modalOpen, onTaskCreate, onClose } = props;
+
+    const userId = useAppSelector(selectUserId);
+    const username = useAppSelector(selectUsername);
 
     const dispatch = useAppDispatch();
     const selectedTask = useAppSelector(selectTaskById({ id: new Date(defaultDate?.year, defaultDate?.month, defaultDate?.date) }));
@@ -32,7 +38,11 @@ const CreateTaskModal = (props: ModalProps) => {
         priority: '1',
         content: '',
         time: '',
-        date: new Date().toDateString()
+        date: new Date().toJSON(),
+        creator: {
+            id: userId,
+            username
+        }
     });
 
     useEffect(() => {
@@ -70,7 +80,11 @@ const CreateTaskModal = (props: ModalProps) => {
     return (
         <Modal open={modalOpen}>
             <StyledCreateTaskModal justifyContent={'center'} alignContent={'center'}>
-                <Typography mb={2}>Создать задачу</Typography>
+                <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+                    <Typography mb={2}>Создать задачу</Typography>
+                    <Button onClick={onClose}><MaterialIcon name={'MdClose'}/></Button>
+                </Stack>
+
                 <Stack gap={3} justifyContent={'flex-start'}>
                     <TextField value={task.content}
                                variant={'outlined'}

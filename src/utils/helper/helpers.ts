@@ -138,3 +138,7 @@ export function stringAvatar (name) {
         children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`.toUpperCase(),
     };
 }
+
+export function trimDateTime (dateTimeString: string) {
+    return dateTimeString.split('T')[0];
+}

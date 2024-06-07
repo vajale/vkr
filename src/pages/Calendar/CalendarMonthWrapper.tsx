@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { memo, useEffect, useMemo } from "react";
 import CalendarCell from "@/pages/Calendar/CalendarCell";
 import { type DateCellItem } from "@/utils/hooks/useCalendar";
 import { StyledCalendarGrid } from "@/pages/Calendar/styled";
@@ -6,17 +6,31 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { calendarActions, selectTasks } from "@/store/slices/calendarSlice";
 import CalendarCellTask from "@/pages/Calendar/CalendarCellTask";
 import { type Task } from "@/components/PageView/model/types";
+import { useGetTasksQuery } from "@/api/tasksApi/endpoints";
+import { selectUserId } from "@/store/slices/userSlice";
+import { Box, Button, Stack } from "@mui/material";
+import { trimDateTime } from "@/utils/helper/helpers";
 
 interface WrapperProps {
     cells: DateCellItem[]
     onCellClick: (date: DateCellItem) => void
 }
 
-const CalendarMonthWrapper = (props: WrapperProps) => {
+const CalendarMonthWrapper = memo((props: WrapperProps) => {
     const { cells, onCellClick } = props;
 
     const dispatch = useAppDispatch();
+
+    const userId = useAppSelector(selectUserId);
     const tasks = useAppSelector(selectTasks);
+
+    const { data, isLoading, isSuccess } = useGetTasksQuery({ userId });
+
+    useEffect(() => {
+        if (isSuccess) {
+            dispatch(calendarActions.setTasks(data));
+        }
+    }, [data]);
 
     const handleCellClick = (date: DateCellItem, task: Task | null) => {
         // if (task != null) {
@@ -28,17 +42,30 @@ const CalendarMonthWrapper = (props: WrapperProps) => {
 
     const cellsToRender = useMemo(() => cells.map((cell) => {
         const key = new Date(cell.year, cell.month, cell.date).toJSON();
-        const taskForDate = tasks.find((task) => task.date === key);
+        const dateTasks = tasks.filter((task) => trimDateTime(task.date) === trimDateTime(key));
 
-        if (taskForDate != null) {
-            const cellContent = <CalendarCellTask task={taskForDate}/>;
+        const dateTask = tasks.find((task) => task.date === key);
 
-            return <CalendarCell content={cellContent}
+        if (dateTasks.length > 1) {
+            const boxOfTasks = () => (
+                <Button sx={{ backgroundColor: "rgb(0,0,0,0.1)" }}>
+                    <Box width={140} height={70}>
+                        <Stack flexDirection={'row'}>
+                            <div></div>
+                        </Stack>
+                        Количетство задач: {dateTasks.length}
+                    </Box>
+                </Button>
+            );
+
+            return <CalendarCell content={boxOfTasks()}
                                  cell={cell}
                                  key={key}/>;
         }
 
-        return <CalendarCell onClick={(date) => { handleCellClick(date, null); }} cell={cell} key={key}/>;
+        return <CalendarCell onClick={(date) => {
+            handleCellClick(date, null);
+        }} cell={cell} key={key}/>;
     }), [cells, tasks]);
 
     return (
@@ -46,6 +73,6 @@ const CalendarMonthWrapper = (props: WrapperProps) => {
             {cellsToRender}
         </StyledCalendarGrid>
     );
-};
+});
 
 export default CalendarMonthWrapper;
