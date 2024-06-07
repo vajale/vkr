@@ -1,6 +1,6 @@
 import { Avatar, Typography } from "@mui/material";
 import React from "react";
-import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
+import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseEndpoints";
 
 interface ItemProps {
     userId: string;

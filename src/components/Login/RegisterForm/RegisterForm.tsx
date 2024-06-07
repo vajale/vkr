@@ -16,7 +16,7 @@ import { useFirebaseAuth } from "@/components/FireBase";
 import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { StyledLoginButton } from "@/components/Login/AuthForm/styled";
-import { useCreateUserMutation } from "@/api/usersApi/usersFirebaseService";
+import { useCreateUserMutation } from "@/api/usersApi/usersFirebaseEndpoints";
 import { StyledRegister } from "@/components/Login/RegisterForm/styled";
 import { selectSignStatus, userActions } from "@/store/slices/userSlice";
 import { SIGN_STATS } from "@/store/slices/userSlice/types";

@@ -4,7 +4,7 @@ import {
     useCreateNewPageMutation,
     useFetchPagesQuery,
     useRemovePageMutation,
-} from "@/api/firebasePageAPI/pagesService";
+} from "@/api/firebasePageAPI/pagesEndpoins";
 import { MaterialIcon } from "@/assets/Icon";
 import { useAppSelector } from "@/store/hooks";
 import { selectUserAuth, selectUserFavorites, selectUserPages } from "@/store/slices/userSlice";

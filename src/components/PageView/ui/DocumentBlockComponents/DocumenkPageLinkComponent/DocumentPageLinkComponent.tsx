@@ -5,8 +5,8 @@ import PageLink from "@/components/PageLink/PageLink";
 import { useAppSelector } from "@/store/hooks";
 import { selectPage, selectPageId, selectPageName } from "@/store/slices/pageSlice";
 import { MaterialIcon } from "@/assets/Icon";
-import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
-import { useFetchPageDataQuery } from "@/api/firebasePageAPI/pagesService";
+import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseEndpoints";
+import { useFetchPageDataQuery } from "@/api/firebasePageAPI/pagesEndpoins";
 
 interface PageLinkProps {
     label?: string,

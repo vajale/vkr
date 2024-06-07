@@ -15,7 +15,7 @@ interface TextBlockProps {
 
 const cursorOffset = {
     x: -50,
-    y: -65
+    y: -55
 };
 
 const EditableTextField = (props: TextBlockProps) => {
@@ -45,13 +45,9 @@ const EditableTextField = (props: TextBlockProps) => {
     };
 
     return (
-        <StyledMotionDiv
-            style={{
-                borderRadius: 7,
-                padding: 7,
-            }}>
+        <StyledMotionDiv>
             <TextEditorProvider width={width} json={title}>
-                {toolPanelOpen && <ToolPanel position={clickPosition}/>}
+                {toolPanelOpen && disableEditTools && <ToolPanel position={clickPosition}/>}
                 <TextEditor
                     placeholder={placeholder}
                     onFocus={handleFocus}

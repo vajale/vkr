@@ -5,7 +5,7 @@ import PageHeader from "../PageHeader/PageHeader";
 import {
     useUpdatePageBlocksMutation,
     useUpdatePageVisualMutation,
-} from "@/api/firebasePageAPI/pagesService";
+} from "@/api/firebasePageAPI/pagesEndpoins";
 import { StyledPageView } from "@/components/PageView/ui/PageView/styled";
 import DocumentBlocksList from "@/components/PageView/ui/PageView/DocumentBlocksList";
 import { type Page } from "../../model/types";

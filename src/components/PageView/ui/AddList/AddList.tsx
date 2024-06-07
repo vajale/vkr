@@ -2,7 +2,7 @@ import { Button, Stack } from "@mui/material";
 import { DocumentBlockType } from "../../model/types";
 import { StyledBox } from "../EditList/styled";
 import React from "react";
-import { useCreateNewPageMutation } from "@/api/firebasePageAPI/pagesService";
+import { useCreateNewPageMutation } from "@/api/firebasePageAPI/pagesEndpoins";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { pageActions, selectPage, selectPageId } from "@/store/slices/pageSlice";
 import { toast } from "react-toastify";

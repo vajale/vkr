@@ -16,8 +16,8 @@ import {
 } from "@/components/StatickBlocks/Members/PermissionSelect";
 import { type IPermissionSelect } from "@/components/StatickBlocks/Members/PermissionSelect/types";
 import { useParams } from "react-router-dom";
-import { useGetUsersWithPermissionsQuery } from "@/api/firebasePageAPI/pagesService";
-import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
+import { useGetUsersWithPermissionsQuery } from "@/api/firebasePageAPI/pagesEndpoins";
+import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseEndpoints";
 import { selectUserId } from "@/store/slices/userSlice";
 import { useGetUserProfileDataQuery } from "@/api/userProfile";
 import { useFirebaseAuth } from "@/components/FireBase";

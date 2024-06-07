@@ -29,7 +29,7 @@
 //     return hierarchy;
 // }
 
-export function buildDeepHierarchy(items) {
+export function buildDeepHierarchy (items) {
     const itemMap = new Map();
 
     // Создаем карту элементов по id
@@ -61,7 +61,7 @@ export const rawData = [
     { id: 555, name: "Child of the second element", parent: 2 },
 ];
 
-export function pack(data) {
+export function pack (data) {
     const childs = (id) =>
         data
             .filter((item) => item.parent === id)
@@ -70,4 +70,37 @@ export function pack(data) {
                 children.length ? { id, name, children } : { id, name },
             );
     return childs(0);
+}
+
+export function formatDateString (jsonDate: string): string {
+    const date = new Date(jsonDate);
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const isToday = date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear();
+
+    const isTomorrow = date.getDate() === tomorrow.getDate() &&
+        date.getMonth() === tomorrow.getMonth() &&
+        date.getFullYear() === tomorrow.getFullYear();
+
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    let dateString = '';
+
+    if (isToday) {
+        dateString = 'сегодня';
+    } else if (isTomorrow) {
+        dateString = 'завтра';
+    } else {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        dateString = `${day}-${month}-${year}`;
+    }
+
+    return `${dateString} ${hours}:${minutes}`;
 }

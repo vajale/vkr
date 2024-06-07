@@ -1,4 +1,4 @@
-import type { SimplyPage } from "@/api/firebasePageAPI/pagesService";
+import type { SimplyPage } from "@/api/firebasePageAPI/pagesEndpoins";
 import PageLink from "@/components/PageLink/PageLink";
 import React from "react";
 

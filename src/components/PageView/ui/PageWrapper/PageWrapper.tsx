@@ -1,4 +1,4 @@
-import { useFetchPageDataQuery } from "@/api/firebasePageAPI/pagesService";
+import { useFetchPageDataQuery } from "@/api/firebasePageAPI/pagesEndpoins";
 import React, { useEffect } from "react";
 import { StyledPageView, StyledPageWrapper } from "@/components/PageView/ui/PageView/styled";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";

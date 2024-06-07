@@ -7,7 +7,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { userActions } from "@/store/slices/userSlice";
 import { firebaseAuth, useFirebaseAuth } from "@/components/FireBase";
 import PagesList from "@/components/layouts/main/PagesList";
-import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseService";
+import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseEndpoints";
 
 interface LayoutProps {
     children: React.ReactNode | React.ReactElement;

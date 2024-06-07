@@ -16,16 +16,29 @@ export const rainbowColors = [
     '#2c0050' // Фиолетовый
 ];
 
- export const getBackground = (task: Task) => {
-    switch (task.priority) {
+ export const getBackground = (priority: "1" | "2" | "3" | "4") => {
+    switch (priority) {
         case '1':
             return '#7ae6ff';
         case '2':
             return '#9fff80';
         case '3':
-            return '#f7ff93';
+            return '#f7ffa9';
         case '4':
-            return '#ff7171';
+            return '#ff8e8e';
+    }
+};
+
+export const getSecondaryBackground = (priority: "1" | "2" | "3" | "4") => {
+    switch (priority) {
+        case '1':
+            return '#d0f3ff';
+        case '2':
+            return '#c6ffb4';
+        case '3':
+            return '#f9ffbe';
+        case '4':
+            return '#ffb5b5';
     }
 };
 

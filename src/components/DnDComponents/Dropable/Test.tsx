@@ -1,11 +1,11 @@
-import { DndContext, rectIntersection, useDraggable, useDroppable } from "@dnd-kit/core";
+import { DndContext, type DragEndEvent, rectIntersection, useDraggable, useDroppable } from "@dnd-kit/core";
 
 import React, { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 export interface Cards {
-    title: string;
+    content: string;
 }
 
 const KanbanCard = ({
@@ -18,7 +18,7 @@ const KanbanCard = ({
     parent: string;
 }) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-        id: title,
+ id: title,
         data: {
             title,
             index,
@@ -62,7 +62,7 @@ function KanbanLane ({ title, items }: KanbanLaneProps) {
         <div>
             <div>{title}</div>
             <div style={{ width: 200, height: 300, backgroundColor: 'white' }} ref={setNodeRef}>
-                {items.map(({ title: cardTitle }, key) => (
+                {items.map(({ content: cardTitle }, key) => (
                     <KanbanCard title={cardTitle} key={key} index={key} parent={title}/>
                 ))}
             </div>
@@ -70,7 +70,7 @@ function KanbanLane ({ title, items }: KanbanLaneProps) {
     );
 }
 
-function AddCard ({
+export function AddCard ({
                      addCard,
                  }: {
     addCard: (title: string) => void;
@@ -104,45 +104,49 @@ export default function KanbanBoard () {
     const [doneItems, setDoneItems] = useState<Cards[]>([]);
     const [inProgressItems, setInProgressItems] = useState<Cards[]>([]);
     const [uItems, setuItems] = useState<Cards[]>([]);
+
     const addNewCard = (title: string) => {
-        setuItems([...uItems, { title }]);
+        setuItems([...uItems, { content: title }]);
     };
+
+    const handleDragEnd = (e: DragEndEvent) => {
+        const container = e.over?.id;
+        const title = e.active.data.current?.content ?? "";
+        const index = e.active.data.current?.index ?? 0;
+        const parent = e.active.data.current?.parent ?? "ToDo";
+        if (container === "ToDo") {
+            setTodoItems([...todoItems, { content: title }]);
+        } else if (container === "Done") {
+            setDoneItems([...doneItems, { content: title }]);
+        } else if (container === "Unassigned") {
+            setuItems([...uItems, { content: title }]);
+        } else {
+            setInProgressItems([...inProgressItems, { content: title }]);
+        }
+        if (parent === "ToDo") {
+            setTodoItems([
+                ...todoItems.slice(0, index),
+                ...todoItems.slice(index + 1),
+            ]);
+        } else if (parent === "Done") {
+            setDoneItems([
+                ...doneItems.slice(0, index),
+                ...doneItems.slice(index + 1),
+            ]);
+        } else if (parent === "Unassigned") {
+            setuItems([...uItems.slice(0, index), ...uItems.slice(index + 1)]);
+        } else {
+            setInProgressItems([
+                ...inProgressItems.slice(0, index),
+                ...inProgressItems.slice(index + 1),
+            ]);
+        }
+    };
+
     return (
         <DndContext
             collisionDetection={rectIntersection}
-            onDragEnd={(e) => {
-                const container = e.over?.id;
-                const title = e.active.data.current?.title ?? "";
-                const index = e.active.data.current?.index ?? 0;
-                const parent = e.active.data.current?.parent ?? "ToDo";
-                if (container === "ToDo") {
-                    setTodoItems([...todoItems, { title }]);
-                } else if (container === "Done") {
-                    setDoneItems([...doneItems, { title }]);
-                } else if (container === "Unassigned") {
-                    setuItems([...uItems, { title }]);
-                } else {
-                    setInProgressItems([...inProgressItems, { title }]);
-                }
-                if (parent === "ToDo") {
-                    setTodoItems([
-                        ...todoItems.slice(0, index),
-                        ...todoItems.slice(index + 1),
-                    ]);
-                } else if (parent === "Done") {
-                    setDoneItems([
-                        ...doneItems.slice(0, index),
-                        ...doneItems.slice(index + 1),
-                    ]);
-                } else if (parent === "Unassigned") {
-                    setuItems([...uItems.slice(0, index), ...uItems.slice(index + 1)]);
-                } else {
-                    setInProgressItems([
-                        ...inProgressItems.slice(0, index),
-                        ...inProgressItems.slice(index + 1),
-                    ]);
-                }
-            }}
+            onDragEnd={handleDragEnd}
         >
             <div>
                 <AddCard addCard={addNewCard}/>

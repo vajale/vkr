@@ -6,11 +6,11 @@ import { type ICalendarSchema } from "@/store/slices/calendarSlice/types";
 import { type Task } from "@/components/PageView/model/types";
 
 const initialState: ICalendarSchema = {
-    tasks: mockTasks,
+    tasks: [],
     selectedTask: undefined
 };
 
-export const calenderSlice = createSlice({
+export const calendarTasksSlice = createSlice({
     name: "calendar",
     initialState,
     reducers: {
@@ -65,8 +65,8 @@ export const calenderSlice = createSlice({
 export const selectTaskById = (taskId: string) =>
     createSelector([selectTasks], tasks => tasks.find(task => task.id === taskId));
 
-export const { selectTasks, selectEditTask } = calenderSlice.selectors;
-export default calenderSlice.reducer;
+export const { selectTasks, selectEditTask } = calendarTasksSlice.selectors;
+export default calendarTasksSlice.reducer;
 
-export const { actions: calendarActions } = calenderSlice;
-export const { reducer: calendarReducer } = calenderSlice;
+export const { actions: calendarActions } = calendarTasksSlice;
+export const { reducer: calendarReducer } = calendarTasksSlice;

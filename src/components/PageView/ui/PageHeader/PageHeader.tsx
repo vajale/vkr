@@ -4,7 +4,7 @@ import { useAppSelector } from "@/store/hooks";
 import { selectUserAuth, selectUserFavorites } from "@/store/slices/userSlice";
 import { MaterialIcon } from "@/assets/Icon";
 import { StyledPageHeader } from "@/components/PageView/ui/PageHeader/styled";
-import { useAddToFavoritesMutation, useRemoveFavoritesMutation } from "@/api/firebasePageAPI/pagesService";
+import { useAddToFavoritesMutation, useRemoveFavoritesMutation } from "@/api/firebasePageAPI/pagesEndpoins";
 import { selectPageId } from "@/store/slices/pageSlice";
 import useToast from "@/utils/hooks/useToast";
 import { type Page } from "@/components/PageView/model/types";

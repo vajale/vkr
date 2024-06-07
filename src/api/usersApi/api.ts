@@ -1,6 +1,6 @@
-import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/dist/query/react";
+import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query";
 
-export const users = createApi({
+export const usersApi = createApi({
     reducerPath: "usersApi",
     baseQuery: fakeBaseQuery(),
     endpoints: () => ({})
