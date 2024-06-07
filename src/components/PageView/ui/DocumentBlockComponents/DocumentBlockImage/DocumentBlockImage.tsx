@@ -35,11 +35,23 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
         setDragStartY(e.clientY);
         document.addEventListener("mousemove", handleDrag);
         document.addEventListener("mouseup", stopDrag);
+        document.addEventListener("mouseup", updateBlock);
     };
 
     const stopDrag = () => {
         document.removeEventListener("mousemove", handleDrag);
         document.removeEventListener("mouseup", stopDrag);
+    };
+
+    const updateBlock = () => {
+        const newObj = {
+            ...item,
+            sizes: {
+                width,
+                height,
+            },
+        };
+        dispatch(pageActions.updateBlock(newObj));
     };
 
     const page = useAppSelector(selectPage);
@@ -57,9 +69,16 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
         fileInputElement.current?.click();
     };
 
+    const resetWidth = () => {
+        setWidth(200);
+        setHeight(200);
+    };
+
     const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const _fileName = fileInputElement.current?.value.split("\\").pop();
         const _fileValue = event?.target?.files;
+
+        resetWidth();
 
         if (_fileName && _fileValue?.length) {
             await uploadFile({ file: _fileValue[0], imgId: src, pageId: page?.id ?? "" });
@@ -71,17 +90,6 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
         setDragStartY(e.clientY);
         setDragStartX(e.clientX);
     };
-
-    useEffect(() => {
-        const newObj = {
-            ...item,
-            sizes: {
-                width,
-                height,
-            },
-        };
-        dispatch(pageActions.updateBlock(newObj));
-    }, [width, height]);
 
     const image = useMemo(() => {
         if (isLoading) {
@@ -121,7 +129,7 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
 
     return (
         <StyledDocumentBlockImage width={sizes?.width} height={sizes?.height}>
-            <div className="resizable-box" style={{ width: sizes.width, height: sizes.height }}>
+            <div className="resizable-box" style={{ width, height }}>
                 {image}
                 <div
                     className="handle right"
