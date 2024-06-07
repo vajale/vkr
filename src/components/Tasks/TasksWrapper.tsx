@@ -1,14 +1,48 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import React, { memo, useEffect, useMemo, useState } from "react";
 import { LucideIcon, MaterialIcon } from "@/assets/Icon";
-import { type DragEndEvent, DndContext, closestCenter, useSensor, MouseSensor, useSensors } from "@dnd-kit/core";
+import {
+    type DragEndEvent,
+    DndContext,
+    closestCenter,
+    useSensor,
+    MouseSensor,
+    useSensors,
+} from "@dnd-kit/core";
 import TaskColumn from "@/components/Tasks/TaskColumn";
 import { type Task } from "../PageView/model/types";
-import { AddCard } from "../DnDComponents/Dropable/Test";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { calendarActions, selectTasks } from "@/store/slices/calendarSlice";
 import { useGetTasksQuery, useUpdateAllTasksMutation } from "@/api/tasksApi/endpoints";
 import { selectUserId } from "@/store/slices/userSlice";
+
+function customCollisionDetection ({ active, droppableRects, droppableContainers }) {
+    if (!active?.rect?.current?.translated) {
+        return [];
+    }
+
+    const activeRect = active.rect.current.translated;
+    let closestId = null;
+    let minDistance = Infinity;
+
+    for (const droppableContainer of droppableContainers) {
+        const id = droppableContainer.id;
+        const rect = droppableRects.get(id);
+
+        if (rect && rect.left !== undefined && rect.top !== undefined) {
+            const distance = Math.sqrt(
+                Math.pow(activeRect.left - rect.left, 2) + Math.pow(activeRect.top - rect.top, 2)
+            );
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestId = id;
+            }
+        }
+    }
+
+    return closestId ? [{ id: closestId }] : [];
+}
 
 enum ColumnState {
     TODO = 'В очереди',
@@ -19,6 +53,8 @@ enum ColumnState {
 
 const TasksWrapper = memo(() => {
     const dispatch = useAppDispatch();
+
+    const [activeId, setActiveId] = useState(null);
 
     const userId = useAppSelector(selectUserId);
     const allTasks = useAppSelector(selectTasks);
@@ -62,6 +98,16 @@ const TasksWrapper = memo(() => {
                 dispatch(calendarActions.updateTaskPriority({ id: task.id, priority: '4' }));
                 break;
         }
+
+        setActiveId(null);
+    };
+
+    const handleDragMove = (event: DragEndEvent) => {
+        const container = event.over?.id;
+
+        if (container) {
+            setActiveId(container);
+        }
     };
 
     const [todoTask, makeTask, finishedTask, errorTask] = useMemo(() => {
@@ -83,6 +129,10 @@ const TasksWrapper = memo(() => {
         mouseSensor,
     );
 
+    const activeItem = activeId !== null ? allTasks.find(item => item.id === activeId) : null;
+
+    console.log(activeId);
+
     return (
         <Paper sx={{ width: '98%', margin: 1, height: '90%' }}>
             <Stack mt={2} mb={2} flexDirection={'row'} alignItems={'center'}>
@@ -94,14 +144,15 @@ const TasksWrapper = memo(() => {
             <Box height={'90%'} sx={{ backgroundColor: 'whitesmoke' }} margin={1} borderRadius={1} p={2}>
                 {isSuccess && <Stack flexDirection={'row'} gap={1} alignItems={'flex-start'}>
                     <DndContext
-                        collisionDetection={closestCenter}
+                        collisionDetection={customCollisionDetection}
                         onDragEnd={handleDragEnd}
+                        onDragMove={handleDragMove}
                         sensors={sensors}
                     >
-                        <TaskColumn priority={'1'} parentId={ColumnState.TODO} items={todoTask}/>
-                        <TaskColumn priority={'2'} parentId={ColumnState.IN_PROGRESS} items={makeTask}/>
-                        <TaskColumn priority={'3'} parentId={ColumnState.DONE} items={finishedTask}/>
-                        <TaskColumn priority={'4'} parentId={ColumnState.UNASSIGNED} items={errorTask}/>
+                        <TaskColumn activeId={activeId} priority={'1'} parentId={ColumnState.TODO} items={todoTask}/>
+                        <TaskColumn activeId={activeId} priority={'2'} parentId={ColumnState.IN_PROGRESS} items={makeTask}/>
+                        <TaskColumn activeId={activeId} priority={'3'} parentId={ColumnState.DONE} items={finishedTask}/>
+                        <TaskColumn activeId={activeId} priority={'4'} parentId={ColumnState.UNASSIGNED} items={errorTask}/>
                     </DndContext>
                 </Stack>}
             </Box>

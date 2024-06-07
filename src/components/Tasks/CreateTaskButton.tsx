@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { calendarActions } from "@/store/slices/calendarSlice";
 import { type Task } from "@/components/PageView/model/types";
 import { useAddTaskMutation } from "@/api/tasksApi/endpoints";
-import { selectUserId } from "@/store/slices/userSlice";
+import { selectUser, selectUserId, selectUsername } from "@/store/slices/userSlice";
 import { getSecondaryBackground } from "@/utils/mock/mockdata";
 
 interface ButtonProps {
@@ -16,6 +16,7 @@ const CreateTaskButton = (props: ButtonProps) => {
     const { id } = props;
 
     const userId = useAppSelector(selectUserId);
+    const username = useAppSelector(selectUsername);
 
     const [addTask] = useAddTaskMutation();
 
@@ -27,7 +28,11 @@ const CreateTaskButton = (props: ButtonProps) => {
             priority: id,
             content: '',
             time: '',
-            date: new Date().toJSON()
+            date: new Date().toJSON(),
+            creator: {
+                id: userId,
+                username,
+            }
         };
 
         dispatch(calendarActions.addTasks(newTask));
@@ -38,7 +43,7 @@ const CreateTaskButton = (props: ButtonProps) => {
         <Button sx={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }} onClick={handleCreateTask}>
             <Stack width={'100%'} flexDirection={'row'} alignItems={'center'} justifyContent={'flex-start'}>
                 <MaterialIcon name={'MdAdd'}/>
-                <Typography marginRight={1} variant={'small'} marginLeft={1}>Создать задачу</Typography>
+                <Typography marginRight={1} variant={'subtitle1'} marginLeft={1}>Создать задачу</Typography>
             </Stack>
         </Button>
     );

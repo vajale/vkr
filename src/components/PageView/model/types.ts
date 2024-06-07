@@ -105,4 +105,9 @@ export interface Task {
     priority: '1' | '2' | '3' | '4';
     date: string;
     time: string;
+    creator: {
+        id?: string,
+        username?: string,
+        avatar?: string
+    }
 }

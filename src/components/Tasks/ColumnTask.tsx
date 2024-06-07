@@ -13,7 +13,9 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { calendarActions } from "@/store/slices/calendarSlice";
 import { useRemoveTaskMutation, useUpdateTaskMutation } from "@/api/tasksApi/endpoints";
 import { selectAvatar, selectUserId, selectUsername } from "@/store/slices/userSlice";
-import { formatDateString } from "@/utils/helper/helpers";
+import { formatDateString, stringAvatar } from "@/utils/helper/helpers";
+import Draggable from "@/components/DnDComponents/Dropable/Draggable";
+import Dropable from "@/components/DnDComponents/Dropable/Dropable";
 
 interface TaskProps {
     task: Task,
@@ -53,13 +55,13 @@ const ColumnTask = memo(({ task, parent, index, onChange }: TaskProps) => {
             color: "none",
             height: "auto",
             display: "flex",
-            border: "none",
-            opacity: isDragging ? 0.8 : 1,
             transition,
-            marginBottom: 7
+            marginBottom: 7,
+            background: isDragging && 'rgba(0, 0, 0, 0.05)',
+            opacity: isDragging ? 0.5 : 1,
             // cursor: canEdit ? 'cursor' : 'move',
         };
-    }, [isDragging, transition]);
+    }, [isDragging, transition, transform]);
 
     const handleSwitchEdit = useCallback(() => {
         setEdit(prevState => !prevState);
@@ -73,27 +75,31 @@ const ColumnTask = memo(({ task, parent, index, onChange }: TaskProps) => {
     const taskDate = useMemo(() => formatDateString(task.date), []);
 
     return (
-        <motion.div ref={setNodeRef} {...listeners} {...attributes} style={style}>
-            <Paper sx={{ padding: 1, minWidth: 200 }}>
-                <Stack width={"100%"} flexDirection={'row'} justifyContent={'space-between'}>
-                    <Stack>
-                        <Box maxWidth={'60%'} borderRadius={1} p={0.5} ml={0.8} mt={1} sx={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>{taskDate}</Box>
-                        <EditableTextField width={'200px'} onContentChange={handleContentChange} canEdit={canEdit} title={task.content} placeholder={'...'}/>
-                        {canEdit && <MotionDivider initial={{ scale: 0 }} animate={{ scale: 0.95 }} flexItem orientation={'horizontal'}/>}
-                        <Avatar sx={{ width: 24, height: 24, ml: 0.8, mt: 1 }} alt={username[0]} src={avatar}/>
+            <motion.div ref={setNodeRef} {...listeners} {...attributes} style={style}>
+                <Paper sx={{ padding: 1, minWidth: 200, width: '100%' }}>
+                    <Stack width={"100%"} flexDirection={'row'} justifyContent={'space-between'}>
+                        <Stack>
+                            <Box maxWidth={'60%'} borderRadius={1} p={0.5} ml={0.8} mt={1}
+                                 sx={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>{taskDate}</Box>
+                            <EditableTextField width={'200px'} onContentChange={handleContentChange} canEdit={canEdit}
+                                               title={task.content} placeholder={'...'}/>
+                            {canEdit && <MotionDivider initial={{ scale: 0 }} animate={{ scale: 0.95 }} flexItem
+                                                       orientation={'horizontal'}/>}
+                            <Avatar {...stringAvatar(username)} />
+                        </Stack>
+                        <Stack>
+                            <Button onClick={handleSwitchEdit} size={'small'}
+                                    sx={{ width: 28, height: 28, minWidth: 28 }}>
+                                <MaterialIcon name={'MdEdit'}/>
+                            </Button>
+                            <Button onClick={handleRemoveTask} size={'small'}
+                                    sx={{ width: 28, height: 28, minWidth: 28 }}>
+                                <MaterialIcon name={'MdDelete'}/>
+                            </Button>
+                        </Stack>
                     </Stack>
-                    <Stack>
-                        <Button onClick={handleSwitchEdit} size={'small'} sx={{ width: 28, height: 28, minWidth: 28 }}>
-                            <MaterialIcon name={'MdEdit'}/>
-                        </Button>
-                        <Button onClick={handleRemoveTask} size={'small'} sx={{ width: 28, height: 28, minWidth: 28 }}>
-                            <MaterialIcon name={'MdDelete'}/>
-                        </Button>
-                    </Stack>
-                </Stack>
-            </Paper>
-        </motion.div>
-
+                </Paper>
+            </motion.div>
     );
 });
 
