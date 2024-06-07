@@ -43,8 +43,6 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
     };
 
     const updateBlock = () => {
-        console.log(width);
-        console.log(height);
         const newObj = {
             ...item,
             sizes: {
@@ -70,9 +68,16 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
         fileInputElement.current?.click();
     };
 
+    const resetWidth = () => {
+        setWidth(200);
+        setHeight(200);
+    };
+
     const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const _fileName = fileInputElement.current?.value.split("\\").pop();
         const _fileValue = event?.target?.files;
+
+        resetWidth();
 
         if (_fileName && _fileValue?.length) {
             await uploadFile({ file: _fileValue[0], imgId: src, pageId: page?.id ?? "" });
