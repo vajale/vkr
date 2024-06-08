@@ -6,25 +6,12 @@ export const StyledPageView = styled(Stack)(({ theme }: IExtendedThemeProps) => 
 	flexDirection: "column",
 	alignItems: "flex-start",
 	borderRadius: "14px 14px 0 0",
-	backgroundColor: 'white',
+	backgroundColor: theme?.menuBackground.third,
 	overflowY: 'auto',
 	overflowX: 'hidden',
-	maxHeight: 700,
+	maxHeight: '700px',
 	minHeight: 700,
-	maxWidth: 1270,
-	width: 1270,
-	// ".page-title": {
-	// 	// fontSize: theme?.textSize.sizeText24,
-	// },
-	// ".page-view-paper": {
-	// 	// width: 1200,
-	// 	// height: 800,
-	// 	// borderRadius: 3,
-	// 	// marginLeft: 77
-	// 	// display: "flex",
-	// 	// flexDirection: "column",
-	// 	// alignItems: "center",
-	// }
+	width: '100%',
 }));
 
 export const StyledPageWrapper = styled(Stack)(({ theme }: IExtendedThemeProps) => ({
@@ -33,6 +20,9 @@ export const StyledPageWrapper = styled(Stack)(({ theme }: IExtendedThemeProps) 
 }));
 
 export const StyledButtonsContainer = styled(Stack)(({ theme }: IExtendedThemeProps) => ({
+	display: "flex",
+	alignItems: 'center',
+	flexDirection: 'row'
 }));
 
 export const StyledButton = styled(Button)(({ theme }: IExtendedThemeProps) => ({

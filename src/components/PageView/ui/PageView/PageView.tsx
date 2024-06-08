@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 
 import PageHeader from "../PageHeader/PageHeader";
 
@@ -50,10 +50,19 @@ const PageView = (props: ViewProps) => {
         dispatch(pageActions.updateHeader({ name: content }));
     };
 
+    const handleLazyBlocksUpdate = useCallback(() => {
+        if (!isLoading) {
+            console.log(page);
+            debugger;
+            void updateDocuments({ newPage: page });
+        }
+    }, [page, isLoading]);
+
     const isHaveDocBlocks = page.documentBlocks !== undefined;
+
     const blocks = page.documentBlocks ?? [];
 
-    const canEditPage = isAuth && usersPermission[userId] !== UserPermission.READER;
+    const canEditPage = isAuth && usersPermission[userId as never] !== UserPermission.READER;
 
     return (
         <StyledPageView>
@@ -62,7 +71,7 @@ const PageView = (props: ViewProps) => {
                         canEdit={canEditPage}
                         page={page}
             />
-            {isHaveDocBlocks && <DocumentBlocksList canEdit={canEditPage} docs={blocks}/>}
+            {isHaveDocBlocks && <DocumentBlocksList onDocumentsChanges={handleLazyBlocksUpdate} canEdit={canEditPage} docs={blocks}/>}
         </StyledPageView>
     );
 };

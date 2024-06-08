@@ -15,10 +15,14 @@ export interface DocumentBlockBase {
     type: DocumentBlockType;
     content: DocumentContentType;
     textType: {
-        variant: "h1" | "h2" | "h3" | "h4" | "h5" | "subtitlePrimary" | "subtitleSecondary";
-        weight?: "strong" | "bald" | "default";
         fontColor?: string;
+        backgroundColor?: string
     } | null;
+    creator?: {
+        id?: string
+        username?: string,
+        date?: string
+    }
 }
 
 export type DocumentContentType = string;

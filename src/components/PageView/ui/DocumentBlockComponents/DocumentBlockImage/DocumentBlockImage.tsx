@@ -6,6 +6,7 @@ import { pageActions, selectPage } from "@/store/slices/pageSlice";
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { type DocumentPageImageBlock } from "@/components/PageView/model/types";
 import { MaterialIcon } from "@/assets/Icon";
+import { selectUsername } from "@/store/slices/userSlice";
 
 interface IProps {
     item: DocumentPageImageBlock;
@@ -13,6 +14,8 @@ interface IProps {
 
 const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
     const { src, sizes } = item;
+
+    const username = useAppSelector(selectUsername);
 
     const dispatch = useAppDispatch();
     const [width, setWidth] = useState(sizes.width);
@@ -51,7 +54,7 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
                 height,
             },
         };
-        dispatch(pageActions.updateBlock(newObj));
+        dispatch(pageActions.updateBlock({ block: newObj, username }));
     };
 
     const page = useAppSelector(selectPage);
@@ -108,10 +111,7 @@ const DocumentBlockImage: React.FC<IProps> = ({ item }) => {
     }, [isLoading, data]);
 
     const handleSwitchViewStyle = () => {
-        dispatch(pageActions.updateBlock({
-            ...item,
-            simpleView: !item.simpleView
-        }));
+        dispatch(pageActions.updateBlock({ block: { ...item, simpleView: !item.simpleView }, username }));
     };
 
     if (item.simpleView) {

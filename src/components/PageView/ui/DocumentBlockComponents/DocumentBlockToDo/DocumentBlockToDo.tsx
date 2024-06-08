@@ -9,11 +9,12 @@ import {
 import { Button, Checkbox, Stack, Typography } from "@mui/material";
 import { DndContext } from "@dnd-kit/core";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { pageActions } from "@/store/slices/pageSlice";
 import { MaterialIcon } from "@/assets/Icon";
 import { motion } from "framer-motion";
 import EditableTextField from "@/components/PageView/ui/EditableTextField/EditableTextField";
+import { selectUsername } from "@/store/slices/userSlice";
 
 interface TodoProps {
     block: DocumentTodoBlock;
@@ -26,6 +27,8 @@ const DocumentBlockToDo = (props: TodoProps) => {
     const { block, canEdit, onContentChange } = props;
 
     const dispatch = useAppDispatch();
+
+    const username = useAppSelector(selectUsername);
 
     const [todos, setTodos] = useState<Todo[] | []>(() => {
         if (block.todos === undefined) {
@@ -48,7 +51,7 @@ const DocumentBlockToDo = (props: TodoProps) => {
         });
 
         setTodos(newTodos);
-        dispatch(pageActions.updateBlock({ ...block, todos: newTodos }));
+        dispatch(pageActions.updateBlock({ block: { ...block, todos: newTodos }, username }));
     };
 
     const handleCreateNewTask = () => {
@@ -59,14 +62,14 @@ const DocumentBlockToDo = (props: TodoProps) => {
         }];
 
         setTodos(newTodos);
-        dispatch(pageActions.updateBlock({ ...block, todos: newTodos }));
+        dispatch(pageActions.updateBlock({ block: { ...block, todos: newTodos }, username }));
     };
 
     const handleRemoveTask = (id: string) => {
         const filterTodos = todos.filter(item => item.id !== id);
 
         setTodos(filterTodos);
-        dispatch(pageActions.updateBlock({ todos: filterTodos }));
+        dispatch(pageActions.updateBlock({ block: { todos: filterTodos }, username }));
     };
 
     const handleContentChange = (json: string) => {
@@ -74,7 +77,7 @@ const DocumentBlockToDo = (props: TodoProps) => {
             onContentChange(json);
 
             dispatch(
-                pageActions.updateBlock({ ...block, content: json })
+                pageActions.updateBlock({ block: { ...block, content: json }, username })
             );
         }
     };
@@ -91,7 +94,7 @@ const DocumentBlockToDo = (props: TodoProps) => {
 
         setTodos(newTodos);
         dispatch(
-            pageActions.updateBlock({ ...block, todos: newTodos })
+            pageActions.updateBlock({ block: { ...block, todos: newTodos }, username })
         );
     };
 
@@ -114,7 +117,6 @@ const DocumentBlockToDo = (props: TodoProps) => {
                             placeholder={'...'}
                             canEdit={canEdit}
                             title={item.title}
-                            width={'100%'}
                             onContentChange={(jsonString) => {
                                 handleTaskChange(item.id, jsonString);
                             }}/>

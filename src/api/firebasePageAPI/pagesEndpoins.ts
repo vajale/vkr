@@ -153,7 +153,7 @@ export const pagesEndpoins = firebaseApi.injectEndpoints({
 
                     await update(sp, updateData);
 
-                    console.log("Данные успешно обновлены");
+                    console.log("Данные блоков обновлены");
                     return newPage;
                 } catch (error) {
                     console.error("Ошибка при обновлении данных:", error);

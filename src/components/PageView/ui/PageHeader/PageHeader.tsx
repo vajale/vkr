@@ -48,7 +48,7 @@ const PageHeader = (props: HeaderProps) => {
                 <Paper
                     className={"background"}
                     style={{
-                        width: 1270,
+                        width: 1320,
                         borderRadius: "14px 14px 0 0",
                         height: 200,
                         backgroundColor: headerBackground,

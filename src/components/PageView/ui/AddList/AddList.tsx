@@ -1,6 +1,6 @@
-import { Button, Stack } from "@mui/material";
+import { Button, Divider, Stack, Typography } from "@mui/material";
 import { DocumentBlockType } from "../../model/types";
-import { StyledBox } from "../EditList/styled";
+import { StyledEditBox, StyledListButton } from "../EditList/styled";
 import React from "react";
 import { useCreateNewPageMutation } from "@/api/firebasePageAPI/pagesEndpoins";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -8,16 +8,24 @@ import { pageActions, selectPage, selectPageId } from "@/store/slices/pageSlice"
 import { toast } from "react-toastify";
 import info = toast.info;
 import { useFirebaseAuth } from "@/components/FireBase";
+import { useClickOutside } from "@/utils/hooks/useClickOutside";
+import { LucideIcon } from "@/assets/Icon";
+import { AnimatePresence } from "framer-motion";
+import { selectUser, selectUsername } from "@/store/slices/userSlice";
 
 interface ListProps {
-    onAddBlock?: (type: DocumentBlockType) => void;
+    onAddBlock: () => void;
+    onOutsideClick: () => void
 }
 
-const AddList = ({ onAddBlock }: ListProps) => {
+const AddList = ({ onAddBlock, onOutsideClick }: ListProps) => {
     const dispatch = useAppDispatch();
 
+    const username = useAppSelector(selectUsername);
     const pageId = useAppSelector(selectPageId);
     const page = useAppSelector(selectPage);
+
+    const ref = useClickOutside(onOutsideClick);
 
     const { refetchUserData } = useFirebaseAuth();
 
@@ -28,16 +36,15 @@ const AddList = ({ onAddBlock }: ListProps) => {
         //
         // if (newType === DocumentBlockType.IMAGE || newType === DocumentBlockType.QUOTE || DocumentBlockType.LINK) return;
 
-        dispatch(pageActions.addNewBlock(newType));
-        console.log(newType);
-        onAddBlock(newType);
+        dispatch(pageActions.addNewBlock({ username, type: newType }));
+        onAddBlock();
     };
 
     const handleCreateTodo = async () => {
-        dispatch(pageActions.addNewBlock(DocumentBlockType.TODO));
+        dispatch(pageActions.addNewBlock({ type: DocumentBlockType.TODO, username }));
 
         if (onAddBlock != null) {
-            onAddBlock(DocumentBlockType.TODO);
+            onAddBlock();
         }
     };
 
@@ -48,40 +55,65 @@ const AddList = ({ onAddBlock }: ListProps) => {
 
             const childLink = newPageData.data.id;
 
-            dispatch(pageActions.addNewPageLinkBlock({ link: childLink }));
+            dispatch(pageActions.addNewPageLinkBlock({ link: childLink, username }));
             dispatch(pageActions.updatePage({ ...page, child: childLink }));
             refetchUserData();
         });
 
         if (onAddBlock == null) return;
-        onAddBlock(DocumentBlockType.LINK);
+        onAddBlock();
     };
 
     return (
-        <StyledBox width={140} position={"absolute"}>
-            <Stack>
-                <Button
-                    onClick={() => {
+        <AnimatePresence>
+            <StyledEditBox animate={{ scale: 1 }} initial={{ scale: 0 }} ref={ref}>
+                <Stack>
+                    <Typography p={1}>Создать...</Typography>
+                    <StyledListButton onClick={() => {
                         handleButtonAdd(DocumentBlockType.TEXT);
                     }}>
-                    Текстовый блок
-                </Button>
-                <Button
-                    onClick={() => {
-                        handleButtonAdd(DocumentBlockType.CHECKBOX);
-                    }}>
-                    Сделать чекбокс
-                </Button>
-                <Button onClick={handleCreateTodo}>Сделать TO-DO</Button>
-                <Button onClick={handleCreatePage}>Создать ссылку на страницу</Button>
-                <Button
-                    onClick={() => {
+                        <Typography>
+
+                            Текст
+                        </Typography>
+                        <LucideIcon name={'LuListTree'}/>
+                    </StyledListButton>
+                    <StyledListButton fullWidth
+                                      onClick={() => {
+                                          handleButtonAdd(DocumentBlockType.CHECKBOX);
+                                      }}>
+                        <Typography>
+                            Чекбокс
+                        </Typography>
+                        <LucideIcon name={'LuCheck'}/>
+                    </StyledListButton>
+
+                    <StyledListButton fullWidth onClick={handleCreateTodo}>
+                        <Typography>
+
+                            TO-DO
+                        </Typography>
+                        <LucideIcon name={'LuList'}/>
+                    </StyledListButton>
+
+                    <StyledListButton size={'small'} fullWidth onClick={handleCreatePage}>
+                        <Typography>
+                            Страницу
+                        </Typography>
+                        <LucideIcon name={'LuStickyNote'}/>
+                    </StyledListButton>
+                    <StyledListButton fullWidth onClick={() => {
                         handleButtonAdd(DocumentBlockType.IMAGE);
                     }}>
-                    Добавить изображение
-                </Button>
-            </Stack>
-        </StyledBox>
+                        <Typography>
+
+                            Изображение
+                        </Typography>
+                        <LucideIcon name={'LuImage'}/>
+                    </StyledListButton>
+                </Stack>
+            </StyledEditBox>
+        </AnimatePresence>
     );
 };
 

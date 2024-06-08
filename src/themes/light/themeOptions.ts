@@ -24,6 +24,11 @@ const themeOptions: IExtendedTheme = {
             secondary: "#d7d7d7"
         },
     },
+    typography: {
+        button: {
+            textTransform: 'none'
+        }
+    }
 };
 
 export default themeOptions;
