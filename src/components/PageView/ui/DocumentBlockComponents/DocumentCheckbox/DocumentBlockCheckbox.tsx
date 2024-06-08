@@ -50,22 +50,25 @@ const DocumentBlockCheckbox = ({ block, onContentChange, canEdit = true }: Check
         dispatch(pageActions.updateBlock({ block: { ...block, flag: !block.flag }, username }));
     };
 
-    return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: 'center', gap: 1 }}>
-            <div style={{ display: "flex", flexDirection: "row", alignItems: 'center' }}>
-                <Checkbox onChange={handleCheckboxChange} checked={block.flag}/>
-                <EditableTextField title={block.content} canEdit={canEdit} onContentChange={handleContentChange}/>
-            </div>
-            {block.flag &&
-                <MotionDivider initial={{ scale: 0 }}
-                               animate={{ scale: 0.95 }}
-                               orientation={'horizontal'}
-                               variant={'fullWidth'}
-                               flexItem
-                />
-            }
-        </div>
+    const backgroundColor = block.textType?.backgroundColor !== undefined ? block.textType?.backgroundColor : 'none';
 
+    return (
+        <div style={{ backgroundColor, borderRadius: '7px' }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: 'center', gap: 1 }}>
+                <div style={{ display: "flex", flexDirection: "row", alignItems: 'center' }}>
+                    <Checkbox onChange={handleCheckboxChange} checked={block.flag}/>
+                    <EditableTextField title={block.content} canEdit={canEdit} onContentChange={handleContentChange}/>
+                </div>
+                {block.flag &&
+                    <MotionDivider initial={{ scale: 0 }}
+                                   animate={{ scale: 0.95 }}
+                                   orientation={'horizontal'}
+                                   variant={'fullWidth'}
+                                   flexItem
+                    />
+                }
+            </div>
+        </div>
     );
 };
 

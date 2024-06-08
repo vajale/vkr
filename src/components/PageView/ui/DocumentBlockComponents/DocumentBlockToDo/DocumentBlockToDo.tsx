@@ -135,8 +135,10 @@ const DocumentBlockToDo = (props: TodoProps) => {
         });
     }, [todos]);
 
+    const backgroundColor = block.textType?.backgroundColor !== undefined ? block.textType?.backgroundColor : 'none';
+
     return (
-        <div>
+        <div style={{ backgroundColor, borderRadius: '7px' }}>
             <Stack flexDirection={'row'}>
                 <EditableTextField
                     placeholder={'Напишите что-нибудь...'}

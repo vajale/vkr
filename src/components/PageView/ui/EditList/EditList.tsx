@@ -63,7 +63,7 @@ const EditList = ({ block, onEdit, onOutsideClick }: EditListProps) => {
                         <LucideIcon name={'LuBookDown'}/>
                     </StyledListButton>
                 );
-            case DocumentBlockType.TEXT:
+            default:
                 return (
                     <div style={{ position: 'relative' }}>
                         {/* <StyledListButton fullWidth size={'small'} onClick={handleSwitchViewStyle}> */}
@@ -75,7 +75,6 @@ const EditList = ({ block, onEdit, onOutsideClick }: EditListProps) => {
                             <MaterialIcon name={'MdEdit'}/>
                         </StyledListButton>
                     </div>
-
                 );
         }
     };

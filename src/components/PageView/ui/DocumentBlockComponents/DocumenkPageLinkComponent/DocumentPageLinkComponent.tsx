@@ -27,15 +27,18 @@ export const DocumentPageLinkComponent = (props: PageLinkProps) => {
     }
 
     const pageName = data?.visual?.name ?? block.id;
+    const backgroundColor = block.textType?.backgroundColor !== undefined ? block.textType?.backgroundColor : 'none';
 
     return (
-        <Stack flexDirection={'row'} alignItems={'center'}>
-            <MaterialIcon name={'MdDescription'}/>
-            {isLoading
-                ? <Skeleton height={24} width={90}/>
-                : <PageLink href={block.src}>
-                    <Typography mr={1}>{pageName}</Typography>
-                </PageLink>}
-        </Stack>
+        <div style={{ backgroundColor, borderRadius: '7px' }}>
+            <Stack flexDirection={'row'} alignItems={'center'}>
+                <MaterialIcon name={'MdDescription'}/>
+                {isLoading
+                    ? <Skeleton height={24} width={90}/>
+                    : <PageLink href={block.src}>
+                        <Typography mr={1}>{pageName}</Typography>
+                    </PageLink>}
+            </Stack>
+        </div>
     );
 };
