@@ -82,17 +82,6 @@ const DocumentBlocksList = (props: BlocksProps) => {
         },
     });
 
-    const handleEmptySpaceClick = async () => {
-        // if (docs[docs.length - 1].content !== '') {
-        //     dispatch(pageActions.addNewBlock(DocumentBlockType.TEXT));
-        //     if (onDocumentsChanges != null) {
-        //         onDocumentsChanges();
-        //     }
-        // };
-    };
-
-    console.log(blocks);
-
     return (
         <div style={{ padding: 7, width: "100%" }}>
             <DndContext
@@ -101,27 +90,19 @@ const DocumentBlocksList = (props: BlocksProps) => {
                 onDragEnd={handleDragEnd}>
                 <SortableContext items={blocks} strategy={verticalListSortingStrategy}>
                     {blocks.map((item) => {
-                        const baseProps = {
-                            ignoreButtonsHover: !canEdit,
-                            // onAdd: handleAddDocuments,
-                        };
-
                         const handleHotKeyClick = () => {};
 
-                        const handleDataUpdate = (data: string) => {
-                            // dispatch(
-                            //     pageActions.updateBlocks({
-                            //         ...item,
-                            //         content: data
-                            //     })
-                            // );
-
+                        const handleDataUpdate = () => {
                             if (onDocumentsChanges != null) {
                                 onDocumentsChanges();
                             }
                         };
-
                         const canEditDoc = canEdit;
+
+                        const baseProps = {
+                            ignoreButtonsHover: !canEdit,
+                            onEdit: handleDataUpdate,
+                        };
 
                         switch (item.type) {
                             case DocumentBlockType.CODE:
@@ -211,7 +192,7 @@ const DocumentBlocksList = (props: BlocksProps) => {
                                 break;
                         }
                     })}
-                    <EmptyDocumentBlock onClick={handleEmptySpaceClick} />
+                    <EmptyDocumentBlock onClick={onDocumentsChanges} />
                 </SortableContext>
             </DndContext>
         </div>

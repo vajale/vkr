@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { type SimplyPage, useCreateNewPageMutation, useRemovePageMutation } from "@/api/firebasePageAPI/pagesService";
+import { type SimplyPage, useCreateNewPageMutation, useRemovePageMutation } from "@/api/firebasePageAPI/pagesEndpoins";
 import PageLink from "@/components/PageLink/PageLink";
 import useToast from "@/utils/hooks/useToast";
 import { useNavigate } from "react-router-dom";

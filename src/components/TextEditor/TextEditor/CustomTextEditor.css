@@ -1,0 +1,9 @@
+.public-DraftEditorPlaceholder-root {
+    position: absolute;
+    color: #aaa;
+    pointer-events: none;
+}
+
+.public-DraftEditorPlaceholder-hasFocus {
+    color: #ccc;
+}

@@ -10,7 +10,7 @@ import {
     useFetchPageDataQuery,
     useLazyFetchPageDataQuery,
     useUpdateUserPermissionMutation,
-} from "@/api/firebasePageAPI/pagesService";
+} from "@/api/firebasePageAPI/pagesEndpoins";
 import { UserPermission } from "@/components/StatickBlocks/Members/PermissionSelect";
 import { Stack } from "@mui/material";
 

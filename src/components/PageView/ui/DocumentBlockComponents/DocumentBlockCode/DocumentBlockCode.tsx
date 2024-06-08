@@ -6,7 +6,8 @@ import {
 import TextEditor, { TextEditorProvider } from "@/components/TextEditor/TextEditor";
 import ToolPanel from "@/components/TextEditor/ToolPanel";
 import { pageActions } from "@/store/slices/pageSlice";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectUsername } from "@/store/slices/userSlice";
 
 const codeStyle = {
     background: "#ececec",
@@ -32,12 +33,14 @@ interface CodeBlockProps {
 const DocumentBlockCode = ({ block, onContentChange, canEdit = true }: CodeBlockProps) => {
     const dispatch = useAppDispatch();
 
+    const username = useAppSelector(selectUsername);
+
     const handleTextChange = (json: string) => {
         if (onContentChange) {
             onContentChange(json);
 
             dispatch(
-                pageActions.updateBlock({ ...block, content: json })
+                pageActions.updateBlock({ block: { ...block, content: json }, username })
             );
         }
     };

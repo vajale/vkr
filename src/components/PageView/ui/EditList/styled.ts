@@ -1,11 +1,15 @@
-import { Box, Stack, styled } from "@mui/material";
+import { Box, Button, Stack, styled } from "@mui/material";
 import { type IExtendedThemeProps } from "@/themes/types";
+import { MotionBox } from "@/components/framer/Box";
 
-export const StyledBox = styled(Box)((theme: IExtendedThemeProps) => ({
-   backgroundColor: theme.theme?.menuBackground.secondary,
-   padding: '14px',
+export const StyledEditBox = styled(MotionBox)((theme: IExtendedThemeProps) => ({
+   backgroundColor: theme.theme?.menuBackground.primary,
    borderRadius: '7px',
-   zIndex: 999
+   zIndex: 100,
+   position: 'absolute',
+   padding: 7,
+   overflowX: 'none',
+   overflowY: 'auto',
 }));
 
 export const StyledList = styled(Stack)((theme: IExtendedThemeProps) => ({
@@ -13,8 +17,9 @@ export const StyledList = styled(Stack)((theme: IExtendedThemeProps) => ({
    gap: 3
 }));
 
-export const StyledListButton = styled("button")(() => ({
+export const StyledListButton = styled(Button)(() => ({
    border: "none",
-   padding: 7,
-   hover: "opacity: 0.6",
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'space-between',
 }));

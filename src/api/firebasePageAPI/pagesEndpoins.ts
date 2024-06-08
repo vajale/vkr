@@ -52,7 +52,7 @@ interface PermissionsResult {
 //
 // console.log(userList);
 
-export const pagesService = firebaseApi.injectEndpoints({
+export const pagesEndpoins = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
         fetchPageData: builder.query<Page, { pageId: string }>({
             async queryFn ({ pageId }) {
@@ -153,7 +153,7 @@ export const pagesService = firebaseApi.injectEndpoints({
 
                     await update(sp, updateData);
 
-                    console.log("Данные успешно обновлены");
+                    console.log("Данные блоков обновлены");
                     return newPage;
                 } catch (error) {
                     console.error("Ошибка при обновлении данных:", error);
@@ -427,4 +427,4 @@ export const {
     useUpdateUserPermissionMutation,
     useAddToFavoritesMutation,
     useRemoveFavoritesMutation
-} = pagesService;
+} = pagesEndpoins;

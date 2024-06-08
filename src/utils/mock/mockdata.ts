@@ -16,30 +16,53 @@ export const rainbowColors = [
     '#2c0050' // Фиолетовый
 ];
 
- export const getBackground = (task: Task) => {
-    switch (task.priority) {
+export const namedRainbowColors: Record<string, string> = {
+    Красный: "rgba(253,159,154,0.5)", // Мягкий красный
+    Оранжевый: "rgba(255,214,152,0.54)", // Мягкий оранжевый
+    Желтый: "rgba(248,248,170,0.52)", // Мягкий желтый
+    Зеленый: "rgba(162,236,162,0.54)", // Мягкий зеленый
+    Голубой: "rgba(174,198,207,0.53)", // Мягкий голубой
+    Синий: "rgba(119,158,203,0.58)", // Мягкий синий
+    Фиолетовый: "rgba(205,165,218,0.58)", // Мягкий фиолетовый
+    Розовый: "rgba(255,182,193,0.62)", // Мягкий розовый
+    Пурпурный: "rgba(230,230,250,0.55)", // Мягкий пурпурный
+    Бирюзовый: "rgba(143,211,206,0.55)", // Мягкий бирюзовый
+    Коралловый: "rgba(231,159,137,0.55)", // Мягкий коралловый
+    Лавандовый: "rgba(230,230,250,0.55)", // Мягкий лавандовый
+    Персиковый: "rgba(255,218,185,0.55)", // Мягкий персиковый
+    Оливковый: "rgba(213,209,156,0.56)"
+};
+
+ export const getBackground = (priority: "1" | "2" | "3" | "4") => {
+    switch (priority) {
         case '1':
             return '#7ae6ff';
         case '2':
             return '#9fff80';
         case '3':
-            return '#f7ff93';
+            return '#f7ffa9';
         case '4':
-            return '#ff7171';
+            return '#ff8e8e';
+    }
+};
+
+export const getSecondaryBackground = (priority: "1" | "2" | "3" | "4") => {
+    switch (priority) {
+        case '1':
+            return '#d0f3ff';
+        case '2':
+            return '#c6ffb4';
+        case '3':
+            return '#f9ffbe';
+        case '4':
+            return '#ffb5b5';
     }
 };
 
 export const mocktasks: Task[] = [
-    {
-        id: '1',
-        content: "leee324345leee324345leee32",
-        priority: '1',
-        time: '00:00:00',
-        date: ''
-    },
-    { id: '2', content: "leee574574574574573", priority: '2', time: '00:00:00', date: '' },
-    { id: '3', content: "leee45", priority: '3', time: '00:00:00', date: '' },
-    { id: '4', content: "leee124587-78-76-678-678-671", priority: '4', time: '00:00:00', date: '' },
+    { id: '2', content: '', priority: '2', time: '00:00:00', date: '' },
+    { id: '3', content: '', priority: '3', time: '00:00:00', date: '' },
+    { id: '4', content: '', priority: '4', time: '00:00:00', date: '' },
 ];
 
 export const mocktasks2: Task[] = [
@@ -50,9 +73,6 @@ export const mocktasks2: Task[] = [
         time: '00:00:00',
         date: ''
     },
-    { id: '12', content: "leee574574574574573", priority: '2', time: '00:00:00', date: '' },
-    { id: '13', content: "leee45", priority: '3', time: '00:00:00', date: '' },
-    { id: '14', content: "leee124587-78-76-678-678-671", priority: '4', time: '00:00:00', date: '' },
 ];
 
 export const mocktasks3: Task[] = [
@@ -63,9 +83,7 @@ export const mocktasks3: Task[] = [
         time: '00:00:00',
         date: ''
     },
-    { id: '22', content: "leee574574574574573", priority: '2', time: '00:00:00', date: '' },
-    { id: '23', content: "leee45", priority: '1', time: '00:00:00', date: '' },
-    { id: '24', content: "leee124587-78-76-678-678-671", priority: '4', time: '00:00:00', date: '' },
+
 ];
 export const mocktasks4: Task[] = [
     {
@@ -75,22 +93,21 @@ export const mocktasks4: Task[] = [
         time: '00:00:00',
         date: ''
     },
-    { id: '32', content: "leee574574574574573", priority: '3', time: '00:00:00', date: '' },
-    { id: '33', content: "leee45", priority: '4', time: '00:00:00', date: '' },
-    { id: '34', content: "leee124587-78-76-678-678-671", priority: '2', time: '00:00:00', date: '' },
 ];
+
+export const mockTasks = [...mocktasks, ...mocktasks2, ...mocktasks3, ...mocktasks4];
 
 export const mockDocs1: DocumentBlock[] = [
     {
-        id: "1",
+        id: "143643643634623613612",
         type: DocumentBlockType.TEXT,
         content: "BIDLO",
         textType: {
             variant: 'subtitle1'
-        }
+        },
     },
     {
-        id: "3",
+        id: "3125125125152",
         type: DocumentBlockType.LINK,
         content: "To do",
         textType: {
@@ -109,7 +126,7 @@ export const mockDocs2: DocumentBlock[] = [
         }
     },
     {
-        id: "65iuj5jrs",
+        id: "125125125125",
         type: DocumentBlockType.TEXT,
         content: "52125512",
         textType: {
@@ -117,7 +134,7 @@ export const mockDocs2: DocumentBlock[] = [
         }
     },
     {
-        id: "ewrewr",
+        id: "124124",
         type: DocumentBlockType.CODE,
         content: "xcbxcbxcb",
         textType: {

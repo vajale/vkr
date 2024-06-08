@@ -21,10 +21,10 @@ export enum BlockType {
 }
 
 export enum InlineStyle {
-  BOLD = "B",
-  ITALIC = "I",
-  UNDERLINE = "U",
-  ACCENT = "A",
+  BOLD = "BOLD",
+  ITALIC = "ITALIC",
+  UNDERLINE = "UNDERLINE",
+  ACCENT = "ACCENT",
 }
 
 export const BLOCK_LABELS = {

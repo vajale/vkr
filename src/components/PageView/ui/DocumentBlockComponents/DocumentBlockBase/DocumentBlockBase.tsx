@@ -8,26 +8,28 @@ import { CSS } from "@dnd-kit/utilities";
 import { useAppDispatch } from "@/store/hooks";
 import { pageActions } from "@/store/slices/pageSlice";
 import { type DocumentBlock, type DocumentBlockType } from "../../../model/types";
-import { MaterialIcon } from "@/assets/Icon";
+import { LucideIcon, MaterialIcon } from "@/assets/Icon";
 import { motion } from "framer-motion";
 import AddList from "@/components/PageView/ui/AddList/AddList";
 import EditList from "@/components/PageView/ui/EditList/EditList";
 import { useSortable } from "@dnd-kit/sortable";
 import { StyledButton, StyledButtonsContainer } from "@/components/PageView/ui/PageView/styled";
+import { useClickOutside } from "@/utils/hooks/useClickOutside";
 
 interface DocumentBlockBaseProps {
     item: DocumentBlock;
     ignoreButtonsHover?: boolean;
     isAddMenuOpen?: boolean;
-    onMove?: (id: string) => void;
-    onAdd?: (type: DocumentBlockType) => void;
+    onMove?: () => void;
+    onAdd?: () => void;
+    onEdit?: () => void;
     children: React.ReactNode;
     onTypeChange?: (type: DocumentBlockType, id: string) => void;
     canEdit?: boolean;
 }
 
 const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
-    const { children, onAdd, item, ignoreButtonsHover = false, canEdit } = props;
+    const { children, item, canEdit, onEdit } = props;
 
     const [addListOpen, setAddListOpen] = React.useState(false);
     const [editListOpen, setEditListOpen] = React.useState(false);
@@ -35,7 +37,6 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
     const { setNodeRef, listeners, attributes, transform, active } = useSortable({ id: item.id });
 
     const hoverRef = useRef<HTMLDivElement>(null);
-    const [isHover] = useMouseHover(hoverRef);
 
     const style = {
         transform: CSS.Translate.toString(transform),
@@ -46,43 +47,36 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
         opacity: active?.id === item.id ? 0.7 : 1,
     };
 
-    // const handleTypeEdit = (type: DocumentBlockType) => {
-    //     dispatch(pageActions.updateDocumentType({ id: item.id, type }));
-    // };
-
     const handleAddBlock = (type: DocumentBlockType) => {
-        if (onAdd != null) {
-            onAdd(type);
+        if (onEdit != null) {
+            onEdit();
         }
 
         setAddListOpen(false);
         setEditListOpen(false);
     };
 
-    // const handleEditClick = () => {
-    //     setAddListOpen(false);
-    //     setEditListOpen(false);
-    //     dispatch(pageActions.setEditDocumentId(''));
-    // };
-
-    const showButtons = canEdit && (isHover || addListOpen || editListOpen);
+    const showButtons = canEdit && (addListOpen || editListOpen);
 
     const handleCloseLists = () => {
         setAddListOpen(false);
         setEditListOpen(false);
+
+        if (onEdit != null) {
+            onEdit();
+        }
     };
 
     return (
         <motion.div ref={setNodeRef} style={style} id={item.id}>
             <Stack flexDirection={"row"} ref={hoverRef}>
-                <Stack position={"relative"}>
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        style={{ width: 60 }}>
-                        <StyledButtonsContainer flexDirection={"row"}>
+                <Stack position={"relative"} flexDirection={'row'} alignItems={'center'}>
+                    <motion.div style={{ width: 60, alignItems: 'center', display: 'flex', display: 'relative' }}>
+                        <StyledButtonsContainer>
                             <StyledButton
                                 onClick={() => {
+                                    if (addListOpen) return null;
+
                                     setAddListOpen((prevState) => !prevState);
                                     setEditListOpen(false);
                                     // dispatch(pageActions.setEditDocumentId(item.id));
@@ -92,43 +86,29 @@ const DocumentBlockBase = memo((props: DocumentBlockBaseProps) => {
                             <div id={item.id} {...listeners} {...attributes}>
                                 <StyledButton
                                     onClick={() => {
+                                        if (editListOpen) return null;
+
                                         setEditListOpen((prevState) => !prevState);
                                         setAddListOpen(false);
                                         // dispatch(pageActions.setEditDocumentId(item.id));
                                     }}>
-                                    {/* <MaterialIcon name={"MdGroup"}/> */}|
+                                    <LucideIcon name={'LuGripVertical'}/>
                                 </StyledButton>
                             </div>
                         </StyledButtonsContainer>
-                        {addListOpen && (
-                            <AddList onEdit={handleCloseLists} onAddBlock={handleAddBlock} />
-                        )}
-                        {editListOpen && <EditList onEdit={handleCloseLists} block={item} />}
+                        {addListOpen && <AddList onEdit={handleCloseLists}
+                                                 onAddBlock={handleAddBlock} onOutsideClick={handleCloseLists} />}
+                        {editListOpen && <EditList onEdit={handleCloseLists}
+                                                   block={item} onOutsideClick={handleCloseLists}/>}
                     </motion.div>
                 </Stack>
                 {
                     <DndContext>
-                        <div
-                            style={{
-                                width: "100%",
-                                padding: 4,
-                                borderRadius: 7,
-                                opacity: editListOpen || addListOpen ? 0.7 : 1,
-                            }}>
+                        <div style={{ padding: 4, borderRadius: 7, opacity: editListOpen || addListOpen ? 0.7 : 1 }}>
                             {children}
                         </div>
                     </DndContext>
                 }
-                <div id={item.id} {...listeners} {...attributes}>
-                    <StyledButton
-                        onClick={() => {
-                            setEditListOpen((prevState) => !prevState);
-                            setAddListOpen(false);
-                            // dispatch(pageActions.setEditDocumentId(item.id));
-                        }}>
-                        {/* <MaterialIcon name={"MdGroup"}/> */}|
-                    </StyledButton>
-                </div>
             </Stack>
         </motion.div>
     );

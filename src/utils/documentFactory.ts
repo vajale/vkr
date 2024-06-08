@@ -7,8 +7,11 @@ import {
     type DocumentTextBlock,
     type DocumentTodoBlock,
 } from "@/components/PageView/model/types";
+import { User, type UserFirebase } from "@/store/slices/userSlice/types";
+import { useAppSelector } from "@/store/hooks";
+import { selectUser } from "@/store/slices/userSlice";
 
-export const getPageLinkWithParent = (link: string) => {
+export const getPageLinkWithParent = (link: string, username: string) => {
     const id = new Date().toJSON();
 
     const newBlock: DocumentPageLinkBlock = {
@@ -19,12 +22,16 @@ export const getPageLinkWithParent = (link: string) => {
         textType: {
             variant: "subtitle1",
         },
+        creator: {
+            username,
+            date: id
+        }
     };
 
     return newBlock;
 };
 
-export const documentObjectHelper = (type: DocumentBlockType) => {
+export const documentFactory = (type: DocumentBlockType, username: string) => {
     const id = new Date().toJSON();
     const defaultContent = "";
 
@@ -36,6 +43,10 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
             textType: {
                 variant: "subtitle1",
             },
+            creator: {
+                username,
+                date: id
+            }
         };
 
         return newBlock;
@@ -49,6 +60,10 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
             textType: {
                 variant: "subtitle1",
             },
+            creator: {
+                username,
+                date: id
+            }
         };
 
         return newBlock;
@@ -63,6 +78,10 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
             textType: {
                 variant: "subtitle1",
             },
+            creator: {
+                username,
+                date: id
+            }
         };
 
         return newBlock;
@@ -78,9 +97,11 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
                 height: "200",
             },
             alt: "img_block",
-            textType: {
-                variant: "subtitle1",
-            },
+            simpleView: false,
+            creator: {
+                username,
+                date: id
+            }
         };
 
         return newBlock;
@@ -94,6 +115,10 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
             textType: {
                 variant: "subtitle1",
             },
+            creator: {
+                username,
+                date: id
+            }
         };
 
         return newBlock;
@@ -114,6 +139,10 @@ export const documentObjectHelper = (type: DocumentBlockType) => {
                     title: "Новая задача",
                 },
             ],
+            creator: {
+                username,
+                date: id
+            }
         };
 
         return newBlock;

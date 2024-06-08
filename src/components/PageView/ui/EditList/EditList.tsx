@@ -1,22 +1,31 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 
 import { DocumentBlockType, type DocumentBlock } from "../../model/types";
-import { Button, FormControl, MenuItem, Popover, Select, Stack } from "@mui/material";
-import { useAppDispatch } from "@/store/hooks";
-import { pageActions } from "@/store/slices/pageSlice";
-import { motion } from "framer-motion";
-import { MaterialIcon } from "@/assets/Icon";
-import { StyledBox, StyledList } from "@/components/PageView/ui/EditList/styled";
-import EditTextSelect from "@/components/PageView/ui/EditList/EditTextSelect";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { pageActions, selectPage } from "@/store/slices/pageSlice";
+import { LucideIcon, MaterialIcon } from "@/assets/Icon";
+import { StyledEditBox, StyledList, StyledListButton } from "@/components/PageView/ui/EditList/styled";
+import { useClickOutside } from "@/utils/hooks/useClickOutside";
+import { Divider, Stack, Typography } from "@mui/material";
+import { formatDateString } from "@/utils/helper/helpers";
+import { selectUsername } from "@/store/slices/userSlice";
 import EditColorSelect from "@/components/PageView/ui/EditList/EditColorSelect";
 
 interface EditListProps {
     block: DocumentBlock,
-    onEdit: () => void
+    onEdit: () => void,
+    onOutsideClick: () => void
 }
 
-const EditList = ({ block, onEdit }: EditListProps) => {
+const EditList = ({ block, onEdit, onOutsideClick }: EditListProps) => {
     const dispatch = useAppDispatch();
+
+    const [backgroundSelectOpen, setBackgroundSelectOpen] = useState<boolean>();
+
+    const ref = useClickOutside(onOutsideClick);
+
+    const username = useAppSelector(selectUsername);
+    const page = useAppSelector(selectPage);
 
     const handleDeleteButtonClick = () => {
         dispatch(pageActions.removeBlock({ id: block.id }));
@@ -30,32 +39,81 @@ const EditList = ({ block, onEdit }: EditListProps) => {
         }));
         onEdit();
     };
+    const handleOpenBackgroundSwitchColor = () => {
+        setBackgroundSelectOpen(prevState => !prevState);
+    };
+
+    const handleSwitchViewStyle = () => {
+        dispatch(pageActions.updateBlock({
+            block: {
+                ...block,
+                simpleView: !block.simpleView
+            },
+            username
+        }));
+        onEdit();
+    };
+
+    const getBlockOptions = () => {
+        switch (block.type) {
+            case DocumentBlockType.IMAGE:
+                return (
+                    <StyledListButton fullWidth size={'small'} onClick={handleSwitchViewStyle}>
+                        Изменить стиль
+                        <LucideIcon name={'LuBookDown'}/>
+                    </StyledListButton>
+                );
+            default:
+                return (
+                    <div style={{ position: 'relative' }}>
+                        {/* <StyledListButton fullWidth size={'small'} onClick={handleSwitchViewStyle}> */}
+                        {/*    <Typography>Изменить цвет</Typography> */}
+                        {/*    <LucideIcon name={'LuPalette'}/> */}
+                        {/* </StyledListButton> */}
+                        <StyledListButton fullWidth size={'small'} onClick={handleOpenBackgroundSwitchColor}>
+                            <Typography>Изменить задний фон</Typography>
+                            <MaterialIcon name={'MdEdit'}/>
+                        </StyledListButton>
+                    </div>
+                );
+        }
+    };
 
     return (
-        <StyledBox position={'absolute'}>
-            <StyledList alignContent={'flex-start'}>
-                <motion.div>
-                    <Button fullWidth sx={{ maxHeight: 40 }}
-                            onClick={handleDeleteButtonClick}>
-                        <MaterialIcon name={"MdDeleteOutline"}/>
+        <div style={{ position: 'relative' }}>
+            <StyledEditBox width={240} animate={{ scale: 1 }} initial={{ scale: 0 }} ref={ref}>
+                <Typography p={1}>Редактировать...</Typography>
+                <StyledListButton fullWidth size={'small'}
+                                  onClick={handleDeleteButtonClick}>
+                    <Typography>
                         Удалить
-                    </Button>
-                </motion.div>
-                <motion.div>
-                    <Button fullWidth sx={{ maxHeight: 40 }}
-                            onClick={handleDuplicateBlock}>
-                        <MaterialIcon name={"MdOutlineNoteAlt"}/>
+                    </Typography>
+                    <MaterialIcon name={"MdDelete"}/>
+                </StyledListButton>
+                <StyledListButton fullWidth size={'small'}
+                                  onClick={handleDuplicateBlock}>
+                    <Typography>
                         Дублировать
-                    </Button>
-                </motion.div>
-                {/* <motion.div> */}
-                {/*    <Stack gap={2}> */}
-                {/*        <EditTextSelect block={block} onSelect={handleSelectChange}/> */}
-                {/*        <EditColorSelect block={block} onSelect={handleSelectChange}/> */}
-                {/*    </Stack> */}
-                {/* </motion.div> */}
-            </StyledList>
-        </StyledBox>
+                    </Typography>
+                    <LucideIcon name={"LuDatabase"}/>
+                </StyledListButton>
+                <Divider orientation={'horizontal'} sx={{ width: '90%' }}/>
+                {getBlockOptions()}
+                <Divider orientation={'horizontal'} sx={{ width: '90%' }}/>
+                {block.creator?.date && (
+                    <Stack mt={1} ml={1}>
+                        <Typography sx={{ opacity: 0.6 }} fontSize={12}>Последние
+                            изменения: {block.creator?.username}</Typography>
+                        <Typography sx={{ opacity: 0.6 }} fontSize={12}>{formatDateString(block.creator?.date)}</Typography>
+                    </Stack>
+                )}
+            </StyledEditBox>
+            {backgroundSelectOpen &&
+                <EditColorSelect onOutsideClick={() => {
+                    setBackgroundSelectOpen(false);
+                }} block={block} onSelect={onEdit}/>}
+        </div>
+
     );
 };
 

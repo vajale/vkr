@@ -3,7 +3,7 @@ import { StyledPermissionSelect } from "@/components/StatickBlocks/Members/Permi
 import { MenuItem } from "@mui/material";
 import { useAppDispatch } from "@/store/hooks";
 import { type IPermissionSelect } from "@/components/StatickBlocks/Members/PermissionSelect/types";
-import { useUpdateUserPermissionMutation } from "@/api/firebasePageAPI/pagesService";
+import { useUpdateUserPermissionMutation } from "@/api/firebasePageAPI/pagesEndpoins";
 
 export enum UserPermission {
     MODERATOR = "moderator",

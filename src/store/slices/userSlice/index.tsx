@@ -46,11 +46,12 @@ export const userSlice = createSlice({
         selectUserFavorites: (state) => (state.user !== undefined ? state.user.favorites ?? [] : []),
         selectIsInitialized: (state) => state._isInitialized,
         selectSignStatus: (state) => state.signStatus,
+        selectAvatar: (state) => (state.authData?.avatar) ?? '',
     },
 });
 
 export const { selectUserAuth, selectIsInitialized, selectSignStatus } = userSlice.selectors;
-export const { selectUser, selectUserPages, selectUserData, selectUsername, selectUserId, selectUserFavorites } =
+export const { selectUser, selectUserPages, selectUserData, selectUsername, selectUserId, selectUserFavorites, selectAvatar } =
     userSlice.selectors;
 export default userSlice.reducer;
 

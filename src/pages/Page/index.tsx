@@ -3,7 +3,7 @@ import { MainLayout } from "@/components/layouts/main/MainLayout";
 
 import PageWrapper from "@/components/PageView/ui/PageWrapper/PageWrapper";
 import { useParams } from "react-router-dom";
-import { useRemoveUserActivityMutation, useSetUserActivityMutation } from "@/api/usersApi/usersFirebaseService";
+import { useRemoveUserActivityMutation, useSetUserActivityMutation } from "@/api/usersApi/usersFirebaseEndpoints";
 
 export const Page = memo(() => {
 	const location = useParams<{ id: string }>();

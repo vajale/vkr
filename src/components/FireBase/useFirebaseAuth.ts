@@ -11,7 +11,7 @@ import {
     useLazyGetUserByIdQuery,
     useLoginMutation,
     useRegisterMutation,
-} from "@/api/usersApi/usersFirebaseService";
+} from "@/api/usersApi/usersFirebaseEndpoints";
 import { type IRegisterForm } from "@/components/Login/RegisterForm/types";
 
 export const useFirebaseAuth = () => {

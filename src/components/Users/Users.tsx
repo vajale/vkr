@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
     useLazyGetActiveUsersSubscribeQuery
-} from "@/api/usersApi/usersFirebaseService";
+} from "@/api/usersApi/usersFirebaseEndpoints";
 import { Avatar, Skeleton, Stack, Typography } from "@mui/material";
 import { useLocation, useParams } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";

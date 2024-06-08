@@ -8,9 +8,11 @@ import { pageReducer } from "./slices/pageSlice";
 import { pageSettingsReducer } from "./slices/pageSettingsSlice";
 import appReducer from "./slices/app/index";
 import { userReducer } from "@/store/slices/userSlice";
-import { pagesService } from "@/api/firebasePageAPI/pagesService";
+import { pagesEndpoins } from "@/api/firebasePageAPI/pagesEndpoins";
 import { type ICalendarSchema } from "@/store/slices/calendarSlice/types";
 import { calendarReducer } from "@/store/slices/calendarSlice";
+import { tasksEndpoints } from "@/api/tasksApi/endpoints";
+import { tasksApi } from "@/api/tasksApi/tasksApi";
 
 export interface StateSchema {
     user: IUserSchema;
@@ -27,7 +29,7 @@ const rootReducer: ReducersMapObject<StateSchema> = {
    settings: pageSettingsReducer,
    calendar: calendarReducer,
    // @ts-expect-error
-   [pagesService.reducerPath]: pagesService.reducer
+   [pagesEndpoins.reducerPath]: pagesEndpoins.reducer,
 };
 
 export default rootReducer;

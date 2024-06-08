@@ -15,10 +15,14 @@ export interface DocumentBlockBase {
     type: DocumentBlockType;
     content: DocumentContentType;
     textType: {
-        variant: "h1" | "h2" | "h3" | "h4" | "h5" | "subtitlePrimary" | "subtitleSecondary";
-        weight?: "strong" | "bald" | "default";
         fontColor?: string;
+        backgroundColor?: string
     } | null;
+    creator?: {
+        id?: string
+        username?: string,
+        date?: string
+    }
 }
 
 export type DocumentContentType = string;
@@ -60,6 +64,7 @@ export interface DocumentPageImageBlock extends DocumentBlockBase {
         width?: string;
         height?: string;
     };
+    simpleView?: boolean
 }
 
 export interface Todo {
@@ -104,4 +109,9 @@ export interface Task {
     priority: '1' | '2' | '3' | '4';
     date: string;
     time: string;
+    creator: {
+        id?: string,
+        username?: string,
+        avatar?: string
+    }
 }

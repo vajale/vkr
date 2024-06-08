@@ -6,18 +6,23 @@ export const StyledEditorButtonsContainer = styled(Stack)(({ theme }: IExtendedT
     position: "absolute",
     padding: 7,
     borderRadius: 7,
-    top: -50,
     backgroundColor: theme?.menuBackground.primary,
+    zIndex: 100,
+    maxHeight: 20,
+    minHeight: 20,
+    width: 340
 }));
 
 export const StyledEditorButton = styled(Button)(({ theme }: IExtendedThemeProps) => ({
     height: 20,
-    width: 21,
-    maxWidth: 49,
-    minWidth: 25
+    maxWidth: 30,
+    minWidth: 25,
+    width: 26
 }));
 
 export const StyledMotionDiv = styled(motion.div)(({ isEmpty }: { isEmpty?: boolean }) => ({
     backgroundColor: isEmpty ? "whitesmoke" : "transparent",
     transition: "1 ease-out",
+    borderRadius: 7,
+    padding: 7,
 }));

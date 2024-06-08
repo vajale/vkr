@@ -39,6 +39,7 @@ const CalendarPage = () => {
                     onCellClick={handleOpenCreateTaskModal}
                     cells={monthDateCells}/>
                  <CreateTaskModal
+                     onClose={handleCloseModal}
                     modalOpen={modalOpen}
                     defaultDate={selectedCellDate}
                     onTaskCreate={handleCloseModal}/>

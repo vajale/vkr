@@ -10,7 +10,7 @@ import { StyledPageLink } from "@/components/PageLink/styled";
 import { useAppDispatch } from "@/store/hooks";
 import { pageActions } from "@/store/slices/pageSlice";
 import { userActions } from "@/store/slices/userSlice";
-import { useCreateNewPageMutation } from "@/api/firebasePageAPI/pagesService";
+import { useCreateNewPageMutation } from "@/api/firebasePageAPI/pagesEndpoins";
 
 interface LinkProps {
     href: string,

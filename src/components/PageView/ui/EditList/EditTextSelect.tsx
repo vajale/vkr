@@ -5,7 +5,8 @@ import Select, { type SelectChangeEvent } from '@mui/material/Select';
 import { type DocumentBlock, DocumentBlockType } from "@/components/PageView/model/types";
 import { MenuItem } from "@mui/material";
 import { pageActions } from "@/store/slices/pageSlice";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectUsername } from "@/store/slices/userSlice";
 
 interface Props {
     block: DocumentBlock,
@@ -19,16 +20,21 @@ const EditTextSelect = (props: Props) => {
 
     const dispatch = useAppDispatch();
 
+    const username = useAppSelector(selectUsername);
+
     const handleChange = (event: SelectChangeEvent) => {
         const type = event.target.value;
 
         setVariant(type);
         dispatch(pageActions.updateBlock({
-            ...block,
-            textType: {
-                ...block.textType,
-                variant: type
-            }
+            block: {
+                ...block,
+                textType: {
+                    ...block.textType,
+                    variant: type
+                }
+            },
+            username
         }));
     };
 

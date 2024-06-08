@@ -29,7 +29,7 @@
 //     return hierarchy;
 // }
 
-export function buildDeepHierarchy(items) {
+export function buildDeepHierarchy (items) {
     const itemMap = new Map();
 
     // Создаем карту элементов по id
@@ -61,7 +61,7 @@ export const rawData = [
     { id: 555, name: "Child of the second element", parent: 2 },
 ];
 
-export function pack(data) {
+export function pack (data) {
     const childs = (id) =>
         data
             .filter((item) => item.parent === id)
@@ -70,4 +70,75 @@ export function pack(data) {
                 children.length ? { id, name, children } : { id, name },
             );
     return childs(0);
+}
+
+export function formatDateString (jsonDate: string): string {
+    const date = new Date(jsonDate);
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const isToday = date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear();
+
+    const isTomorrow = date.getDate() === tomorrow.getDate() &&
+        date.getMonth() === tomorrow.getMonth() &&
+        date.getFullYear() === tomorrow.getFullYear();
+
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    let dateString = '';
+
+    if (isToday) {
+        dateString = 'сегодня';
+    } else if (isTomorrow) {
+        dateString = 'завтра';
+    } else {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        dateString = `${day}-${month}-${year}`;
+    }
+
+    return `${dateString} ${hours}:${minutes}`;
+}
+
+function stringToColor (string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = '#';
+
+    for (i = 0; i < 3; i += 1) {
+        const value = (hash >> (i * 8)) & 0xff;
+        color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+}
+
+export function stringAvatar (name) {
+    return {
+        sx: {
+            bgcolor: stringToColor(name),
+            width: 24,
+            height: 24,
+            marginLeft: 0.8,
+            marginTop: 1,
+            fontSize: 14
+        },
+        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`.toUpperCase(),
+    };
+}
+
+export function trimDateTime (dateTimeString: string) {
+    return dateTimeString.split('T')[0];
 }

@@ -7,8 +7,9 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 import { child, get, onValue, ref, remove, update } from "firebase/database";
 import { userActions } from "@/store/slices/userSlice";
 import { dispatch } from "@/store/store";
+import { type Task } from "@/components/PageView/model/types";
 
-interface UserFirebaseRequest {
+export interface UserFirebaseRequest {
     user: {
         firstName?: string;
         lastname?: string;
@@ -18,6 +19,7 @@ interface UserFirebaseRequest {
     username?: string;
     pages?: string[];
     favorites?: string[];
+    tasks?: Task[]
 }
 
 async function getUser (userId: string): Promise<User> {
@@ -48,7 +50,7 @@ async function getUser (userId: string): Promise<User> {
     };
 }
 
-export const usersFirebaseService = firebaseApi.injectEndpoints({
+export const usersFirebaseEndpoints = firebaseApi.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.mutation<User, { email: string; password: string }>({
             queryFn: async ({ email, password }) => {
@@ -310,4 +312,4 @@ export const {
     useLazyGetActiveUsersSubscribeQuery,
     useGetUserByIdQuery,
     useLazyGetUserByIdQuery,
-} = usersFirebaseService;
+} = usersFirebaseEndpoints;

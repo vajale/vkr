@@ -17,11 +17,12 @@ export const StyledDocumentBlockImage = styled("div")(
             width: "10px",
             height: "10px",
             backgroundColor: "gray",
+            borderRadius: 7
         },
 
         ".right": {
-            bottom: "5px",
-            right: "5px",
+            bottom: "0px",
+            right: "0px",
             transform: "translateX(-50%)",
             cursor: "nwse-resize",
         },

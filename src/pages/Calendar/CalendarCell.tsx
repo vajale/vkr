@@ -31,7 +31,7 @@ const CalendarCell = (props: CellProps) => {
             }}>
             <Stack flexDirection={'column'} alignItems={'flex-start'} width={'100%'} height={'100%'}>
                 {cell.date}
-                {content ?? content}
+                {content}
             </Stack>
         </motion.button>
     );

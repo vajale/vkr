@@ -5,8 +5,9 @@ import {
     type DocumentBlockType,
     type Page,
 } from "@/components/PageView/model/types";
-import { documentObjectHelper, getPageLinkWithParent } from "@/utils/documentObjectHelper";
+import { documentFactory, getPageLinkWithParent } from "@/utils/documentFactory";
 import { insertElementBefore } from "@/utils";
+import type { UserFirebase } from "@/store/slices/userSlice/types";
 
 const initialState: DocumentsPageSchema = {
     pageData: undefined,
@@ -30,16 +31,20 @@ export const pageSlice = createSlice({
         setEditDocumentId: create.reducer((state, action: PayloadAction<string>) => {
             state.isPageEdit = action.payload;
         }),
-        updateBlock: create.reducer((state, action: PayloadAction<DocumentBlock>) => {
+        updateBlock: create.reducer((state, action: PayloadAction<{ block: DocumentBlock, username: string }>) => {
             if (state.pageData === undefined) return;
 
             state.pageData.documentBlocks = state.pageData?.documentBlocks?.map((item) => {
-                const block = item.id === action.payload.id;
+                const block = item.id === action.payload.block.id;
 
                 if (block) {
                     return {
                         ...item,
-                        ...action.payload,
+                        ...action.payload.block,
+                        creator: {
+                            username: action.payload.username,
+                            date: new Date().toJSON()
+                        }
                     };
                 }
                 return item;
@@ -98,16 +103,17 @@ export const pageSlice = createSlice({
                 };
             },
         ),
-        addNewBlock: create.reducer((state, action: PayloadAction<DocumentBlockType>) => {
-            const type = action.payload;
-            const document = documentObjectHelper(type);
+        addNewBlock: create.reducer((state, action: PayloadAction<{ type: DocumentBlockType, username: string }>) => {
+            const type = action.payload.type;
+            const username = action.payload.username;
+            const document = documentFactory(type, username);
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             state.pageData.documentBlocks = [...state.pageData.documentBlocks, document];
         }),
-        addNewPageLinkBlock: create.reducer((state, action: PayloadAction<{ link: string }>) => {
-            const document = getPageLinkWithParent(action.payload.link);
+        addNewPageLinkBlock: create.reducer((state, action: PayloadAction<{ link: string, username: string }>) => {
+            const document = getPageLinkWithParent(action.payload.link, action.payload.username);
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
