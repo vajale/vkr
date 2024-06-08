@@ -29,7 +29,7 @@
 //     return hierarchy;
 // }
 
-export function buildDeepHierarchy (items) {
+export function buildDeepHierarchy(items) {
     const itemMap = new Map();
 
     // Создаем карту элементов по id
@@ -38,17 +38,22 @@ export function buildDeepHierarchy (items) {
     });
 
     // Обновляем поле child, чтобы оно содержало объект, а не id
-    items.map((item) => {
+    items.forEach((item) => {
         if (item.child !== undefined) {
             const parent = itemMap.get(item.id);
             const child = itemMap.get(item.child);
             if (parent && child) {
-                parent.child = {
-                    ...child,
-                    parent: item.id,
-                };
-                itemMap.delete(item.child);
+                parent.child = child;
+                // Устанавливаем parent для child
+                child.parent = item.id;
             }
+        }
+    });
+
+    // Убираем дочерние элементы из карты, чтобы оставить только корневые элементы
+    items.forEach((item) => {
+        if (item.child !== undefined) {
+            itemMap.delete(item.child);
         }
     });
 
@@ -61,7 +66,7 @@ export const rawData = [
     { id: 555, name: "Child of the second element", parent: 2 },
 ];
 
-export function pack (data) {
+export function pack(data) {
     const childs = (id) =>
         data
             .filter((item) => item.parent === id)
@@ -72,32 +77,34 @@ export function pack (data) {
     return childs(0);
 }
 
-export function formatDateString (jsonDate: string): string {
+export function formatDateString(jsonDate: string): string {
     const date = new Date(jsonDate);
     const today = new Date();
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const isToday = date.getDate() === today.getDate() &&
+    const isToday =
+        date.getDate() === today.getDate() &&
         date.getMonth() === today.getMonth() &&
         date.getFullYear() === today.getFullYear();
 
-    const isTomorrow = date.getDate() === tomorrow.getDate() &&
+    const isTomorrow =
+        date.getDate() === tomorrow.getDate() &&
         date.getMonth() === tomorrow.getMonth() &&
         date.getFullYear() === tomorrow.getFullYear();
 
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
 
-    let dateString = '';
+    let dateString = "";
 
     if (isToday) {
-        dateString = 'сегодня';
+        dateString = "сегодня";
     } else if (isTomorrow) {
-        dateString = 'завтра';
+        dateString = "завтра";
     } else {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
         const year = date.getFullYear();
         dateString = `${day}-${month}-${year}`;
     }
@@ -105,7 +112,7 @@ export function formatDateString (jsonDate: string): string {
     return `${dateString} ${hours}:${minutes}`;
 }
 
-function stringToColor (string) {
+function stringToColor(string) {
     let hash = 0;
     let i;
 
@@ -114,7 +121,7 @@ function stringToColor (string) {
         hash = string.charCodeAt(i) + ((hash << 5) - hash);
     }
 
-    let color = '#';
+    let color = "#";
 
     for (i = 0; i < 3; i += 1) {
         const value = (hash >> (i * 8)) & 0xff;
@@ -125,7 +132,7 @@ function stringToColor (string) {
     return color;
 }
 
-export function stringAvatar (name) {
+export function stringAvatar(name) {
     return {
         sx: {
             bgcolor: stringToColor(name),
@@ -133,12 +140,12 @@ export function stringAvatar (name) {
             height: 24,
             marginLeft: 0.8,
             marginTop: 1,
-            fontSize: 14
+            fontSize: 14,
         },
-        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`.toUpperCase(),
+        children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`.toUpperCase(),
     };
 }
 
-export function trimDateTime (dateTimeString: string) {
-    return dateTimeString.split('T')[0];
+export function trimDateTime(dateTimeString: string) {
+    return dateTimeString.split("T")[0];
 }
