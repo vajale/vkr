@@ -36,7 +36,7 @@ const DocumentBlockText = memo((props: TextBlockProps) => {
 
     return (
         <div style={{ backgroundColor, borderRadius: '7px' }}>
-            <EditableTextField placeholder={'Напишите что-нибудь...'}
+            <EditableTextField disableEditTools={false} placeholder={'Напишите что-нибудь...'}
                                title={block.content}
                                canEdit={canEdit}
                                width={'1300px'}

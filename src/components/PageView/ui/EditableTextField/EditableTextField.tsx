@@ -16,7 +16,7 @@ interface TextBlockProps {
 }
 
 const cursorOffset = {
-    x: 40,
+    x: 20,
     y: -40
 };
 
@@ -50,7 +50,7 @@ const EditableTextField = (props: TextBlockProps) => {
         setClickPosition({ x: x + cursorOffset.x, y: y + cursorOffset.y });
     };
 
-    const isToolPanelOpen = toolPanelOpen && disableEditTools;
+    const isToolPanelOpen = toolPanelOpen;
 
     return (
         <StyledMotionDiv>
