@@ -130,7 +130,7 @@ export const usersFirebaseEndpoints = firebaseApi.injectEndpoints({
 
                 const userFirebaseRequest: UserFirebaseRequest = queryData as UserFirebaseRequest;
 
-                const customUsername = `${userFirebaseRequest.user.firstName} ${userFirebaseRequest.user.lastname === undefined && ""}`;
+                const customUsername = `${userFirebaseRequest.user.firstName} ${userFirebaseRequest.user.lastname}`;
 
                 // const pageMap = new Set(userFirebaseRequest.pages);
                 // console.log(Array.from(new Set(userFirebaseRequest.pages)));
@@ -312,4 +312,5 @@ export const {
     useLazyGetActiveUsersSubscribeQuery,
     useGetUserByIdQuery,
     useLazyGetUserByIdQuery,
+    useGetActiveUsersQuery,
 } = usersFirebaseEndpoints;

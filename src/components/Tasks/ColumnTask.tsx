@@ -83,7 +83,7 @@ const ColumnTask = memo(({ task, parent, index, onChange }: TaskProps) => {
                                  sx={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
                                 {taskDate}
                             </Box>
-                            <EditableTextField width={'200px'} onContentChange={handleContentChange} canEdit={canEdit}
+                            <EditableTextField disableEditTools width={'200px'} onContentChange={handleContentChange} canEdit={canEdit}
                                                title={task.content} placeholder={'...'}/>
                             {canEdit && <MotionDivider initial={{ scale: 0 }} animate={{ scale: 0.95 }} flexItem
                                                        orientation={'horizontal'}/>}

@@ -97,11 +97,11 @@ const ToolPanel: React.FC<PanelProps> = ({ position }) => {
             <StyledEditorButton
                 className={cn(
                     "tool-panel__item",
-                    currentBlockType === BlockType.cite && "tool-panel__item_active"
+                    currentBlockType === BlockType.h2 && "tool-panel__item_active"
                 )}
                 onMouseDown={(e) => {
                     e.preventDefault();
-                    toggleBlockType(BlockType.cite);
+                    toggleBlockType(BlockType.h3);
                 }}
             >
                 <LucideIcon name={'LuHeading3'}/>

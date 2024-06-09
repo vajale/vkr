@@ -110,7 +110,7 @@ const PagesList = (props: ListProps) => {
                     />
                 ))}
             </Stack>
-            <Divider/>
+            <Divider style={{ width: 290 }}/>
             <Stack width={300} mt={2} flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
                 <Typography sx={{ opacity: 0.8 }} mb={1}>Все страницы</Typography>
                 <Button sx={{ minWidth: 20 }} onClick={handleAddPageClick}>

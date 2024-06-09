@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    useLazyGetActiveUsersSubscribeQuery
-} from "@/api/usersApi/usersFirebaseEndpoints";
+import { useGetActiveUsersQuery } from "@/api/usersApi/usersFirebaseEndpoints";
 import { Avatar, Skeleton, Stack, Typography } from "@mui/material";
 import { useLocation, useParams } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";
@@ -11,26 +9,24 @@ import UserItem from "@/components/Users/UserItem";
 const Users = () => {
     const location = useParams<{ id: string }>();
     const pageId = location.id ?? "";
-    const [users, setUsers] = useState<[]>([]);
     const user = useAppSelector(selectUser);
 
     // const browserLocation = useLocation();
     // const isPage = useMemo(() => matchPath(URL.PAGE, { path: browserLocation.pathname, end: false }), []);
     // console.log(isPage);
 
-    const [getUsers, { data, isLoading, isError }] = useLazyGetActiveUsersSubscribeQuery();
+    // @ts-expect-error
+    const { data, isLoading, isError } = useGetActiveUsersQuery({ pageId });
 
-    useEffect(() => {
-        if (user != null) {
-            void getUsers({ pageId });
-        }
+    if (data === undefined) {
+        return null;
+    }
 
-        if (data) {
-            setUsers(data);
-        }
-    }, [pageId, user]);
+    if (data === null) {
+        return null;
+    }
 
-    if (users.length === 0) {
+    if (data.length === 0) {
         return null;
     }
 
@@ -38,11 +34,15 @@ const Users = () => {
         return <Skeleton width={140} height={24}/>;
     }
 
-    return (
-        <Stack marginRight={3} gap={2} flexDirection={'row'}>
-             {/* {users?.map(item => <UserItem key={item} userId={item}/>)} */}
-        </Stack>
-    );
+    try {
+        return (
+            <Stack marginRight={3} gap={2} flexDirection={'row'}>
+                {data?.map((item, key) => <UserItem key={key} user={item}/>)}
+            </Stack>
+        );
+    } catch (e) {
+        return null;
+    }
 };
 
 export default Users;

@@ -1,27 +1,22 @@
 import { Avatar, Typography } from "@mui/material";
 import React from "react";
 import { useGetUserByIdQuery } from "@/api/usersApi/usersFirebaseEndpoints";
+import { type UserFirebase } from "@/store/slices/userSlice/types";
+import { stringAvatar } from "@/utils/helper/helpers";
 
 interface ItemProps {
-    userId: string;
+    userId?: string;
+    user: UserFirebase
 }
 
 const UserItem = (props: ItemProps) => {
-    const { userId } = props;
+    const { userId, user } = props;
 
-    const { data, isLoading } = useGetUserByIdQuery({ userId });
-
-    if (data === undefined) {
-        return null;
-    }
-
-    const username = data?.username ? data?.username[0] : "";
-
-    console.log(data);
+    const username = user.data.username ?? '';
 
     return (
-        <Avatar sx={{ width: 24, height: 24 }}>
-            <Typography>{username}</Typography>
+        <Avatar {...stringAvatar(username)} sx={{ width: 24, height: 24 }}>
+            <Typography>{username[0]}</Typography>
         </Avatar>
     );
 };

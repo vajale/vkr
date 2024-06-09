@@ -11,19 +11,20 @@ interface TextBlockProps {
     onContentChange?: (jsonString: string) => void;
     disableEditTools?: boolean;
     width?: string,
-    placeholder?: string
+    placeholder?: string,
+    onBlur?: () => void
 }
 
 const cursorOffset = {
-    x: 0,
-    y: 0
+    x: 40,
+    y: -40
 };
 
 const EditableTextField = (props: TextBlockProps) => {
-    const { canEdit = true, onContentChange, title, disableEditTools, width, placeholder = '...' } = props;
+    const { canEdit = true, onContentChange, title, disableEditTools, width, placeholder = '...', onBlur } = props;
 
     const [toolPanelOpen, setToolPanelOpen] = useState(false);
-    const [clickPosition, setClickPosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+    const [clickPosition, setClickPosition] = useState<{ x: number, y: number }>(() => ({ x: 0, y: 0 }));
 
     const handleContentChange = (json: string) => {
         if (onContentChange) {
@@ -34,6 +35,10 @@ const EditableTextField = (props: TextBlockProps) => {
     const handleBlur = () => {
         if (disableEditTools) return;
         setToolPanelOpen(false);
+
+        if (onBlur) {
+            onBlur();
+        }
     };
 
     const handleFocus = () => {
@@ -45,10 +50,12 @@ const EditableTextField = (props: TextBlockProps) => {
         setClickPosition({ x: x + cursorOffset.x, y: y + cursorOffset.y });
     };
 
+    const isToolPanelOpen = toolPanelOpen && disableEditTools;
+
     return (
         <StyledMotionDiv>
             <TextEditorProvider width={width} json={title}>
-                {toolPanelOpen && <ToolPanel position={clickPosition}/>}
+                {isToolPanelOpen && <ToolPanel position={clickPosition}/>}
                 <TextEditor
                     placeholder={placeholder}
                     onFocus={handleFocus}

@@ -6,14 +6,13 @@ export const StyledCalendarGrid = styled(Stack)(({ theme }: IExtendedThemeProps)
     display: "grid",
     gridTemplateColumns: "repeat(7, 1fr)",
     gridTemplateRows: 'repeat(7, 1fr)',
-    backgroundColor: theme?.menuBackground.third,
+    gridGap: 7
 }));
 
 export const StyledCalendarCell = styled(motion.button)(({ theme }: IExtendedThemeProps) => ({
     border: 'none',
     height: 90,
     width: 160,
-    padding: 7,
     backgroundColor: theme?.menuBackground.third,
     borderRadius: 7,
 }));

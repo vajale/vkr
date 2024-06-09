@@ -10,6 +10,8 @@ import { useGetTasksQuery } from "@/api/tasksApi/endpoints";
 import { selectUserId } from "@/store/slices/userSlice";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { trimDateTime } from "@/utils/helper/helpers";
+import { useNavigate } from "react-router-dom";
+import { NAVIGATION } from "@/constants/navigation";
 
 interface WrapperProps {
     cells: DateCellItem[]
@@ -20,6 +22,7 @@ interface WrapperProps {
 const CalendarMonthWrapper = memo((props: WrapperProps) => {
     const { cells, onCellClick, tasks } = props;
 
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     const userId = useAppSelector(selectUserId);
@@ -55,20 +58,21 @@ const CalendarMonthWrapper = memo((props: WrapperProps) => {
 
         if (dateTasks.length > 1) {
             const boxOfTasks = () => (
-                <Button>
-                    <Box width={140} height={70}>
-                        <Stack flexDirection={'row'}>
-                            <Typography>Задачи: {dateTasks.length}</Typography>
-                        </Stack>
-                    </Box>
-                </Button>
+                <Box style={{ backgroundColor: "rgba(230,230,250,0.55)", borderRadius: 7, zIndex: 9000, padding: 7, cursor: 'default' }} width={140}
+                     height={70} onMouseDown={() => {
+                    navigate(NAVIGATION.TASKS);
+                }}>
+                    <Stack flexDirection={'row'}>
+                        <Typography>Задачи: {dateTasks.length}</Typography>
+                    </Stack>
+                </Box>
             );
 
             return <CalendarCell content={boxOfTasks()}
                                  cell={cell}
                                  key={key}/>;
         } else if (dateTask) {
-             const taskContent = <CalendarCellTask task={dateTask}/>;
+            const taskContent = <CalendarCellTask task={dateTask}/>;
 
             return <CalendarCell content={taskContent}
                                  cell={cell}
