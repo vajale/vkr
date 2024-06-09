@@ -1,9 +1,8 @@
-import { Button, Divider, Skeleton, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Skeleton, Stack, Typography } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
 import {
     useCreateNewPageMutation,
     useFetchPagesQuery,
-    useRemovePageMutation,
 } from "@/api/firebasePageAPI/pagesEndpoins";
 import { MaterialIcon } from "@/assets/Icon";
 import { useAppSelector } from "@/store/hooks";
@@ -18,6 +17,10 @@ import LayoutPageLink from "@/components/layouts/main/LayoutPageLink";
 import FavoritePageLink from "@/components/layouts/main/FavoritePageLink";
 import { buildDeepHierarchy } from "@/utils/helper/helpers";
 import { useFirebaseAuth } from "@/components/FireBase";
+
+// @ts-expect-error
+import LogoSvg from "@/assets/svg/logo.svg";
+import { TITLES } from "@/components/Login/constants";
 
 interface ListProps {
     onPageChanged: () => void;
@@ -87,38 +90,19 @@ const PagesList = (props: ListProps) => {
         );
     }
 
-    const items1 = [
-        { id: 1, name: 'Item 1', child: undefined },
-        { id: 2, name: 'Item 2', child: 1 },
-        { id: 4, name: 'Item 4', child: 5 },
-        { id: 5, name: 'Item 5', child: undefined },
-    ];
-
     const allPages = pagesData && buildDeepHierarchy(pagesData);
-    //
-    // if (pagesData) {
-    //     console.log(buildDeepHierarchy(pagesData));
-    // }
 
     return (
-        <>
-            <Typography
-                className={"main-button"}
-                mb={4}
-                variant={"h5"}
-                fontWeight={900}
-                onClick={handleMainButton}>
-                СЕЙФ +
-            </Typography>
-            {/* <PageLink id={""} href={"calendar"} label={"Поиск"} icon={"MdSearch"} /> */}
-            <Stack mt={4}>
+        <div style={{ width: '100%' }}>
+            <Box mt={3}>
+                <img src={LogoSvg} alt={TITLES.IMAGE_ALT}/>
+            </Box>
+            <Stack mt={4} alignItems={'flex-start'}>
                 <AppLink icon={"MdCalendarMonth"} href={"/calendar"} label={"Календарь"}/>
                 <Members/>
             </Stack>
-            <Stack mt={2} flexDirection={"row"} alignItems={"center"}>
-                <Typography>Избранное</Typography>
-            </Stack>
-            <Stack gap={1}>
+            <Typography sx={{ opacity: 0.8 }} mt={2}>Избранное</Typography>
+            <Stack gap={1} ml={1} mt={1} mb={1}>
                 {favoritesData?.map((page) => (
                     <FavoritePageLink
                         page={page}
@@ -127,23 +111,23 @@ const PagesList = (props: ListProps) => {
                 ))}
             </Stack>
             <Divider/>
-            <Stack mt={2} flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
-                <Typography>Все страницы</Typography>
+            <Stack width={300} mt={2} flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
+                <Typography sx={{ opacity: 0.8 }} mb={1}>Все страницы</Typography>
                 <Button sx={{ minWidth: 20 }} onClick={handleAddPageClick}>
                     <MaterialIcon name={"MdAdd"}/>
                 </Button>
             </Stack>
             <Stack gap={1}>
-                  {/* <Hierarchy items={buildDeepHierarchy(items)}/> */}
-                  {pagesData && allPages.map((page) => (
+                {/* <Hierarchy items={buildDeepHierarchy(items)}/> */}
+                {pagesData && allPages.map((page) => (
                     <LayoutPageLink key={page.id}
                                     page={page}
                                     onPageCreated={handleChildPageCreated}
                                     onPageDelete={handlePageRemove}
                     />
-                  ))}
+                ))}
             </Stack>
-        </>
+        </div>
     );
 };
 

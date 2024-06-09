@@ -9,7 +9,7 @@ import {
     MouseSensor,
     useSensors,
 } from "@dnd-kit/core";
-import TaskColumn from "@/components/Tasks/TaskColumn";
+import ColumnOfTasks from "@/components/Tasks/ColumnOfTasks";
 import { type Task } from "../PageView/model/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { calendarActions, selectTasks } from "@/store/slices/calendarSlice";
@@ -149,10 +149,10 @@ const TasksWrapper = memo(() => {
                         onDragMove={handleDragMove}
                         sensors={sensors}
                     >
-                        <TaskColumn activeId={activeId} priority={'1'} parentId={ColumnState.TODO} items={todoTask}/>
-                        <TaskColumn activeId={activeId} priority={'2'} parentId={ColumnState.IN_PROGRESS} items={makeTask}/>
-                        <TaskColumn activeId={activeId} priority={'3'} parentId={ColumnState.DONE} items={finishedTask}/>
-                        <TaskColumn activeId={activeId} priority={'4'} parentId={ColumnState.UNASSIGNED} items={errorTask}/>
+                        <ColumnOfTasks activeId={activeId} priority={'1'} parentId={ColumnState.TODO} items={todoTask}/>
+                        <ColumnOfTasks activeId={activeId} priority={'2'} parentId={ColumnState.IN_PROGRESS} items={makeTask}/>
+                        <ColumnOfTasks activeId={activeId} priority={'3'} parentId={ColumnState.DONE} items={finishedTask}/>
+                        <ColumnOfTasks activeId={activeId} priority={'4'} parentId={ColumnState.UNASSIGNED} items={errorTask}/>
                     </DndContext>
                 </Stack>}
             </Box>

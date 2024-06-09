@@ -28,15 +28,10 @@ export const MainLayout: React.FC<LayoutProps> = memo((props) => {
     return (
         <StyledMainLayout>
             <StyledContentWrapper>
-                <Stack
-                    padding={3}
-                    gap={1}
-                    style={{ width: 300, height: 800, position: "sticky" }}>
-                    <PagesList onPageChanged={handlePageChanged} />
-                </Stack>
+                <PagesList onPageChanged={handlePageChanged}/>
             </StyledContentWrapper>
             <div className={"side-menu"}>
-                <AppHeader />
+                <AppHeader/>
                 {children}
             </div>
         </StyledMainLayout>

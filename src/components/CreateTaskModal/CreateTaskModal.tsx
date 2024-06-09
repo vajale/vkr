@@ -68,7 +68,7 @@ const CreateTaskModal = (props: ModalProps) => {
             newTask.date = new Date(defaultDate.year, defaultDate.month, defaultDate.date).toJSON();
             newTask.id = new Date(defaultDate.year, defaultDate.month, defaultDate.date).toJSON();
 
-            dispatch(calendarActions.updateTask(newTask));
+            dispatch(calendarActions.addTask(newTask));
             onTaskCreate();
         }
     };

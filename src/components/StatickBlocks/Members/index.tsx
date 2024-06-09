@@ -31,13 +31,20 @@ const permissionName = {
 
 const UserElement: React.FC<IPermissionSelect> = ({ userId, userPermission, pageId }) => {
     const clientUserId = useAppSelector(selectUserId);
+
     const { firebaseUser } = useFirebaseAuth();
+
     const { data, isLoading, isError } = useGetUserByIdQuery({ userId });
+
     const { data: profilePicture, isLoading: isLoadingPicture } = useGetUserProfileDataQuery({
         userId: firebaseUser?.id ?? "",
     });
 
-    if (isLoading || !data) {
+    if (!data) {
+        return null;
+    }
+
+    if (isLoading) {
         return <StyledUserSkeleton />;
     }
 

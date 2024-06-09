@@ -21,15 +21,17 @@ const StyledMainLayout = styled("div")(({ theme }: IExtendedThemeProps) => ({
 }));
 
 const StyledContentWrapper = styled("div")(({ theme }: IExtendedThemeProps) => ({
-    backgroundColor: theme?.menuBackground.secondary,
     display: "flex",
     alignItems: "flex-start",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "flex-start",
-
+    width: 300,
+    position: "sticky",
+    paddingLeft: 28,
     ".main-button": {
         cursor: "pointer",
-    }
+    },
+    backgroundColor: theme?.menuBackground.secondary
 }));
 
 export { StyledMainLayout, StyledContentWrapper };

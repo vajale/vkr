@@ -109,7 +109,7 @@ export function formatDateString(jsonDate: string): string {
         dateString = `${day}-${month}-${year}`;
     }
 
-    return `${dateString} ${hours}:${minutes}`;
+    return ` ${hours}:${minutes} ${dateString}`;
 }
 
 function stringToColor(string) {

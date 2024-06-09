@@ -33,6 +33,9 @@ export const calendarTasksSlice = createSlice({
                 });
             }
         },
+        addTask: (state, action: PayloadAction<Task>) => {
+            state.tasks = [...state.tasks, action.payload];
+        },
         updateTaskPriority: (state, action: PayloadAction<{ id: string, priority: string }>) => {
             state.tasks.map(task => {
                 if (task.id === action.payload.id) {

@@ -68,7 +68,7 @@ const AddList = ({ onAddBlock, onOutsideClick }: ListProps) => {
         <AnimatePresence>
             <StyledEditBox animate={{ scale: 1 }} initial={{ scale: 0 }} ref={ref}>
                 <Stack>
-                    <Typography p={1}>Создать...</Typography>
+                    <Typography sx={{ opacity: 0.8 }} mb={1}>Создать...</Typography>
                     <StyledListButton onClick={() => {
                         handleButtonAdd(DocumentBlockType.TEXT);
                     }}>

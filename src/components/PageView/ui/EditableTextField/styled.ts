@@ -4,13 +4,15 @@ import { motion } from "framer-motion";
 
 export const StyledEditorButtonsContainer = styled(Stack)(({ theme }: IExtendedThemeProps) => ({
     position: "absolute",
+    display: "flex",
+    flexDirection: 'row',
     padding: 7,
     borderRadius: 7,
     backgroundColor: theme?.menuBackground.primary,
     zIndex: 100,
     maxHeight: 20,
     minHeight: 20,
-    width: 340
+    width: 300
 }));
 
 export const StyledEditorButton = styled(Button)(({ theme }: IExtendedThemeProps) => ({
