@@ -16,7 +16,7 @@ interface TaskWrapperProps {
     activeId: unknown
 }
 
-const TaskColumn = memo(({ parentId = 'Задачи', items, bgColor, priority, activeId }: TaskWrapperProps) => {
+const ColumnOfTasks = memo(({ parentId = 'Задачи', items, bgColor, priority, activeId }: TaskWrapperProps) => {
     const { setNodeRef } = useDroppable({
         id: parentId,
     });
@@ -55,4 +55,4 @@ const TaskColumn = memo(({ parentId = 'Задачи', items, bgColor, priority, 
     );
 });
 
-export default TaskColumn;
+export default ColumnOfTasks;

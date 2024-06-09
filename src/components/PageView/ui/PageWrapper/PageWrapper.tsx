@@ -25,6 +25,10 @@ const PageWrapper = ({ pageId }: WrapperProps) => {
         }
     }, [data]);
 
+    if (isLoading) {
+        return <SkeletonPage/>;
+    }
+
     if (page === undefined) {
         return (
             <StyledPageWrapper>

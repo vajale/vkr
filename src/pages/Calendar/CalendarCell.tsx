@@ -2,6 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { type DateCellItem } from "@/utils/hooks/useCalendar";
 import { Box, Stack } from "@mui/material";
+import { getBackground } from "@/utils/mock/mockdata";
+import { StyledCalendarCell } from "@/pages/Calendar/styled";
 
 interface CellProps {
     cell: DateCellItem
@@ -13,8 +15,8 @@ const CalendarCell = (props: CellProps) => {
     const { cell, onClick, content } = props;
 
     return (
-        <motion.button
-            whileHover={{ scale: 1.05, backgroundColor: 'whitesmoke' }}
+        <StyledCalendarCell
+            whileHover={{ scale: 1.05, border: '1px rgb(0,0,0,0.1) solid' }}
             onClick={() => {
                 if (onClick != null) {
                     if (cell.view?.type !== "next" || cell.view?.type !== 'past') {
@@ -23,17 +25,13 @@ const CalendarCell = (props: CellProps) => {
                 }
             }}
             style={{
-                border: 'none',
-                height: 100,
-                width: 160,
-                padding: 7,
-                opacity: cell.view?.type === "past" || cell.view?.type === "next" ? 0.3 : 1
+                opacity: cell.view?.type === "past" || cell.view?.type === "next" ? 0.3 : 1,
             }}>
             <Stack flexDirection={'column'} alignItems={'flex-start'} width={'100%'} height={'100%'}>
                 {cell.date}
                 {content}
             </Stack>
-        </motion.button>
+        </StyledCalendarCell>
     );
 };
 

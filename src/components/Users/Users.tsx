@@ -30,12 +30,12 @@ const Users = () => {
         }
     }, [pageId, user]);
 
-    if (isLoading) {
-        return <Skeleton width={140} height={24}/>;
-    }
-
     if (users.length === 0) {
         return null;
+    }
+
+    if (isLoading) {
+        return <Skeleton width={140} height={24}/>;
     }
 
     return (

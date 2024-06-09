@@ -8,21 +8,21 @@ import CalendarCellTask from "@/pages/Calendar/CalendarCellTask";
 import { type Task } from "@/components/PageView/model/types";
 import { useGetTasksQuery } from "@/api/tasksApi/endpoints";
 import { selectUserId } from "@/store/slices/userSlice";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { trimDateTime } from "@/utils/helper/helpers";
 
 interface WrapperProps {
     cells: DateCellItem[]
-    onCellClick: (date: DateCellItem) => void
+    tasks: Task[]
+    onCellClick: (date: DateCellItem) => void,
 }
 
 const CalendarMonthWrapper = memo((props: WrapperProps) => {
-    const { cells, onCellClick } = props;
+    const { cells, onCellClick, tasks } = props;
 
     const dispatch = useAppDispatch();
 
     const userId = useAppSelector(selectUserId);
-    const tasks = useAppSelector(selectTasks);
 
     const { data, isLoading, isSuccess } = useGetTasksQuery({ userId });
 
@@ -48,17 +48,22 @@ const CalendarMonthWrapper = memo((props: WrapperProps) => {
 
         if (dateTasks.length > 1) {
             const boxOfTasks = () => (
-                <Button sx={{ backgroundColor: "rgb(0,0,0,0.1)" }}>
+                <Button>
                     <Box width={140} height={70}>
                         <Stack flexDirection={'row'}>
-                            <div></div>
+                            <Typography>Задачи: {dateTasks.length}</Typography>
                         </Stack>
-                        Количетство задач: {dateTasks.length}
                     </Box>
                 </Button>
             );
 
             return <CalendarCell content={boxOfTasks()}
+                                 cell={cell}
+                                 key={key}/>;
+        } else if (dateTask) {
+             const taskContent = <CalendarCellTask task={dateTask}/>;
+
+            return <CalendarCell content={taskContent}
                                  cell={cell}
                                  key={key}/>;
         }

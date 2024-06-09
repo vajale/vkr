@@ -1,6 +1,6 @@
 import { firebaseAuth, firebaseRealtimeDatabase, firestoreDB } from "@/components/FireBase";
 
-import { type DocumentBlock, type Page } from "../../components/PageView/model/types";
+import { type DocumentBlockType, type DocumentBlock, type Page } from "../../components/PageView/model/types";
 import { firebaseApi } from "@/api";
 import { child, get, push, ref, remove, set, update } from "firebase/database";
 import { arrayRemove, arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
@@ -228,8 +228,8 @@ export const pagesEndpoins = firebaseApi.injectEndpoints({
                 }
             },
         }),
-        createNewPage: builder.mutation<{ id: string }, { parentId?: string }>({
-            queryFn: async ({ parentId }) => {
+        createNewPage: builder.mutation<{ page: Page }, { parentId?: string, withDocumentBlock?: DocumentBlockType }>({
+            queryFn: async ({ parentId, withDocumentBlock }) => {
                 const userId = firebaseAuth.currentUser?.uid;
 
                 if (!userId) {
@@ -283,7 +283,10 @@ export const pagesEndpoins = firebaseApi.injectEndpoints({
                     });
 
                     console.log("Страница добавлена: " + pageFirebaseId);
-                    return { data: { id: pageFirebaseId } };
+
+                    newPageObj.page.id = pageFirebaseId;
+
+                    return { data: { id: pageFirebaseId, page: newPageObj.page } };
                 } catch (error: any) {
                     console.error(error.message);
                     return { error: error.message };

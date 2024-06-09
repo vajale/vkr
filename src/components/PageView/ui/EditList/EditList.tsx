@@ -82,7 +82,7 @@ const EditList = ({ block, onEdit, onOutsideClick }: EditListProps) => {
     return (
         <div style={{ position: 'relative' }}>
             <StyledEditBox width={240} animate={{ scale: 1 }} initial={{ scale: 0 }} ref={ref}>
-                <Typography p={1}>Редактировать...</Typography>
+                <Typography sx={{ opacity: 0.8 }} mb={1}>Редактировать...</Typography>
                 <StyledListButton fullWidth size={'small'}
                                   onClick={handleDeleteButtonClick}>
                     <Typography>

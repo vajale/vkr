@@ -75,12 +75,14 @@ const ColumnTask = memo(({ task, parent, index, onChange }: TaskProps) => {
     const taskDate = useMemo(() => formatDateString(task.date), []);
 
     return (
-            <motion.div ref={setNodeRef} {...listeners} {...attributes} style={style}>
+            <motion.div animate={{ y: 0, opacity: 1 }} initial={{ y: -5, opacity: 0.5 }} transition={{ ease: "easeOut", duration: 0.3 }} ref={setNodeRef} {...listeners} {...attributes} style={style}>
                 <Paper sx={{ padding: 1, minWidth: 200, width: '100%' }}>
                     <Stack width={"100%"} flexDirection={'row'} justifyContent={'space-between'}>
                         <Stack>
-                            <Box maxWidth={'60%'} borderRadius={1} p={0.5} ml={0.8} mt={1}
-                                 sx={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>{taskDate}</Box>
+                            <Box fontWeight={800} borderRadius={1} p={0.5} ml={0.8} mt={1}
+                                 sx={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
+                                {taskDate}
+                            </Box>
                             <EditableTextField width={'200px'} onContentChange={handleContentChange} canEdit={canEdit}
                                                title={task.content} placeholder={'...'}/>
                             {canEdit && <MotionDivider initial={{ scale: 0 }} animate={{ scale: 0.95 }} flexItem

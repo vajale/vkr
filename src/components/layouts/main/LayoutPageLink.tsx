@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { type SimplyPage, useCreateNewPageMutation, useRemovePageMutation } from "@/api/firebasePageAPI/pagesEndpoins";
 import PageLink from "@/components/PageLink/PageLink";
 import useToast from "@/utils/hooks/useToast";
@@ -9,6 +9,8 @@ import { useAppDispatch } from "@/store/hooks";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { MaterialIcon } from "@/assets/Icon";
 import { useFirebaseAuth } from "@/components/FireBase";
+import { motion } from "framer-motion";
+import { useMouseHover } from "@/components/PageView/model/hooks/useMouseHover";
 
 interface LinkProps {
     page: SimplyPage,
@@ -27,6 +29,8 @@ const LayoutPageLink = (props: LinkProps) => {
 
     const [removePage] = useRemovePageMutation({});
     const [createPage] = useCreateNewPageMutation();
+
+    const targetHoverRef = useRef<HTMLDivElement>();
 
     const handlePageRemove = () => {
         void removePage({ pageId: page.id }).then(() => {
@@ -54,7 +58,7 @@ const LayoutPageLink = (props: LinkProps) => {
     const buttonIconName = options.isOptionsOpen ? "MdKeyboardArrowDown" : "MdKeyboardArrowRight";
 
     return (
-        <Stack>
+        <div ref={targetHoverRef}>
             <Stack flexDirection={'row'}>
                 <Button onClick={handleButtonOptionsClick} sx={{ minWidth: 30 }}>
                     <MaterialIcon name={buttonIconName}/>
@@ -64,11 +68,21 @@ const LayoutPageLink = (props: LinkProps) => {
                     showOptionsButton
                     href={page.id}
                     label={page.visual?.name}
-                    width={280}
+                    width={210}
                     onPageDelete={handlePageRemove}
                     icon={"MdOutlineDescription"}
                     onChildrenPageCreated={handleCreateChildrenPage}
                 />
+                <motion.div initial={{ opacity: 0 }} whileHover={{ opacity: 1 }}>
+                    <Stack mr={2} flexDirection={'row'}>
+                        <Button onClick={handlePageRemove} sx={{ minWidth: 20 }}>
+                            <MaterialIcon name={"MdDelete"}/>
+                        </Button>
+                        <Button onClick={handleCreateChildrenPage} sx={{ minWidth: 20 }}>
+                            <MaterialIcon name={"MdAdd"}/>
+                        </Button>
+                    </Stack>
+                </motion.div>
             </Stack>
             {options.isOptionsOpen &&
                 (page.child &&
@@ -77,7 +91,7 @@ const LayoutPageLink = (props: LinkProps) => {
                     </Box>
                 )
             }
-        </Stack>
+        </div>
     );
 };
 

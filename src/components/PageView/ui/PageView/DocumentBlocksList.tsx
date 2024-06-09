@@ -47,10 +47,10 @@ const DocumentBlocksList = (props: BlocksProps) => {
         const newArray = arrayMove(blocks, oldIndex, newIndex);
 
         dispatch(pageActions.updateBlocks(newArray));
-
-        if (onDocumentsChanges != null) {
-            onDocumentsChanges();
-        }
+        //
+        // if (onDocumentsChanges != null) {
+        //     onDocumentsChanges();
+        // }
     };
 
     if (blocks.length === 0) {
@@ -93,15 +93,15 @@ const DocumentBlocksList = (props: BlocksProps) => {
                         const handleHotKeyClick = () => {};
 
                         const handleDataUpdate = () => {
-                            if (onDocumentsChanges != null) {
-                                onDocumentsChanges();
-                            }
+                            // if (onDocumentsChanges != null) {
+                            //     onDocumentsChanges();
+                            // }
                         };
                         const canEditDoc = canEdit;
 
                         const baseProps = {
                             ignoreButtonsHover: !canEdit,
-                            onEdit: handleDataUpdate,
+                            // onEdit: handleDataUpdate,
                         };
 
                         switch (item.type) {

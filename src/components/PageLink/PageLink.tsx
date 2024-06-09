@@ -1,16 +1,10 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 
-import { Button, Link, Skeleton, Stack, Typography, useTheme } from "@mui/material";
+import { Link, Skeleton, Stack } from "@mui/material";
 import { MaterialIcon } from "@/assets/Icon";
-import { type Page } from "@/components/PageView/model/types";
-import { useMouseHover } from "@/components/PageView/model/hooks/useMouseHover";
-import { motion } from "framer-motion";
+
 import { type MaterialIconName } from "@/assets/icons";
 import { StyledPageLink } from "@/components/PageLink/styled";
-import { useAppDispatch } from "@/store/hooks";
-import { pageActions } from "@/store/slices/pageSlice";
-import { userActions } from "@/store/slices/userSlice";
-import { useCreateNewPageMutation } from "@/api/firebasePageAPI/pagesEndpoins";
 
 interface LinkProps {
     href: string,
@@ -68,16 +62,6 @@ const PageLink = (props: LinkProps) => {
                                 {children ?? label}
                             </Link>
                         </Stack>
-                        {showOptionsButton && <motion.div initial={{ opacity: 0 }} whileHover={{ opacity: 1 }}>
-                            <Stack mr={2} flexDirection={'row'}>
-                                <Button onClick={handleDeletePage} sx={{ minWidth: 20 }}>
-                                    <MaterialIcon name={"MdDelete"}/>
-                                </Button>
-                                <Button onClick={handleCreateChildrenPage} sx={{ minWidth: 20 }}>
-                                    <MaterialIcon name={"MdAdd"}/>
-                                </Button>
-                            </Stack>
-                        </motion.div>}
                     </Stack>
                 </Stack>
             </Stack>

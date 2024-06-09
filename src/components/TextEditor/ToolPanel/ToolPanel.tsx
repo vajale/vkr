@@ -66,7 +66,7 @@ const ToolPanel: React.FC<PanelProps> = ({ position }) => {
     }, []);
 
     return (
-        <StyledEditorButtonsContainer style={{ left: position.x, top: position.y }} flexDirection={'row'}>
+        <StyledEditorButtonsContainer style={{ left: position.x, top: position.y }}>
             <StyledEditorButton
                 className={cn(
                     "tool-panel__item",
