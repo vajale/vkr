@@ -14,6 +14,10 @@ const UserItem = (props: ItemProps) => {
 
     const username = user.data.username ?? '';
 
+    if (username == undefined) return null;
+    if (username == undefined) return null;
+    if (username == '') return null;
+
     return (
         <Avatar {...stringAvatar(username)} sx={{ width: 24, height: 24 }}>
             <Typography>{username[0]}</Typography>
