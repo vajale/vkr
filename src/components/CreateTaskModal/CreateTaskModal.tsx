@@ -1,6 +1,6 @@
 import React, { type ChangeEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { calendarActions, selectTasks, selectEditTask, selectTaskById } from "@/store/slices/calendarSlice";
+import { calendarActions, selectTaskById } from "@/store/slices/calendarSlice";
 import { StyledCreateTaskModal } from "@/pages/Calendar/styled";
 import { Button, Modal, Stack, TextField, Typography } from "@mui/material";
 import CustomTimePicker from "@/components/TimePicker/CustomTimePicker";

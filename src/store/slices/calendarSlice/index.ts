@@ -60,15 +60,14 @@ export const calendarTasksSlice = createSlice({
         }
     },
     selectors: {
-        selectTasks: (state) => state.tasks,
-        selectEditTask: (state) => state.tasks.find(task => state.selectedTask?.id === task.id),
+        selectTasks: (state) => state.tasks ?? [],
     }
 });
 
 export const selectTaskById = (taskId: string) =>
     createSelector([selectTasks], tasks => tasks.find(task => task.id === taskId));
 
-export const { selectTasks, selectEditTask } = calendarTasksSlice.selectors;
+export const { selectTasks } = calendarTasksSlice.selectors;
 export default calendarTasksSlice.reducer;
 
 export const { actions: calendarActions } = calendarTasksSlice;

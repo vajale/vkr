@@ -42,6 +42,13 @@ const CalendarMonthWrapper = memo((props: WrapperProps) => {
 
     const cellsToRender = useMemo(() => cells.map((cell) => {
         const key = new Date(cell.year, cell.month, cell.date).toJSON();
+
+        if (tasks === undefined) {
+            return <CalendarCell onClick={(date) => {
+                handleCellClick(date, null);
+            }} cell={cell} key={key}/>;
+        }
+
         const dateTasks = tasks.filter((task) => trimDateTime(task.date) === trimDateTime(key));
 
         const dateTask = tasks.find((task) => task.date === key);
