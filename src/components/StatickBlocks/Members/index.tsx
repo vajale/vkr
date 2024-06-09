@@ -68,7 +68,7 @@ const UserElement: React.FC<IPermissionSelect> = ({ userId, userPermission, page
                 {getPicture()}
                 <div className={"user"}>
                     <div className={"main-data"}>
-                        {data.username}
+                        {data?.username?.split(" ")[0]}
                         <div className={"role"}>{permissionName[userPermission]}</div>
                     </div>
                     <Typography className={"mail"}>{data.data.phoneNumber}</Typography>

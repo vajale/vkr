@@ -7,35 +7,35 @@ import { type MaterialIconName } from "@/assets/icons";
 import { StyledPageLink } from "@/components/PageLink/styled";
 
 interface LinkProps {
-    href: string,
-    label?: string,
-    isLoading?: boolean,
-    showOptionsButton?: boolean
-    showChildrenButton?: boolean
-    icon?: MaterialIconName,
-    children?: React.ReactNode,
-    width?: string | number
-    height?: string | number
-    onPageDelete?: () => void,
-    onChildrenPageCreated: () => void
+    href: string;
+    label?: string;
+    isLoading?: boolean;
+    showOptionsButton?: boolean;
+    showChildrenButton?: boolean;
+    icon?: MaterialIconName;
+    children?: React.ReactNode;
+    width?: string | number;
+    height?: string | number;
+    onPageDelete?: () => void;
+    onChildrenPageCreated: () => void;
 }
 
 const PageLink = (props: LinkProps) => {
     const {
-        label = 'Страница',
+        label = "Страница",
         href,
         showOptionsButton,
         icon,
         isLoading,
         width,
         height,
-        onPageDelete, children, onChildrenPageCreated
+        onPageDelete,
+        children,
+        onChildrenPageCreated,
     } = props;
 
     if (isLoading) {
-        return (
-            <Skeleton width={width} height={height}/>
-        );
+        return <Skeleton width={width} height={height} />;
     }
 
     const handleDeletePage = () => {
@@ -52,13 +52,19 @@ const PageLink = (props: LinkProps) => {
 
     return (
         <StyledPageLink>
-            <Stack justifyContent={'space-between'}>
-                <Stack flexDirection={'row'} gap={1} justifyContent={"space-between"}>
-                    <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}
-                           width={width}>
-                        <Stack flexDirection={'row'} alignItems={'center'}>
-                            {icon && <MaterialIcon name={icon}/>}
-                            <Link sx={{ textDecoration: 'none', ml: 1, overflow: 'hidden' }} href={"#/page/" + href}>
+            <Stack justifyContent={"space-between"}>
+                <Stack flexDirection={"row"} gap={1} justifyContent={"space-between"}>
+                    <Stack
+                        flexDirection={"row"}
+                        alignItems={"center"}
+                        jus
+                        tifyContent={"space-between"}
+                        width={width}>
+                        <Stack flexDirection={"row"} alignItems={"center"}>
+                            {icon && <MaterialIcon name={icon} />}
+                            <Link
+                                sx={{ textDecoration: "none", ml: 1, overflow: "hidden" }}
+                                href={"#/page/" + href}>
                                 {children ?? label}
                             </Link>
                         </Stack>
@@ -66,8 +72,7 @@ const PageLink = (props: LinkProps) => {
                 </Stack>
             </Stack>
         </StyledPageLink>
-    )
-        ;
+    );
 };
 
 export default PageLink;

@@ -5,6 +5,7 @@ export const StyledPageLink = styled("div")(({ theme }: IExtendedThemeProps) => 
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    width: "100%",
     // height: '100%',
     a: {
         fontFamily: "Inter",

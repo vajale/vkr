@@ -1,5 +1,9 @@
 import React, { useRef, useState } from "react";
-import { type SimplyPage, useCreateNewPageMutation, useRemovePageMutation } from "@/api/firebasePageAPI/pagesEndpoins";
+import {
+    type SimplyPage,
+    useCreateNewPageMutation,
+    useRemovePageMutation,
+} from "@/api/firebasePageAPI/pagesEndpoins";
 import PageLink from "@/components/PageLink/PageLink";
 import useToast from "@/utils/hooks/useToast";
 import { useNavigate } from "react-router-dom";
@@ -13,15 +17,17 @@ import { motion } from "framer-motion";
 import { useMouseHover } from "@/components/PageView/model/hooks/useMouseHover";
 
 interface LinkProps {
-    page: SimplyPage,
-    onPageDelete: () => void
-    onPageCreated: () => void,
+    page: SimplyPage;
+    onPageDelete: () => void;
+    onPageCreated: () => void;
 }
 
 const LayoutPageLink = (props: LinkProps) => {
     const { page, onPageDelete, onPageCreated } = props;
 
-    const [options, setOptions] = useState<{ isOptionsOpen: boolean }>(() => ({ isOptionsOpen: false }));
+    const [options, setOptions] = useState<{ isOptionsOpen: boolean }>(() => ({
+        isOptionsOpen: false,
+    }));
     const { refetchUserData } = useFirebaseAuth();
 
     const dispatch = useAppDispatch();
@@ -39,7 +45,7 @@ const LayoutPageLink = (props: LinkProps) => {
     };
 
     const handleButtonOptionsClick = () => {
-        setOptions(prevState => ({ isOptionsOpen: !prevState.isOptionsOpen }));
+        setOptions((prevState) => ({ isOptionsOpen: !prevState.isOptionsOpen }));
     };
 
     const handleCreateChildrenPage = () => {
@@ -59,38 +65,40 @@ const LayoutPageLink = (props: LinkProps) => {
 
     return (
         <div ref={targetHoverRef}>
-            <Stack flexDirection={'row'}>
+            <Stack flexDirection={"row"}>
                 <Button onClick={handleButtonOptionsClick} sx={{ minWidth: 30 }}>
-                    <MaterialIcon name={buttonIconName}/>
+                    <MaterialIcon name={buttonIconName} />
                 </Button>
                 <PageLink
                     showChildrenButton
                     showOptionsButton
                     href={page.id}
                     label={page.visual?.name}
-                    width={210}
+                    width={"100%"}
                     onPageDelete={handlePageRemove}
                     icon={"MdOutlineDescription"}
                     onChildrenPageCreated={handleCreateChildrenPage}
                 />
                 <motion.div initial={{ opacity: 0 }} whileHover={{ opacity: 1 }}>
-                    <Stack mr={2} flexDirection={'row'}>
+                    <Stack mr={2} flexDirection={"row"}>
                         <Button onClick={handlePageRemove} sx={{ minWidth: 20 }}>
-                            <MaterialIcon name={"MdDelete"}/>
+                            <MaterialIcon name={"MdDelete"} />
                         </Button>
                         <Button onClick={handleCreateChildrenPage} sx={{ minWidth: 20 }}>
-                            <MaterialIcon name={"MdAdd"}/>
+                            <MaterialIcon name={"MdAdd"} />
                         </Button>
                     </Stack>
                 </motion.div>
             </Stack>
-            {options.isOptionsOpen &&
-                (page.child &&
-                    <Box ml={2}>
-                        <LayoutPageLink page={page.child} onPageCreated={onPageCreated} onPageDelete={onPageDelete}/>
-                    </Box>
-                )
-            }
+            {options.isOptionsOpen && page.child && (
+                <Box ml={2}>
+                    <LayoutPageLink
+                        page={page.child}
+                        onPageCreated={onPageCreated}
+                        onPageDelete={onPageDelete}
+                    />
+                </Box>
+            )}
         </div>
     );
 };

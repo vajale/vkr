@@ -24,9 +24,11 @@ export const AccountButton: React.FC<IAccountButton> = ({
         }
     };
 
+    const name = accountName.split(" ")[0];
+
     return (
         <StyledAccountButton onClick={handleButtonClick}>
-            <Typography>{accountName}</Typography>
+            <Typography>{name}</Typography>
             {IconElement()}
         </StyledAccountButton>
     );

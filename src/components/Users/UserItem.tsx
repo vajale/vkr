@@ -17,6 +17,8 @@ const UserItem = (props: ItemProps) => {
 
     const username = data?.username ? data?.username[0] : "";
 
+    console.log(data);
+
     return (
         <Avatar sx={{ width: 24, height: 24 }}>
             <Typography>{username}</Typography>
